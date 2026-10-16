@@ -45,8 +45,8 @@ T1 → T2 → T3 → T4 → T5 → T6
 **Depends on**: None
 **Reuses**: SOCKS5 do núcleo fixado, contratos NP-01/02.
 **Done when**:
-- [ ] Aceite exato e rejeições de versão/método/credencial/rota têm asserts; frames fragmentados são preservados até completos, com limite.
-- [ ] Gate Quick passa; nenhuma asserção Foundation alterada.
+- [x] Aceite exato e rejeições de versão/método/credencial/rota têm asserts; frames fragmentados são preservados até completos, com limite.
+- [x] Gate Quick passa; 29 asserções Swift, 70 testes Foundation; nenhuma asserção existente alterada. Evidências em native-execution.md.
 **Tests**: unit
 **Gate**: Quick
 
