@@ -1,0 +1,35 @@
+{
+  "distribution": "tlc-spec-driven",
+  "version": "3.3.0",
+  "author": "Felipe Rodrigues - github.com/felipfr",
+  "license": "CC-BY-4.0",
+  "source": "Distribuição instalada da skill no harness do proprietário; origem e patches locais documentados.",
+  "files_sha256": {
+    "SKILL.md": "127a54fdc984939c4953d0a14120563e73f37488befcd885bb9a1dae95b18524",
+    ".skill-meta.json": "1d475b944e89a8855afe2b26f013c2777d4f448d3b36957a9845afcf35b555a2",
+    "references/implement.md": "03ec93c9713b2ebb373c6684f6c8d62588192e865dce0c53970c2c913b9c50c4",
+    "references/validate.md": "149b78e32927ff601fab88366f29d254020c92ca98fa7b3a147bbeaee11ff403",
+    "references/discuss.md": "c601fedf2266047c0f6da372abafe81b35bc97e04d1b3fb15e1a2c65e4dc75ce",
+    "references/code-analysis.md": "38b571c81d98e390b9ac8947563ad19a33843db425d4ff94ad73db70a054f828",
+    "references/coding-principles.md": "8c548affbcdaa4c62bd75bf27b39a81af41ec16bd603e5e634f30771bebd4fbb",
+    "references/lessons.md": "77cdc271f6ade34f8b47274456c72fc16731c7af9992967cfd5f548d328fb022",
+    "references/tasks.md": "8ea4731f59271029d90db8fbf1ce800333f859b32529016134fcb19de9a570c6",
+    "references/context-limits.md": "bff0c86980d41897b70216fa18b6a05a0c9d74a0e80940939fc0f314a55da482",
+    "references/memory.md": "ade5d5550146767719c524ba3ef559bc5431c22a08fddce33bc35bc9e762bc38",
+    "references/design.md": "1c17dd93d0a5618f002300a362683c8dca74185037aa61d9aeef83b9750b5d40",
+    "references/specify.md": "99f1f5693308b8c7ee4ba1152b40f4f00b24abd57767084adaecd409a5aecc17",
+    "references/sub-agents.md": "08481bbe05cf1f29062cc504d3d4f204c10f12fc4f683c330bea8e4adb01f1b2",
+    "scripts/check_commit.py": "20a0fc0f8423b958ea7bae5eec9286d47e8593c157d87fd9d92c2f17a1464567",
+    "scripts/validate_tasks.py": "bfa8533fc3c63e19d999ed25dd79bddeb8ead5d43dc2c0149a0cfc0d9d2bc5d7",
+    "scripts/lessons.py": "258cdb508d9787aee1a840bf811e13637c52ef0dd76273b08fab8c19ebac9b09",
+    "scripts/validate_spec.py": "2a0b7e334d026f9556c665fbd0386cfa5b17c62a5e921fed52a9422bc27bc006",
+    "scripts/validate_state.py": "dc0997e2af32faeeb5e4cd241ce41c3a03a37c6ef25a77850557752988205d3c"
+  },
+  "local_patches": [
+    {
+      "path": "references/memory.md",
+      "change": "Remoção de espaços finais para passar git diff --check; sem alteração de regra.",
+      "sha256": "0a568b7f7c895cedc1db425cb8d1616e607368d25468fb74f156212a99110bf0"
+    }
+  ]
+}

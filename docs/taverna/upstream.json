@@ -1,0 +1,9 @@
+{
+  "repository": "simplex-chat/simplex-chat",
+  "branch": "stable",
+  "sha": "479548ee53ffb73db73841e77acbeee5a78dbbd5",
+  "preserved": {
+    "LICENSE": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+    "assets/ASSETS_LICENSE.md": "51f29f028cbd23f4b2a08c3d670d70915e57a930f0023b001397bec15b4cdd8e"
+  }
+}

@@ -87,3 +87,15 @@ website/test/stubs-layout-cache/_includes/*.js
 apps/android/app/release
 apps/multiplatform/.kotlin/sessions
 
+
+# Taverna: writable state belongs to each worktree.
+.build/
+.venv/
+.state/
+.env
+.env.*
+__pycache__/
+*.py[cod]
+*.p12
+*.pfx
+*.mobileprovision
