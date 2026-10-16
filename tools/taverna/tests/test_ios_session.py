@@ -121,3 +121,23 @@ class SessionTests(unittest.TestCase):
             path.write_text(json.dumps(bad) + '\n')
             with self.assertRaisesRegex(ValueError, 'containment'):
                 session.guard_proof(path, 42)
+
+    def test_xcode_build_caches_must_resolve_inside_worktree(self):
+        settings = {key: str(self.root / '.build' / key) for key in
+                    ('CACHE_ROOT', 'SHARED_PRECOMPS_DIR', 'SDK_STAT_CACHE_DIR',
+                     'COMPILATION_CACHE_CAS_PATH', 'CONFIGURATION_BUILD_DIR')}
+        session.validate_build_paths(self.root, settings)
+        for key in settings:
+            bad = dict(settings, **{key: str(self.base / 'global-cache')})
+            with self.assertRaisesRegex(ValueError, key):
+                session.validate_build_paths(self.root, bad)
+        for key in ('CACHE_ROOT', 'SHARED_PRECOMPS_DIR', 'SDK_STAT_CACHE_DIR', 'COMPILATION_CACHE_CAS_PATH'):
+            bad = dict(settings)
+            del bad[key]
+            with self.assertRaisesRegex(ValueError, key):
+                session.validate_build_paths(self.root, bad)
+        alias = self.root / '.build/escape'
+        alias.parent.mkdir(exist_ok=True)
+        alias.symlink_to(self.base, target_is_directory=True)
+        with self.assertRaisesRegex(ValueError, 'CACHE_ROOT'):
+            session.validate_build_paths(self.root, dict(settings, CACHE_ROOT=str(alias / 'cache')))
