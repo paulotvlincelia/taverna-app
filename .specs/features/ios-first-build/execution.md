@@ -92,3 +92,50 @@ O proprietário autorizou o cache assinado, conforme APP-003. A segunda avaliaç
 O helper administrativo conferiu os hashes da configuração original e da proposta, recusou alterações concorrentes ou workers ativos e acrescentou somente extra-trusted-substituters e extra-trusted-public-keys. O proprietário autenticou no macOS. Aplicação e reinício do daemon Nix terminaram com exit 0 às 14:37:57 UTC. O arquivo anterior está preservado sob .build/attempts/nix-cache-configuration-20261016.
 
 A validação confirmou require-sigs=true, trusted-users=root e cliente trusted=false. O cache não foi incluído como substituter padrão de todos os projetos: a terceira avaliação o seleciona explicitamente por extra-substituters. Receita, commit e locks permanecem os mesmos, com limite de 5.400 s e log de build habilitado. Registros próprios em .build/attempts/nix-core-evaluation-20261016-03; receipt.json será gravado ao término.
+
+## Derivação resolvida e realização
+
+A terceira avaliação terminou com exit 0. Produziu /nix/store/c27zzp98xz7brkfbs4cgkp6gy4cfxix6-simplex-chat-lib-simplex-chat-7.0.0.12.drv; o output out esperado é by4ic9kf94n9vnz7hcnpqi2lmldvpr6v-simplex-chat-lib-simplex-chat-7.0.0.12. O formato JSON observado por derivation show é versão 4, com inputs.drvs e paths relativos à store. O comando não aceita json-format; o probe rejeitado foi preservado e o consumidor foi corrigido sem modificar a receita.
+
+O dry-run terminou com exit 0, mas também listou paths data que não sabia construir. Esse resultado não foi tratado como gate nativo aprovado. A realização real iniciou às 14:42:34 UTC de 2026-10-16, limitada a 5.400 s, com no-link, keep-failed e o cache explícito. Logs e receipts ficam em .build/attempts/nix-core-realization-20261016. Nenhum produto do núcleo foi qualificado até aqui.
+
+## Probes independentes da sessão
+
+O preparo de T2 foi separado de T1 porque os controles de ambiente não dependem das bibliotecas. T3 continua dependendo dos dois gates, e nenhum teste do mensageiro foi iniciado. Todos os programas abaixo são controles sintéticos locais, fora dos arquivos versionados do app; seu sucesso não comprova o build iOS da Taverna.
+
+Um iPhone 17 com runtime 27.0 foi criado no device set do worktree. O registro .build/session.json contém UDID, responsável, branch e caminhos. Só esse dispositivo foi inicializado ou encerrado. Nenhum simulador alheio foi apagado ou resetado.
+
+| Probe | Resultado | Evidência ignorada sob .build/attempts |
+| --- | --- | --- |
+| Sandbox pela API de dentro do runtime | FAIL: biblioteca libsandbox.1.dylib ausente; boot interrompido antes do sistema do simulador | simulator-isolation-20261016 |
+| Assinatura ad hoc com App Sandbox | FAIL: assinatura aceita, mas conexão externa continuou permitida | simulator-isolation-20261016-02 |
+| sandbox-exec macOS via trampoline iOS | Execução host possível; perfil inicial recusado; perfil corrigido perdeu DYLD_ROOT_PATH ao voltar ao simulador | simulator-isolation-20261016-03 |
+| Helper macOS próprio, com restauração explícita do ambiente | Controle externo bloqueado com EPERM, exit 0; controles sem restrição no host e no simulador tiveram conexão bem-sucedida | simulator-isolation-20261016-04 e -02 |
+| Aplicar o helper ao launchd_sim | Perfil aplicado e conexão negada, mas boot falhou ao se vincular à sessão; permitir IPC Unix não resolveu | simulator-isolation-20261016-05 e -06 |
+| Controle positivo do mesmo exec, sem sandbox | Boot exit 0; resultado não é contenção | simulator-isolation-20261016-07-positive-exec |
+| Negar somente IP remoto, permitindo localhost | Controle externo EPERM; boot ainda falhou | simulator-isolation-20261016-08 |
+| Controle positivo com sandbox allow default | Boot também falhou, embora o exec sem sandbox funcione. A falha não depende apenas das regras de rede; causa interna do vínculo ainda não comprovada | simulator-isolation-20261016-09-positive-policy |
+| Roteamento de device set no Xcode inspirado no idb | showdestinations exit 0, mas UDID próprio ausente: probe exit 2. xcodebuild usa library-validation; não desativada | xcode-device-set-20261016 |
+| Destino explícito sem instrumentação | showBuildSettings recusou o UDID do set exclusivo, exit 64. Nenhum destino alheio foi escolhido como substituto | xcode-device-set-20261016-02 |
+
+O padrão investigado para roteamento vem do código público de [XcodeBuildOperation](https://github.com/facebook/idb/blob/main/FBXCTestCore/Utility/XcodeBuildOperation.swift) e do [shim do idb](https://github.com/facebook/idb/blob/main/Shims/Shimulator/TestReporterShim/XCTestReporterShim.m). O protótipo local não altera resultados XCTest; não foi incorporado ao projeto nem apresentado como compatível com Xcode 27.1. Não remover assinatura ou validação de bibliotecas do Xcode para fazê-lo funcionar.
+
+CFFIXED_USER_HOME muda o logPath informado pelo cliente simctl, mas o runtime ainda gravava sob Library/Logs do usuário. Essa diferença foi medida, sem tratar o caminho informado como prova física. Após encerrar somente o dispositivo próprio, seus logs foram movidos integralmente para .build/SimulatorLogs, preservando nove arquivos. O índice por UDID criado pelo CoreSimulator ficou como symlink para esse armazenamento. Caminhos e realpath estão em session.json e simulator-isolation-20261016-04/log-relocation.json; reconciliar esse índice antes de qualquer remoção futura do worktree.
+
+Situação de T2: controles parciais obtidos; contenção da sessão e destino efetivo do executor ainda não aprovados. O mensageiro permanece sem instalação ou lançamento. Nenhuma alteração de firewall global, VPN, rede administrativa ou proteção do macOS foi feita.
+
+O probe de destino explícito gerou um bundle de erro no temporário do macOS, apesar de TMPDIR local. Esse bundle específico foi preservado em xcode-device-set-20261016-02/error.xcresult; sua movimentação consta do receipt. Os próximos comandos precisam de resultBundlePath explícito, sem presumir que TMPDIR controla todos os caminhos do Xcode.
+
+Um teste adicional verificou aliases de índice: um segundo set dentro do worktree reconheceu um alias para o dispositivo próprio. O índice padrão já carregado pelo CoreSimulator não reconheceu a mesma forma de registro. Só o alias desse UDID foi criado no índice padrão e removido após o teste, preservando o dispositivo original e todos os outros IDs. Não houve reinício do serviço CoreSimulator ou mudança de seu índice compartilhado para forçar recarga. Registros em simulator-index-alias-20261016 e xcode-device-index-20261016.
+
+## Agendamento da realização nativa
+
+O Nix usava max-jobs=1. Um segundo cliente da mesma realização foi iniciado com max-jobs=3 e cores=2 para antecipar dependências independentes, coordenadas pelos locks nativos da store. O cliente original não foi interrompido. Ambos têm o mesmo prazo absoluto, 16:12:34 UTC; o novo agendador não estende o limite da tentativa. Seus registros estão em nix-core-realization-20261016/scheduler-02 e parallel-scheduler.json. Isso não é a segunda execução independente exigida pela feature.
+
+## Alternativa de isolamento comprovada somente em controles
+
+O registro nativo de um dispositivo novo seguido da relocação de seu armazenamento permitiu que Xcode showBuildSettings selecionasse exatamente seu UDID, com exit 0. O SDK o mantém no índice padrão; o set privado não o lista. Os dados físicos estão em .build/SimulatorDevices e o índice do SDK aponta para essa localização. O registro desse controle, separado do primeiro dispositivo, está em .build/attempts/xcode-native-registration-20261016/registration.json. Nenhum outro registro de dispositivo foi movido ou removido.
+
+Foi compilado um app UIKit fictício de controle, separado do fonte Taverna. Ele foi instalado somente nesse novo simulador. Seu processo retornou do helper macOS com o mesmo PID, confirmou connect_errno=1/EPERM e chegou a UIKIT_CONTROL_READY. A contenção cobre esse processo; não cobre todos os daemons do simulador. Recibos e código do controle estão em .build/attempts/uikit-process-containment-20261016. Build e lançamento da Taverna continuam NOT RUN.
+
+O [Design](design.md) propõe revisar os critérios de isolamento para essa alternativa. A proposta depende da resposta do proprietário; os critérios originais ainda não foram substituídos, e T2 continua sem aprovação de seu gate.

@@ -2,7 +2,7 @@
 
 ## Execution Protocol
 
-Usar tlc-spec-driven conforme a skill versionada. A especificação, sua execução e a rota Nix foram autorizadas pelo proprietário. Esta decomposição preserva os critérios aprovados. Executar as tarefas em sequência, sem marcar uma etapa concluída só porque sua preparação terminou. O Verifier independente é obrigatório após o último commit de implementação.
+Usar tlc-spec-driven conforme a skill versionada. A especificação, sua execução e a rota Nix foram autorizadas pelo proprietário. Esta decomposição preserva os critérios aprovados. Verificar e fechar cada tarefa separadamente, sem marcar uma etapa concluída só porque sua preparação terminou. O preparo de T2 independe das bibliotecas e pode ocorrer enquanto a operação Nix de T1 aguarda; T3 exige ambas aprovadas. O Verifier independente é obrigatório após o último commit de implementação.
 
 **Design:** [design.md](design.md).
 **Status:** In Progress — preparação administrativa concluída; T1 em andamento, sem biblioteca qualificada ainda.
@@ -38,13 +38,14 @@ Os comandos existentes vêm de CONTRIBUTING.md. Comandos específicos do build s
 Ordem completa, incluindo dependências entre fases:
 
 ```text
-T1 → T2 → T3 → T4 → T5 → T6
+T1 → T3 → T4 → T5 → T6
+T2 → T3
 ```
 
 ### Phase 1: Núcleo e sessão
 
 ```text
-T1 → T2
+T1  T2
 ```
 
 ### Phase 2: Compilação e prova
@@ -81,7 +82,7 @@ T5 → T6
 
 **What**: Demonstrar um executor que seleciona o simulador próprio e contém sua saída de rede antes de abrir o mensageiro.
 **Where**: `.specs/features/ios-first-build/execution.md`
-**Depends on**: T1
+**Depends on**: None
 **Reuses**: simctl --set e política de estado local da fundação.
 **Requirement**: IOS-04, IOS-05, IOS-10, IOS-15.
 **Tools**: CLI Xcode e probes locais; TLC Spec Driven.
@@ -98,7 +99,7 @@ T5 → T6
 
 **What**: Acrescentar um teste da navegação inicial e compilar/executar a suíte do app com entradas qualificadas.
 **Where**: `apps/ios/Tests iOS/Tests_iOS.swift`
-**Depends on**: T2
+**Depends on**: T1, T2
 **Reuses**: XCTest e testes existentes, sem remover asserções ou usar skips para obter sucesso.
 **Requirement**: IOS-03, IOS-06, IOS-08, IOS-11, IOS-12, IOS-13.
 **Tools**: Xcode/xcodebuild; TLC Spec Driven.
@@ -176,8 +177,8 @@ T5 → T6
 | Task | Depends On | Diagram Shows | Status |
 | --- | --- | --- | --- |
 | T1 | None | Entrada da fase 1 | Match |
-| T2 | T1 | T1 → T2 | Match |
-| T3 | T2 | Entrada da fase 2 após fase 1 | Match |
+| T2 | None | Entrada independente da fase 1 | Match |
+| T3 | T1, T2 | Entrada da fase 2 após os dois gates da fase 1 | Match |
 | T4 | T3 | T3 → T4 | Match |
 | T5 | T4 | Entrada da fase 3 após fase 2 | Match |
 | T6 | T5 | T5 → T6 | Match |
@@ -195,4 +196,4 @@ T5 → T6
 
 ## Estado
 
-T1 em andamento. T2–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.
+T1 em andamento; preparação operacional de T2 iniciada enquanto Nix realiza o núcleo. T3–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.
