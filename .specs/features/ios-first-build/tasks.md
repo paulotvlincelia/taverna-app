@@ -5,7 +5,7 @@
 Usar tlc-spec-driven conforme a skill versionada. A especificação, sua execução e a rota Nix foram autorizadas pelo proprietário. Esta decomposição preserva os critérios aprovados. Verificar e fechar cada tarefa separadamente, sem marcar uma etapa concluída só porque sua preparação terminou. O preparo de T2 independe das bibliotecas e pode ocorrer enquanto a operação Nix de T1 aguarda; T3 exige ambas aprovadas. O Verifier independente é obrigatório após o último commit de implementação.
 
 **Design:** [design.md](design.md).
-**Status:** In Progress — T1, T2, T7 e T8 concluídas; núcleo/entradas qualificados localmente. T3 em execução: build real e onboarding aprovados, suíte completa pendente; T4–T6 pendentes.
+**Status:** In Progress — T1, T2, T7 e T8 concluídas; núcleo/entradas qualificados localmente. T3 concluída: build, onboarding e quatro métodos first-build aprovados; T4 em fechamento; T5/T6 pendentes.
 
 Ferramentas: Git nativo, Python 3.12 stdlib, Nix 2.34.9 e ferramentas do Xcode instalado. A integração de handoff, CI e locks nesta branch pertence ao Codex. Não há delegação de implementação; oito tarefas cabem em uma sequência local. A verificação final será independente.
 
@@ -120,16 +120,16 @@ T5 → T6
 **Where**: `apps/ios/Tests iOS/Tests_iOS.swift`, `apps/ios/Tests iOS/Tests_iOSLaunchTests.swift`, `apps/ios/Shared/Views/Chat/ChatView.swift`
 **Depends on**: T1, T7
 **Reuses**: XCTest e testes existentes, sem remover asserções ou usar skips para obter sucesso. Compatibilidade pontual do SDK: alias do tipo SwiftUI.State para preservar a composição State<ObservedObject<Chat>> em ChatView; o macro State do SDK 27.1 colide com as propriedades sintetizadas.
-**Requirement**: IOS-03, IOS-06, IOS-08, IOS-11, IOS-12, IOS-13.
+**Requirement**: IOS-03, IOS-06, IOS-08, IOS-10, IOS-11, IOS-12, IOS-13.
 **Tools**: Xcode/xcodebuild; TLC Spec Driven.
-**Tests**: e2e, no mesmo arquivo; preservar os três métodos de teste herdados nos dois arquivos da suíte e acrescentar um método com asserções do onboarding. Configurar todas as instâncias de XCUIApplication com o guard qualificado, sem eliminar launch/performance/screenshot herdados. Contagens efetivas, inclusive configurações de UI repetidas pelo XCTest, devem constar do resultado.
+**Tests**: e2e, no mesmo arquivo; preservar os três métodos de teste herdados nos dois arquivos da suíte e acrescentar um método com asserções do onboarding. Configurar todas as instâncias de XCUIApplication com o guard qualificado, sem eliminar launch/performance/screenshot herdados. No perfil first-build aprovado, os quatro métodos executam em inglês/portrait/light, sem skips; o perfil full-matrix mantém a expansão herdada. Registrar explicitamente perfil e contagens, sem alegar aprovação da matriz integral.
 **Gate**: Full iOS.
 **Done when**:
 
 - [x] Sete revisões SwiftPM preservadas e configuração efetiva de assinatura registrada sem provisionamento de conta.
 - [x] App, framework, NSE e Share Extension compilados e identificados.
 - [x] Get started visível e habilitado em 30 s; após o toque, Your profile visível em 30 s; nenhum envio do formulário.
-- [ ] Suíte real aprovada, com contagens de execução/falha/skip e artefatos, sem usar somente screenshot ou medição de launch como prova da interface.
+- [x] Perfil first-build real aprovado, com quatro métodos/asserts, zero falhas/skips, contagens e artefatos; matriz integral disponível e pendente, sem usar somente screenshot/launch como prova da navegação.
 
 ### T8: Versionar o preparo das bibliotecas qualificadas
 
@@ -149,11 +149,11 @@ T5 → T6
 
 ### T4: Validar os artefatos e estados da prova
 
-**What**: Implementar a checagem da prova real, rejeitando sucesso vazio ou artefatos inconsistentes.
-**Where**: `tools/taverna/ios_proof.py`
+**What**: Registrar e validar a prova real, seus códigos de etapa e a comparação de reproduções, rejeitando sucesso vazio ou artefatos inconsistentes.
+**Where**: `tools/taverna/ios_proof.py`, `tools/taverna/tests/test_ios_proof.py`
 **Depends on**: T3, T8
 **Reuses**: Inspeção nativa versionada em T8, Python stdlib, estilo unittest da fundação e estrutura real do resultado Xcode observado em T3.
-**Requirement**: IOS-02, IOS-09, IOS-14, IOS-16, IOS-19, IOS-20.
+**Requirement**: IOS-02, IOS-09, IOS-10, IOS-14, IOS-16, IOS-17, IOS-19, IOS-20.
 **Tools**: Python 3.12 e ferramentas Xcode para inspeção; TLC Spec Driven.
 **Tests**: unit + integration, co-localizados em tools/taverna/tests; uma asserção por resultado definido, incluindo produto ausente, hash errado, plataforma errada, etapa não zero, timeout e teste obrigatório não executado. Fixtures são fictícias; o gate também exige a tentativa real de T3.
 **Gate**: Build + validação dos artefatos reais.
@@ -237,7 +237,7 @@ T5 → T6
 
 ## Estado
 
-T8 concluída: preparador versionado, 51 testes Python e repetição real dos cinco hashes; T1 concluída: fonte realizado, cinco bibliotecas/4.187 objetos qualificados e falhas discriminadas; T2 concluída como ambiente com controle UIKit sintético e preflight real. T7 concluída: CACHE_ROOT e caches efetivos confinados e gate repetido; T3–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.
+T8 concluída: preparador versionado, 51 testes Python e repetição real dos cinco hashes; T1 concluída: fonte realizado, cinco bibliotecas/4.187 objetos qualificados e falhas discriminadas; T2 concluída como ambiente com controle UIKit sintético e preflight real. T7 concluída: CACHE_ROOT e caches efetivos confinados e gate repetido; T3 concluída no perfil aprovado; T4–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.
 
 ## Ajuste de decomposição em 2026-10-16
 

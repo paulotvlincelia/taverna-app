@@ -1,5 +1,25 @@
 # Prontidão para o primeiro build iOS
 
+## Estado atualizado em 2026-10-16
+
+Compilação e navegação inicial comprovadas localmente; perfil first-build aprovado pelo proprietário, com quatro métodos reais aprovados e zero falhas/skips. Não há aprovação final do Verifier/CI nem duas reproduções limpas do commit final.
+
+| Parte | Estado atual | Evidência |
+| --- | --- | --- |
+| Núcleo | Realizado localmente do fonte fixado, com Nix; cinco arquivos e 4.187 objetos de simulador | T1/T8 em [execution.md](execution.md) e [manifesto](native-inputs.json). |
+| App/framework/extensões | Build-for-testing aprovado, arm64 iOS Simulator e ad hoc | Tentativas ios-app-build-20261016-02/-03; quatro produtos e símbolos reais inspecionados. |
+| Navegação inicial | Get started → Your profile aprovado, sem envio do formulário | Probe novo onboarding-evidence-probe-20261016: 12,912 s, um método aprovado, zero falhas/skips; duas screenshots reais inspecionadas no estado ignorado. |
+| Contenção | Prova antes do main no processo real do app | IPv4/IPv6 remotos negados e loopback permitido; dados/UDID próprios, conforme APP-004. |
+| Ferramentas Python | 70 testes locais aprovados | 51 já versionados e 19 novos testes de T4 ainda em trabalho; não equivalem a prova de suíte iOS completa. |
+| Perfil first-build | Quatro métodos aprovados, zero falhas/skips em 85,065 s | first-build-profile-build/tests/proof; nove eventos before-main; dados novos e shutdown 0. |
+| Matriz integral | Incompleta por timeout, sem PASS | Terceira tentativa: 60 min, 541 execuções positivas/zero falhas observadas; dados preservados e simulador desligado. |
+| Decisão de gate | Aprovada pelo proprietário | Perfil first-build em inglês/portrait/light, quatro métodos/asserts e zero skips; matriz integral disponível e pendente. |
+| Repetição/CI/Verifier | Pendentes | Continuam obrigatórios; distribuição/assinatura/push em aparelho não comprovados. |
+
+O texto abaixo preserva o levantamento inicial de planejamento. Seus estados de ausência e rotas candidatas são históricos; a execução e o bloqueio atuais estão registrados acima e em execution.md.
+
+## Levantamento inicial, antes da implementação
+
 Em 2026-10-16, o Xcode e os runtimes estão disponíveis. O primeiro build ainda não foi executado. O bloqueio de entrada mais importante é obter e qualificar as bibliotecas nativas do núcleo; os testes e o destino isolado também precisam de prova.
 
 Este documento é um levantamento de planejamento. Não é o relatório de um Verifier e não declara a issue #6 concluída.

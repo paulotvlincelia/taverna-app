@@ -37,6 +37,9 @@ private func shouldShowAvatar(_ current: ChatItem, _ older: ChatItem?) -> Bool {
     }
 }
 
+// Name the wrapper type so SDK State macros leave this composition intact.
+typealias ChatViewState<Value> = SwiftUI.State<Value>
+
 // Spec: spec/client/chat-view.md#ChatView
 struct ChatView: View {
     @EnvironmentObject var chatModel: ChatModel
@@ -47,7 +50,7 @@ struct ChatView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.scenePhase) var scenePhase
-    @State @ObservedObject var chat: Chat
+    @ChatViewState @ObservedObject var chat: Chat
     @ObservedObject var im: ItemsModel
     @State var mergedItems: BoxedValue<MergedItems>
     @State var floatingButtonModel: FloatingButtonModel
