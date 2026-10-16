@@ -6,7 +6,7 @@ A ponte em `tools/taverna/access_proof` é uma fixture experimental. Não é um 
 
 ## O que foi exercitado
 
-Onze testes de integração usam relays reais: mensagens SMP nos dois sentidos e arquivo XFTP comparado byte a byte; credencial ausente ou desconhecida; revogação; conexões existentes; política indisponível/inválida; tentativa de alcançar os backends diretamente; e tentativa de usar a ponte como proxy para um destino sentinela. Isso qualifica essa fronteira local, não todos os caminhos de rede do app.
+Doze testes de integração usam relays reais: mensagens SMP nos dois sentidos e arquivo XFTP comparado byte a byte; credencial ausente ou desconhecida; revogação; conexões existentes; política indisponível/inválida; tentativa de alcançar os backends diretamente; tentativa de usar a ponte como proxy para um destino sentinela e isolamento dos logs por execução. Isso qualifica essa fronteira local, não todos os caminhos de rede do app.
 
 Relays v7.0.0.6 vêm da release oficial v7.0.0, no mesmo commit SimpleXMQ fixado no núcleo do fork. O cliente CLI oficial v7.0.0.11 é de interoperabilidade e tem fonte distinto do build iOS. O XFTP CLI oficial usado como ferramenta de prova é experimental/deprecated; não foi adotado como componente do app. [Entradas e hashes](../../tools/taverna/access_proof/inputs.json).
 
