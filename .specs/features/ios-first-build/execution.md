@@ -461,3 +461,12 @@ Negativo real: actual-partial-outcome-negative aplica validate_results ao xcresu
 | Resultado real e parcial negativa | IOS-08/13/14, fixtures isoladas não provam integração com Xcode | Sim |
 
 Adequação A–D aprovada: valores/estados explícitos, testes derivados dos critérios, nenhum skip/exclusão/assert enfraquecido e padrão unittest/stdlib de CONTRIBUTING. A verificação independente ainda fará sensor; T4 não declara a feature concluída.
+
+
+## T5 concluída: guia de reprodução e ambiente corrigido
+
+Publicado docs/taverna/ios-build.md com os comandos versionados de avaliação/realização Nix, preparo dos cinco arquivos, download limitado do WebRTC, resolução dos sete pins, sessão/guard/controle, build/test/prova e comparação. As etapas constituintes têm execuções reais registradas em T1–T4/T8; seis blocos bash/Python passaram a checagem de sintaxe. O procedimento integral em dois worktrees limpos será executado em T6, sem antecipar esse gate.
+
+O escopo documental de T5 inclui environments.md: suas instruções antigas ainda apontavam para set privado, recusado pelo Xcode instalado. O guia de entrada agora aplica APP-004 (índice padrão/aliases/dados físicos próprios), preservando o preflight F0 como inventário histórico, sem alterar código/testes da fundação. A ampliação corrige o caminho de leitura necessário para IOS-05/16, não introduz uma nova funcionalidade.
+
+O primeiro gate unitário detectou que a cópia de teste da fundação não incluía os destinos dos novos links para a feature. O check no repositório real passou, mas o teste corretamente recusou a cópia incompleta. Um commit local foi criado antes de corrigir essa falha; ele foi corrigido por amend somente após repetir os gates com sucesso. A fixture agora copia também a feature ios-first-build real; todas as asserções e os 70 testes permanecem. Gate Build final aprovado: 70 testes, Foundation/links, compileall e diff. Documentação não exige testes artificiais; sua adequação vem dos comandos reais de T1–T4 e da reprodução final obrigatória. Não publicar screenshots/binários, não compartilhar caches graváveis e não apagar worktree pendente são instruções explícitas. Git/store imutável não dependem de harness ou chat anterior.

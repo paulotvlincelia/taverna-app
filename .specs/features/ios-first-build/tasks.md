@@ -167,7 +167,7 @@ T5 → T6
 ### T5: Documentar o procedimento reproduzível
 
 **What**: Publicar no guia local os comandos efetivamente comprovados, limites, dependências e retomada.
-**Where**: `docs/taverna/ios-build.md`
+**Where**: `docs/taverna/ios-build.md`, `docs/taverna/environments.md`, `tools/taverna/tests/test_foundation.py`
 **Depends on**: T4
 **Reuses**: Registros reais de T1–T4 e guia de ambientes.
 **Requirement**: IOS-04, IOS-07, IOS-15, IOS-16, IOS-19, IOS-20.
@@ -176,8 +176,8 @@ T5 → T6
 **Gate**: Build e links relativos válidos.
 **Done when**:
 
-- [ ] Guia pode ser seguido em outro worktree, sem memória de chat, credenciais ou Downloads compartilhado.
-- [ ] Explica origem das bibliotecas, método de isolamento comprovado, tentativas e limites da prova.
+- [x] Guia pode ser seguido em outro worktree, sem memória de chat, credenciais ou Downloads compartilhado.
+- [x] Explica origem das bibliotecas, método de isolamento comprovado, tentativas e limites da prova.
 
 ### T6: Apresentar o estado factual e repetir a prova
 
