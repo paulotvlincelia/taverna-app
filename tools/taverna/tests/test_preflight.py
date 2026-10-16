@@ -31,6 +31,7 @@ class PreflightTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
+        (self.root / '.build/SimulatorDevices').mkdir(parents=True)
 
     def test_tool_presence_does_not_prove_ios_build(self):
         result = preflight.inspect(self.root, ready_tools)
@@ -111,6 +112,26 @@ class PreflightTests(unittest.TestCase):
             self.assertEqual(preflight.run_command(['denied']), (126, ''))
         with patch.object(preflight.subprocess, 'run', return_value=subprocess.CompletedProcess('x', 1, '', 'secret')):
             self.assertEqual(preflight.run_command(['x']), (1, ''))
+
+    def test_missing_session_simulator_set_never_queries_global_devices(self):
+        (self.root / '.build/SimulatorDevices').rmdir()
+        seen = []
+        def runner(argv):
+            seen.append(argv)
+            return ready_tools(argv)
+        result = preflight.inspect(self.root, runner)
+        self.assertEqual(result['checks']['simulators']['status'], 'BLOCKED')
+        self.assertFalse(any('simctl' in argv for argv in seen))
+        self.assertFalse((self.root / '.build/SimulatorDevices').exists())
+
+    def test_only_worktree_simulator_set_is_queried(self):
+        seen = []
+        def runner(argv):
+            seen.append(argv)
+            return ready_tools(argv)
+        preflight.inspect(self.root, runner)
+        command = next(argv for argv in seen if 'simctl' in argv)
+        self.assertEqual(command[2:4], ['--set', str(self.root / '.build/SimulatorDevices')])
 
     def test_cli_empty_path_exit_two_and_json(self):
         result = subprocess.run([sys.executable, str(ROOT / 'tools/taverna/preflight.py'), '--root', str(self.root)], env={**os.environ, 'PATH': self.temp.name}, capture_output=True, text=True)

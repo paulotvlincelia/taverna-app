@@ -9,7 +9,7 @@ import subprocess
 from typing import Callable
 
 GHC_REQUIRED = '9.6.3'  # upstream flake.nix compiler-nix-name = "ghc963"
-LAYOUT = ('DerivedData', 'SourcePackages', 'cabal', 'stack', 'tmp', 'logs')
+LAYOUT = ('DerivedData', 'SourcePackages', 'cabal', 'stack', 'tmp', 'logs', 'SimulatorDevices')
 
 
 def state_layout(root: Path) -> dict[str, str]:
@@ -54,7 +54,12 @@ def inspect(root: Path, run: Callable = run_command) -> dict:
         checks[name] = {'status': 'PASS' if valid else 'BLOCKED', 'version': version,
                         'required': required or 'available',
                         'reason': None if valid else ('missing' if code == 127 else 'timeout' if code == 124 else 'unavailable or incompatible')}
-    code, output = run(['xcrun', 'simctl', 'list', 'devices', 'available', '--json'])
+    simulator_set = root / '.build/SimulatorDevices'
+    # Never initialize a missing set or consult another session's default devices.
+    if simulator_set.is_dir() and simulator_set.resolve().is_relative_to(root.resolve()):
+        code, output = run(['xcrun', 'simctl', '--set', str(simulator_set), 'list', 'devices', 'available', '--json'])
+    else:
+        code, output = 1, ''
     try:
         devices = json.loads(output)['devices'] if code == 0 else {}
         count = sum(1 for values in devices.values() for device in values
@@ -63,7 +68,7 @@ def inspect(root: Path, run: Callable = run_command) -> dict:
     except (ValueError, KeyError, TypeError, AttributeError):
         count, valid = 0, False
     checks['simulators'] = {'status': 'PASS' if valid else 'BLOCKED', 'available_count': count,
-                            'reason': None if valid else 'no available simulator proven'}
+                            'reason': None if valid else 'no available simulator in this worktree device set'}
     try:
         state_layout(root)
         checks['state_isolation'] = {'status': 'PASS', 'reason': 'layout confined to worktree; does not prove session ownership/UDID assignment'}
