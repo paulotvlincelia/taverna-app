@@ -1,12 +1,12 @@
 # Contexto do primeiro build iOS
 
-Coletado em 2026-10-16. Status: proposta para revisão; não é aprovação de implementação.
+Coletado em 2026-10-16. Status: especificação e defaults aprovados pelo proprietário nesta data; qualificação em andamento.
 
 Especificação: [spec.md](spec.md). Levantamento factual: [readiness.md](readiness.md).
 
 ## Limite da entrega
 
-Comprovar a base iOS do fork Taverna em simulador no MacBook, preservando a fundação já integrada. O proprietário pediu o plano e o que falta; esta etapa não executa o build nem publica alterações.
+Comprovar a base iOS do fork Taverna em simulador no MacBook, preservando a fundação já integrada. Após revisar o plano, o proprietário autorizou sua execução, começando pela qualificação das bibliotecas oficiais. Publicação, distribuição e alterações administrativas continuam sujeitas aos limites registrados no plano.
 
 ## Orientações já dadas pelo proprietário
 
@@ -16,9 +16,9 @@ Comprovar a base iOS do fork Taverna em simulador no MacBook, preservando a fund
 - Repos e pastas de trabalho organizados sob Projects; branch e worktree próprios por sessão/harness.
 - Não alterar a VPN do outro Mac nem o agente OpenClaw existente.
 
-## Propostas ainda não discutidas
+## Defaults aprovados e limite encontrado
 
-As opções estão na tabela Assumptions & Open Questions da especificação, com defaults e justificativas. Não houve aprovação adicional do proprietário para essas escolhas.
+As opções da tabela Assumptions & Open Questions da especificação foram aprovadas. A pesquisa não qualificou uma biblioteca oficial pré-compilada. O [relatório](core-qualification.md) e o [Design](design.md) detalham a alternativa de compilação do núcleo. O uso de Nix requer uma instalação administrativa fora de Projects, ainda não autorizada.
 
 | Área | Proposta | Alternativa e consequência |
 | --- | --- | --- |
