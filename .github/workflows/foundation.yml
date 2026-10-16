@@ -1,0 +1,21 @@
+name: Foundation
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  foundation:
+    runs-on: macos-15
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Test foundation tools
+        run: python -m unittest discover -s tools/taverna/tests -v
+      - name: Check contribution boundary and links
+        run: python tools/taverna/check_foundation.py
+      - name: Compile tools
+        run: python -m compileall -q tools/taverna
