@@ -46,7 +46,7 @@ Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprova
 | Evidências visuais | Manter screenshots e xcresult apenas no estado local ignorado; relatório público textual. | Assets e conteúdo dos bundles ainda precisam de revisão para publicação. | y |
 | Local dos ambientes | Clone principal e worktrees sob a raiz Projects já definida pelo proprietário. | Preservar organização existente; nenhum novo checkout em Downloads ou Desktop. | y |
 
-**Open questions:** none — defaults aprovados; origem/ABI das bibliotecas, seleção do simulador isolado e contenção de rede continuam sendo provas técnicas. A exceção necessária para a rota Nix está apresentada separadamente no Design e ainda não foi adotada.
+**Open questions:** none — defaults aprovados; origem/ABI das bibliotecas, seleção do simulador isolado e contenção de rede continuam sendo provas técnicas. A exceção necessária para a rota Nix foi autorizada separadamente pelo proprietário em 2026-10-16; a instalação ainda não está concluída.
 
 ## User Stories
 
