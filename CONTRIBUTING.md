@@ -20,6 +20,6 @@ python3.12 -m compileall -q tools/taverna
 git diff --check
 ```
 
-O preflight registra dependências e retorna exit 2 quando há gates bloqueados; não precisa acessar contas ou segredos. Build iOS terá provas próprias com commit, toolchains, dependências, comando e resultado. Distinguir núcleo do fonte de bibliotecas pré-compiladas. Simulador não prova assinatura ou push em aparelho.
+O preflight registra dependências e retorna exit 2 quando há gates bloqueados; não precisa acessar contas ou segredos. Build iOS usa o [guia isolado](docs/taverna/ios-build.md), com commit, toolchains, dependências, comandos e resultados próprios. Distinguir núcleo do fonte de bibliotecas pré-compiladas. Simulador não prova assinatura ou push em aparelho.
 
 PRs trazem issue canônica, escopo, testes e limites. Integrar apenas após CI e Verifier independente no último commit. Nunca executar código de PR externo com credenciais de publicação. Distribuição exige revisão de assets, licença AGPL, fonte correspondente e capabilities próprias. Os workflows herdados estão arquivados em docs/taverna/upstream-workflows; somente Foundation fica ativo nesta etapa.

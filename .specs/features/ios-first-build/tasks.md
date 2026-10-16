@@ -182,7 +182,7 @@ T5 → T6
 ### T6: Apresentar o estado factual e repetir a prova
 
 **What**: Atualizar a entrada do projeto com o resultado comprovado e obter duas execuções do commit final de implementação em ambientes distintos.
-**Where**: `README.md`
+**Where**: `README.md`, `CONTRIBUTING.md`, `docs/taverna/provenance.md`
 **Depends on**: T5
 **Reuses**: Guia, receipts e validação de artefatos.
 **Requirement**: IOS-17, IOS-18, IOS-19, IOS-20.
@@ -191,7 +191,7 @@ T5 → T6
 **Gate**: Build + duas provas reais no mesmo commit de implementação, CI nesse commit e Verifier com sensor discriminante.
 **Done when**:
 
-- [ ] README informa resultado e data reais, com link para o guia e limites de identidade, assinatura, push e distribuição.
+- [x] README informa resultado e data reais, com link para o guia e limites de identidade, assinatura, push e distribuição.
 - [ ] Autor e Verifier registram execuções do mesmo commit final de implementação; commits posteriores somente de relatório identificam esse SHA explicitamente.
 - [ ] Verifier cobre todos os critérios e confirma que as checagens matam falhas injetadas em cópia isolada.
 - [ ] Publicação/CI remota respeitam a autorização correspondente. Gate remoto pendente não é apresentado como aprovado.
