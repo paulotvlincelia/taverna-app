@@ -77,7 +77,7 @@ Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprova
 3. WHEN o teste iniciar o aplicativo THEN o processo do app SHALL comprovar, antes do main, contenção de IP remoto por tentativa externa negada e comunicação local permitida, sem alteração da VPN ou do firewall global do Mac; os serviços do sistema iOS ficam fora dessa contenção (IOS-10).
 4. WHEN o aplicativo for lançado com dados novos THEN o teste SHALL confirmar que Get started está visível e habilitado em até 30 segundos (IOS-11).
 5. WHEN o teste tocar Get started THEN o teste SHALL confirmar Your profile em até 30 segundos, encerrando a navegação antes de enviar o formulário (IOS-12).
-6. WHEN a suíte iOS do scheme for executada THEN o relatório SHALL registrar todos os testes descobertos, executados, falhos e ignorados, sem remover testes ou asserções nem acrescentar skips para obter sucesso (IOS-13).
+6. WHEN a suíte iOS do perfil first-build for executada THEN o relatório SHALL comprovar os quatro métodos obrigatórios e todas as asserções em inglês/portrait/light, com zero falhas e skips, identificando o perfil e mantendo a matriz integral disponível e pendente até sua própria conclusão (IOS-13).
 7. IF qualquer etapa obrigatória falhar, exceder seu limite, não executar seus testes ou não produzir seu artefato esperado THEN a execução SHALL terminar sem PASS, com código diferente de zero e identificação da etapa (IOS-14).
 8. WHEN uma tentativa for retomada após falha THEN o procedimento SHALL preservar a evidência anterior em diretório de tentativa distinto sem apagar estado de outras sessões (IOS-15).
 9. WHEN uma tentativa terminar THEN seu registro SHALL identificar commit e estado do fonte, manifesto de entradas, versões de Xcode/SDK/runtime, destino, comandos sanitizados, códigos de saída, hashes dos produtos e resultados dos testes (IOS-16).
@@ -140,14 +140,14 @@ Não há promessa de duração antes da qualificação do núcleo. A segunda exe
 | IOS-07 | Entradas: download/extração | T1, T8, T5 | Execute | In Progress |
 | IOS-08 | App: produtos do scheme | T3 | Execute | In Progress |
 | IOS-09 | App: plataforma/arquitetura | T1, T8, T4 | Execute | In Progress |
-| IOS-10 | App: rede isolada | T2 | Execute | In Progress |
+| IOS-10 | App: rede isolada | T2, T3, T4 | Execute | In Progress |
 | IOS-11 | App: abertura observável | T3 | Execute | In Progress |
 | IOS-12 | App: navegação observável | T3 | Execute | In Progress |
 | IOS-13 | App: suíte preservada | T3 | Execute | In Progress |
 | IOS-14 | App: falha detectada | T4 | Tasks | In Tasks |
 | IOS-15 | App: retomada | T2, T7, T8, T5 | Execute | In Progress |
 | IOS-16 | App: registro de prova | T1, T8, T4, T5 | Execute | In Progress |
-| IOS-17 | App: segunda execução | T6 | Tasks | In Tasks |
+| IOS-17 | App: segunda execução | T4, T6 | Tasks | In Tasks |
 | IOS-18 | App: Verifier e CI | T6 | Tasks | In Tasks |
 | IOS-19 | App: alcance do PASS | T1, T4, T5, T6 | Execute | In Progress |
 | IOS-20 | App: publicação de evidências | T4, T5, T6 | Tasks | In Tasks |
@@ -165,3 +165,5 @@ Estado factual e fontes: [readiness.md](readiness.md). Regras de trabalho: [AGEN
 Ajuste de IOS-04, IOS-05 e IOS-10 aprovado pelo proprietário em 2026-10-16 após revisão dos controles. Decisão canônica APP-004; não equivale a prova de execução da Taverna.
 
 Revisão operacional posterior, em 2026-10-16, antes da tentativa -03: a sessão -02 atingiu 1.200 segundos com 177 execuções aprovadas, zero falhas de asserção observadas e suite incompleta. A enumeração oficial confirmou os quatro métodos lógicos, mas não expôs a expansão por configurações de UI. A próxima sessão terá limite agregado de **60 minutos**, para concluir a expansão herdada sem cortes; não é promessa de duração. Limites de 30 segundos por tela, métodos, configurações e diagnósticos permanecem iguais. As duas tentativas interrompidas continuam sem PASS, com dados/receipts preservados.
+
+Revisão humana aprovada em 2026-10-16: IOS-13 passa a exigir o perfil first-build explícito, com quatro métodos/asserts preservados e zero skips. A matriz integral permanece como perfil full-matrix e comportamento original quando o teste é usado sem a seleção first-build. Não considerar as 541 execuções interrompidas como matriz aprovada. Nenhum outro critério é relaxado; duas provas limpas, CI e Verifier continuam obrigatórios.

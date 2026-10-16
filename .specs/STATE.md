@@ -8,12 +8,10 @@ Registro posterior de 2026-10-16: especificação e rota Nix aprovadas; exceçã
 
 ## Handoff
 
-- **Feature**: ios-first-build, issue #6; TLC Spec Driven, oito tarefas, implementação inline.
-- **Phase / Task**: Execute; T1/T2/T7/T8 concluídas; T3 validação automática ativa.
-- **Completed**: núcleo real local/4.187 objetos; build-for-testing -02/-03 exit 0; quatro produtos arm64 Simulator, ad hoc e símbolos Haskell verificados; onboarding real passou nas tentativas. 51 testes Python (28 Foundation herdados preservados).
-- **In-progress**: UI ios-app-ui-20261016-03, início 20:04:39 UTC/prazo 21:04:39 UTC, sessão exec 3351. UDID 4C162668-2CB6-4460-AC24-82A854980A81. Build -03/patch iOS e dois hashes Swift vinculados; não editar código iOS durante a sessão. T8 final passou em public-native-preparation-20261016-02, exit 0 e cinco hashes reproduzidos. Probe parcial separado (partial-suite-rejection-probe-20261016, sessão 44507) serve somente ao formato/recusa de suíte incompleta, não ao gate positivo.
-- **Next step**: conferir UI completa, xcresult e adequação T3; depois T4, guia, duas execuções limpas no commit final e Verifier/CI.
-- **Blockers**: UI -01 venceu 15 min/130 positivos e -02 venceu 20 min/177 positivos, sem falhas de asserção observadas, suítes incompletas. Nova janela 60 min registrada antes da -03, sem mudar limites de 30 s ou cortar casos. Enumeração oficial mostra quatro métodos lógicos, sem expansão. Nenhuma autorização/autenticação pendente.
-- **Uncommitted files**: dois testes iOS e ChatView.swift; novo componente/testes nativos; spec/design/tasks/execution/handoff. T3 permanece aberta; conferir git.
-- **Branch**: codex/6-ios-first-build-plan; HEAD 53a06d25c.
-- **Ownership**: Codex, feature/tools/integração CI/locks; Projects e store Nix como exceção. Preservar dados/aliases antigos DE62C0FF, 0DE957D3 e 2775E39A, Shutdown confirmado; sem limpeza forçada. rede administrativa, ambiente externo, serviço externo e produção intocados. Sem conta Apple, perfil, mensagem ou distribuição.
+- **Feature**: ios-first-build #6, TLC Spec Driven (Large, oito tarefas), retomada após aprovação explícita do perfil first-build.
+- **Completed**: T1/T2/T7/T8, HEAD 23f14dba8. Núcleo real local, 4.187 objetos; builds -02/-03 e onboarding comprovados; tentativas integrais -01/-02/-03 preservadas sem PASS.
+- **In progress**: T3 perfil inglês/portrait/light aprovado, todos quatro métodos/asserts e zero skips. T4 gravação/validação/comparação preparada; T5 rascunhada; T6 pendente.
+- **Next**: rebuild das fontes novas, sessão própria nova, execução real do perfil; fechar T3/T4 com provas; guia e dois builds limpos do mesmo SHA, CI e Verifier independente.
+- **Constraints**: Projects e exceção Nix aprovada; não tocar ambiente externo/rede administrativa/serviço externo/produção/credenciais Apple. Sem perfil/conversa/binários publicados. Matriz integral disponível e pendente, 541 execuções positivas da tentativa -03 não são suíte aprovada.
+- **Ownership**: Codex, branch codex/6-ios-first-build-plan, integrador feature/tools/docs/CI/locks. Três Swift T3, dois arquivos Python T4 e spec/handoff não commitados; nenhum push/PR F1 ainda.
+- **Sessions**: todas anteriores Shutdown; record atual 22C3C673 onboarding probe preservado. Dois UDIDs finais devem ser criados antes de qualquer UI paralelo, evitando falso new_device_ids.

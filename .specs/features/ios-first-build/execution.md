@@ -378,3 +378,57 @@ A CLI registra active/receipt e prazo agregado de 5.400 s; cada ferramenta respe
 | Conversão real com cinco hashes | T8 Done when 3; IOS-09/16 | Sim |
 
 Adequação: todas asserções novas têm vínculo com os critérios, inclusive resultados negativos e bytes reais; nenhuma substitui a suíte iOS. Estilo unittest e gate de CONTRIBUTING preservados. Nenhuma conclusão T3/T4–T6 ou de distribuição.
+
+## T4 preparada, gate positivo pendente
+
+Escopo de arquivos: ios_proof.py e seus testes co-localizados. Premissas: JSON observado do xcresulttool 0.4.0, produtos reais e fonte/patch identificados; nenhum sucesso de comando isolado substitui todos os métodos ou as duas reproduções finais. A implementação lê binários, valida fonte/hashes/destino/guard, registra códigos de build/teste e timeout com preservação dos erros, e compara dois resultados limpos. Não muda código iOS nem produtos da suíte ativa.
+
+O probe parcial -01 foi recusado exit 70 por usar o módulo como target; nenhum teste executado. O probe -02 usou o target correto Tests iOS/Tests_iOS/testExample e terminou exit 0 às 20:11:46 UTC, com um caso aprovado e destino antigo próprio desligado. Ele fornece formato real e uma prova deliberadamente incompleta, sem representar a suíte inteira. A CLI em proof-partial-rejection-20261016 recusou os três métodos ausentes, exit 2. O parser leu os quatro executáveis reais arm64/platform 7/ad hoc. Os 68 testes Python passaram; T4 permanece sem seu gate positivo até o resultado integral de T3. As funções de registro usam os comandos Xcode já executados em T3; suas reproduções finais serão verificadas em ambientes novos.
+
+O registro público também contabiliza cada Test Case do console, pois o summary do SDK pode agrupar configurações sob métodos. Contagens, métodos e eventos before-main serão comparados; falha, interrupção ou ausência de método impede sucesso.
+
+A reavaliação via referência GitHub imutável e flags no-write/no-update-lock retornou novamente a derivação c27zzp98..., exit 0. A realização subsequente reaproveitou by4ic9..., exit 0; não é uma segunda compilação do fonte. Curl 8.7.1 recusou fixtures HTTP locais por tamanho (63) e tempo (28), sem usar destinos de produto. O novo download HTTPS limitado do WebRTC recebeu 34.279.775 bytes, SHA 2598307f..., 406 entradas sem escape. Outputs locais próprios, sem publicar URLs temporárias de redirect ou binários.
+
+## Bloqueio do gate integral, em 2026-10-16
+
+A tentativa ios-app-ui-20261016-03 terminou às 21:04:39 UTC por timeout (test_exit_code e agregado 124). Havia 541 execuções aprovadas e zero falhas de asserção observadas; a suíte não encerrou. Shutdown do UDID 4C162668... retornou 0, nenhum dispositivo novo foi criado e os processos terminaram. O build/onboarding reais não substituem esse gate; T3 permanece incompleta.
+
+Scheme e xctestrun não declaram repetições extras; o teste herdado mantém runsForEachTargetApplicationUIConfiguration=true. A enumeração mostra quatro métodos lógicos, não o total das configurações expandidas. Logs de configuração e descritores abertos do runner não informaram esse total. Após três tentativas incompletas, nenhuma quarta foi iniciada automaticamente.
+
+Foi apresentada ao proprietário a proposta local ui-matrix-gate-proposal.md: um perfil explícito first-build, quatro métodos/asserts preservados e zero skips, mantendo a matriz integral disponível/pendente. A revisão mudaria o gate IOS-13 e depende de aprovação; o plano atual não foi substituído. Duas provas limpas, CI e Verifier continuam necessárias. O probe separado onboarding-evidence-probe-20261016 usa novo UDID e somente o método de onboarding para produzir imagens reais; não serve à aprovação da suíte integral.
+
+### Imagens reais do onboarding, sem aprovação da suíte inteira
+
+O preflight do novo UDID 22C3C673... terminou exit 0. onboarding-evidence-probe-20261016 executou somente Tests_iOS/testFirstBuildOnboarding e terminou exit 0 às 21:07:51 UTC. O caso passou em 12,912 s, com zero falhas/skips; não é execução integral. As duas screenshots e o JSON before-main foram exportados com xcresulttool e inspecionados. Get started aparece habilitado; Your profile mostra formulário vazio e Create profile desabilitado. Nenhum perfil criado. A prova de negação IPv4/IPv6 e loopback foi revalidada, e o simulador foi desligado.
+
+Os arquivos exportados permanecem ignorados em onboarding-evidence-probe-20261016/attachments; git check-ignore confirmou os dois PNGs. visual-evidence.json registra hashes e escopo onboarding-only. Nenhuma screenshot, binário ou bundle será publicado. A decisão de gate continua pendente do proprietário.
+
+
+## T3 concluída: perfil aprovado do primeiro build
+
+O proprietário aprovou explicitamente o perfil first-build em 2026-10-16; context/spec/design/tasks registram a revisão. Os quatro métodos/asserts permanecem e a matriz integral é o default da classe herdada quando o perfil first-build não é explícito. Perfis desconhecidos falham antes de abrir o app. O executor fixa light no UDID próprio; a factory confere portrait e usa inglês. Nenhum filtro Only/Skip foi aplicado.
+
+A tentativa first-build-profile-build recompilou as fontes modificadas com exit 0 às 21:13:58 UTC, usando o recorder preparado de T4 com allow-dirty somente nesta exploração. App, framework, NSE e Share Extension continuam arm64/platform 7, ad hoc/TeamIdentifier ausente, símbolos Haskell reais definidos e os sete pins preservados. O patch iOS e os hashes de teste estão ligados aos receipts.
+
+first-build-profile-tests terminou exit 0 às 21:16:27 UTC. XCTest executou os quatro métodos em 85,065 s, zero falhas/skips: testExample, testFirstBuildOnboarding (13,334 s), testLaunchPerformance (medições herdadas) e testLaunch (screenshot). Não houve destino novo; shutdown próprio retornou 0. A validação first-build-profile-proof terminou exit 0: quatro métodos/casos expandidos, nove eventos válidos before-main, full_matrix=PENDING. As screenshots exportadas foram inspecionadas: Get started habilitado; Your profile em light/portrait, nome vazio e Create profile desabilitado. Nenhum perfil/conversa criado. PNGs/xcresult continuam somente no estado ignorado.
+
+Esta prova fecha T3, mas não as duas reproduções limpas, CI ou Verifier. O fonte da exploração identifica HEAD 23f14dba8 e patch iOS; as provas finais usarão um único commit limpo posterior.
+
+### Adequação T3
+
+| Critério | Evidência e asserção | Resultado exigido |
+| --- | --- | --- |
+| IOS-11, Get started em 30 s | apps/ios/Tests iOS/Tests_iOS.swift:57, XCTAssertTrue(getStarted.waitForExistence(...)); :58 isHittable; :59 isEnabled; :60 XCTAssertLessThanOrEqual(..., 30) | Visível/habilitado dentro do limite; método real aprovado. |
+| IOS-12, Your profile sem envio | apps/ios/Tests iOS/Tests_iOS.swift:69, waitForExistence; :74 XCTAssertTrue(profile.isHittable); :75 limite 30 | Navegação real aprovada; método termina após screenshot, sem entrada/envio. |
+| IOS-10, cada lançamento | apps/ios/Tests iOS/Tests_iOS.swift:184, event.pid > 0, executable == SimpleX, phase == before_main, errno EPERM/EACCES para IPv4/IPv6 e loopback | Ausência/divergência lança erro, inclusive dentro da medição; nove eventos reais conferidos. |
+| IOS-13, perfil e testes herdados | apps/ios/Tests iOS/Tests_iOS.swift:111, XCTAssertEqual(...orientation, .portrait); :40 measure(metrics: [XCTApplicationLaunchMetric()]); Tests_iOSLaunchTests.swift:29 screenshot keepAlways | Quatro métodos reais aprovados; todos asserts preservados; full-matrix disponível/pendente. |
+| IOS-03/06/08/09 | Settings/build/produtos reais dos receipts first-build-profile-build e proof; Package.resolved hash fixado | Sete pins, quatro produtos e signing ad hoc efetivamente inspecionados; nenhum provisionamento. |
+
+| Asserção / prova | Necessidade | Manter |
+| --- | --- | --- |
+| waits/isHittable/isEnabled/limites de 30 s | IOS-11/12 | Sim |
+| checks de paths/hashes e novo evento before-main a cada launch | IOS-04/05/10/14 | Sim |
+| portrait/performance/screenshot e quatro métodos | IOS-13 aprovado | Sim |
+| Build real, assinaturas/símbolos/plataformas e probe State<ObservedObject> | IOS-03/06/08/09 e compatibilidade pontual | Sim |
+
+Adequação: resultados observáveis, sem teste especulativo, sem excluir/skipping/assert enfraquecido. CONTRIBUTING.md e matriz de testes aplicados. A compatibilidade SwiftUI preserva State<ObservedObject<Chat>> e seus bindings; não altera protocolos/criptografia. O gate Full iOS passou no perfil autorizado; matriz integral continua sem PASS.

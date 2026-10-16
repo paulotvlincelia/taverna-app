@@ -42,3 +42,7 @@ O texto inicialmente proposto, Create your profile, foi obtido da view CreatePro
 ## Revisão do isolamento aprovada em 2026-10-16
 
 O proprietário aprovou UDID exclusivo registrado no índice padrão do Xcode, com dados/caches/logs físicos no worktree, e contenção de IP remoto no processo do app antes do main. Serviços do sistema iOS ficam fora dela. IOS-04, IOS-05 e IOS-10 foram atualizados; os demais critérios permanecem. Não criar perfil nem mensagens, não alterar firewall/VPN. APP-004 registra a decisão; controles UIKit sintéticos não comprovam a execução da Taverna.
+
+## Revisão aprovada do gate de UI em 2026-10-16
+
+O proprietário aprovou explicitamente o perfil first-build: inglês, portrait e light, com os quatro métodos existentes/novo executados e todas as asserções preservadas, zero skips. A matriz integral continua disponível e pendente; nenhum resultado interrompido é aprovado. Permanecem os limites de 30 segundos por tela, dois ambientes limpos no mesmo commit/manifesto, CI e Verifier independente. A pergunta/aprovação ocorreu após a tentativa integral de 60 minutos, com 541 execuções positivas e suíte incompleta.
