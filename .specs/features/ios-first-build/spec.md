@@ -46,7 +46,7 @@ Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprova
 | Evidências visuais | Manter screenshots e xcresult apenas no estado local ignorado; relatório público textual. | Assets e conteúdo dos bundles ainda precisam de revisão para publicação. | y |
 | Local dos ambientes | Clone principal e worktrees sob a raiz Projects já definida pelo proprietário. | Preservar organização existente; nenhum novo checkout em Downloads ou Desktop. | y |
 
-**Open questions:** none — defaults aprovados; origem/ABI das bibliotecas, seleção do simulador isolado e contenção de rede continuam sendo provas técnicas. A exceção necessária para a rota Nix foi autorizada separadamente pelo proprietário em 2026-10-16; a instalação ainda não está concluída.
+**Open questions:** none — defaults aprovados; origem/ABI das bibliotecas, seleção do simulador isolado e contenção de rede continuam sendo provas técnicas. A exceção necessária para a rota Nix foi autorizada separadamente pelo proprietário em 2026-10-16; a instalação foi concluída e validada, com o avanço registrado em execution.md.
 
 ## User Stories
 
@@ -127,30 +127,30 @@ Não há promessa de duração antes da qualificação do núcleo. A segunda exe
 
 ## Requirement Traceability
 
-| Requirement ID | Story / critério | Phase | Status |
-| --- | --- | --- | --- |
-| IOS-01 | Entradas: proveniência | Specify | Pending |
-| IOS-02 | Entradas: rejeição | Specify | Pending |
-| IOS-03 | Entradas: pins SwiftPM | Specify | Pending |
-| IOS-04 | Entradas: estado isolado | Specify | Pending |
-| IOS-05 | Entradas: destino Xcode | Specify | Pending |
-| IOS-06 | Entradas: assinatura | Specify | Pending |
-| IOS-07 | Entradas: download/extração | Specify | Pending |
-| IOS-08 | App: produtos do scheme | Specify | Pending |
-| IOS-09 | App: plataforma/arquitetura | Specify | Pending |
-| IOS-10 | App: rede isolada | Specify | Pending |
-| IOS-11 | App: abertura observável | Specify | Pending |
-| IOS-12 | App: navegação observável | Specify | Pending |
-| IOS-13 | App: suíte preservada | Specify | Pending |
-| IOS-14 | App: falha detectada | Specify | Pending |
-| IOS-15 | App: retomada | Specify | Pending |
-| IOS-16 | App: registro de prova | Specify | Pending |
-| IOS-17 | App: segunda execução | Specify | Pending |
-| IOS-18 | App: Verifier e CI | Specify | Pending |
-| IOS-19 | App: alcance do PASS | Specify | Pending |
-| IOS-20 | App: publicação de evidências | Specify | Pending |
+| Requirement ID | Story / critério | Tasks | Phase | Status |
+| --- | --- | --- | --- | --- |
+| IOS-01 | Entradas: proveniência | T1 | Tasks | In Tasks |
+| IOS-02 | Entradas: rejeição | T1, T4 | Tasks | In Tasks |
+| IOS-03 | Entradas: pins SwiftPM | T3 | Tasks | In Tasks |
+| IOS-04 | Entradas: estado isolado | T2, T5 | Tasks | In Tasks |
+| IOS-05 | Entradas: destino Xcode | T2 | Tasks | In Tasks |
+| IOS-06 | Entradas: assinatura | T3 | Tasks | In Tasks |
+| IOS-07 | Entradas: download/extração | T1, T5 | Tasks | In Tasks |
+| IOS-08 | App: produtos do scheme | T3 | Tasks | In Tasks |
+| IOS-09 | App: plataforma/arquitetura | T1, T4 | Tasks | In Tasks |
+| IOS-10 | App: rede isolada | T2 | Tasks | In Tasks |
+| IOS-11 | App: abertura observável | T3 | Tasks | In Tasks |
+| IOS-12 | App: navegação observável | T3 | Tasks | In Tasks |
+| IOS-13 | App: suíte preservada | T3 | Tasks | In Tasks |
+| IOS-14 | App: falha detectada | T4 | Tasks | In Tasks |
+| IOS-15 | App: retomada | T2, T5 | Tasks | In Tasks |
+| IOS-16 | App: registro de prova | T1, T4, T5 | Tasks | In Tasks |
+| IOS-17 | App: segunda execução | T6 | Tasks | In Tasks |
+| IOS-18 | App: Verifier e CI | T6 | Tasks | In Tasks |
+| IOS-19 | App: alcance do PASS | T1, T4, T5, T6 | Tasks | In Tasks |
+| IOS-20 | App: publicação de evidências | T4, T5, T6 | Tasks | In Tasks |
 
-Coverage: 20 requisitos; 0 mapeados a tarefas nesta etapa. Design e tarefas ainda não produzidos. Nenhum requisito implementado ou verificado.
+Coverage: 20 requisitos mapeados às seis tarefas de tasks.md, sem requisitos sem destino. T1 em andamento; nenhum requisito verificado e nenhum build do app declarado.
 
 ## Success Criteria
 
