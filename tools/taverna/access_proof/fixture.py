@@ -104,7 +104,7 @@ def start():
     xftp.write_text(xftp.read_text().replace('port = 443','port = 8443'))
     args=base_run('relay','inner',[(WORK,'/work',False)])
     for key,value in {'SMP_SERVER_CFG_PATH':'/work/run-a/smp-config','SMP_SERVER_LOG_PATH':'/work/run-a/smp-log','XFTP_SERVER_CFG_PATH':'/work/run-a/xftp-config','XFTP_SERVER_LOG_PATH':'/work/run-a/xftp-log'}.items():args+=['-e',key+'='+value.replace('/work/run-a/','/work/'+RUN.name+'/')]
-    docker(*args,IMAGE,'sh','-c','/work/bin/smp-server-ubuntu-24_04-aarch64 start > /work/run-a/smp.log 2>&1 & /work/bin/xftp-server-ubuntu-24_04-aarch64 start > /work/run-a/xftp.log 2>&1 & wait')
+    docker(*args,IMAGE,'sh','-c',f'/work/bin/smp-server-ubuntu-24_04-aarch64 start > /work/{RUN.name}/smp.log 2>&1 & /work/bin/xftp-server-ubuntu-24_04-aarch64 start > /work/{RUN.name}/xftp.log 2>&1 & wait')
     docker(*base_run('gateway','inner',[(RUN/'gateway','/gateway',True),(SOURCE,'/source',True)]),IMAGE,'python3','/source/gateway.py','/gateway')
     docker('network','connect','--alias','gateway',PREFIX+'-outer',PREFIX+'-gateway')
     for who in ('alice','bob','unknown'):

@@ -164,5 +164,9 @@ class BoundaryProof(unittest.TestCase):
         time.sleep(.1)
         self.assertEqual(counter.read_text(),'1','client-supplied destination reached sentinel')
 
+    def test_11_logs_belong_to_selected_run(self):
+        self.assertIn('binding to',(f.RUN/'smp.log').read_text())
+        self.assertIn('binding to',(f.RUN/'xftp.log').read_text())
+
 
 if __name__=='__main__':unittest.main(verbosity=2)
