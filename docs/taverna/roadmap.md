@@ -5,7 +5,7 @@ Estado em 2026-10-16: fundação e primeiro build iOS integrados; duas reproduç
 | Épico | Entregas canônicas | Resultado esperado |
 | --- | --- | --- |
 | [E2: App iOS e identidade](https://github.com/paulotvlincelia/taverna-app/issues/1) | [Fundação](https://github.com/paulotvlincelia/taverna-app/issues/4), [assets e dependências](https://github.com/paulotvlincelia/taverna-app/issues/5), [primeiro build](https://github.com/paulotvlincelia/taverna-app/issues/6) | Compilar, testar e comprovar origem/identidade antes de distribuição |
-| [E3: Convites e configuração](https://github.com/paulotvlincelia/taverna-app/issues/2) | [Spec de convites](https://github.com/paulotvlincelia/taverna-app/issues/7) | Fechar critérios para app, relays e grupos antes da implementação |
+| [E3: Convites e configuração](https://github.com/paulotvlincelia/taverna-app/issues/2) | [Spec de convites](https://github.com/paulotvlincelia/taverna-app/issues/7), [prova mínima de acesso](https://github.com/paulotvlincelia/taverna-app/issues/12) | Fechar critérios para app, relays e grupos antes da implementação |
 | [E4: Notificações e distribuição](https://github.com/paulotvlincelia/taverna-app/issues/3) | [Identidade e push próprios](https://github.com/paulotvlincelia/taverna-app/issues/8) | Push real em aparelho e caminho de distribuição viável |
 
 Milestones: Fundação, TestFlight privado e Piloto até 20 convidados. O roadmap tem quadro por Status, backlog por Parent issue e roadmap agrupado por Marco. Início previsto e Alvo previsto permanecem vazios até estimativas fundamentadas; criação de campo não é compromisso de data.
@@ -21,3 +21,5 @@ A [spec de entrada e configuração](../../.specs/features/invitation-only/spec.
 Sequência: requisitos aprovados; comprovar autorização individual e compatibilidade com os serviços em ambiente isolado; preparar identidade e seu DESIGN.md; construir uma fatia completa; qualificar operação, aparelhos e distribuição; iniciar piloto pequeno. As [evidências e lacunas](../../.specs/features/invitation-only/research.md) explicam por que convites de contato e uma senha compartilhada de relay não comprovam o perímetro desejado.
 
 O DESIGN.md será produzido na raiz durante a fase de identidade. Seu contrato na spec cobre marca, tokens, componentes, estados, fluxos, acessibilidade, assets/licenças e tradução para iOS. Não existe identidade visual aprovada nesta etapa.
+
+O [experimento de fronteira de acesso](access-proof.md) usa relays oficiais isolados, com credenciais fictícias por dispositivo e testes de revogação. A prova local não é integração no app nem operação da VPS. O piloto histórico do proprietário permanece evidência de uso do SimpleX; os novos testes verificam somente a fronteira acrescentada pela Taverna.
