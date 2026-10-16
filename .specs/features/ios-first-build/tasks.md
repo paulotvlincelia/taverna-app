@@ -5,7 +5,7 @@
 Usar tlc-spec-driven conforme a skill versionada. A especificação, sua execução e a rota Nix foram autorizadas pelo proprietário. Esta decomposição preserva os critérios aprovados. Verificar e fechar cada tarefa separadamente, sem marcar uma etapa concluída só porque sua preparação terminou. O preparo de T2 independe das bibliotecas e pode ocorrer enquanto a operação Nix de T1 aguarda; T3 exige ambas aprovadas. O Verifier independente é obrigatório após o último commit de implementação.
 
 **Design:** [design.md](design.md).
-**Status:** In Progress — preparação administrativa concluída; T1 em andamento, sem biblioteca qualificada ainda.
+**Status:** In Progress — T1, T2 e T7 concluídas; núcleo/entradas qualificados localmente. T3–T6 pendentes, sem build do app.
 
 Ferramentas: Git nativo, Python 3.12 stdlib, Nix 2.34.9 e ferramentas do Xcode instalado. A integração de handoff, CI e locks nesta branch pertence ao Codex. Não há delegação de implementação; sete tarefas cabem em uma sequência local. A verificação final será independente.
 
@@ -65,18 +65,18 @@ T5 → T6
 ### T1: Realizar e qualificar o núcleo fixado
 
 **What**: Produzir o conjunto nativo com origem e plataforma comprovadas, registrando preparação, comandos e resultados.
-**Where**: `.specs/features/ios-first-build/execution.md`
+**Where**: `.specs/features/ios-first-build/execution.md`, `.specs/features/ios-first-build/native-inputs.json`
 **Depends on**: None
-**Reuses**: flake.nix, flake.lock, cabal.project e mac2ios da revisão fixada.
+**Reuses**: flake.nix, flake.lock, cabal.project e mac2ios do empacotamento original; vtool/libtool do Xcode qualificados para a conversão final legada, conforme design.md.
 **Requirement**: IOS-01, IOS-02, IOS-07, IOS-09, IOS-16, IOS-19.
 **Tools**: Nix e ferramentas nativas de inspeção; TLC Spec Driven.
 **Tests**: integration; registros de avaliação, realização, hashes e inspeção dos objetos reais. O download de um compilador auxiliar não prova a biblioteca final.
 **Gate**: Full Native.
 **Done when**:
 
-- [ ] Bibliotecas e manifesto real identificam URL imutável do fonte, commit, receita, licença e hashes dos artefatos originais/transformados.
-- [ ] Arquitetura e plataforma de simulador são comprovadas; uma entrada incompatível ou sem origem permanece bloqueada.
-- [ ] O registro distingue produto construído localmente de eventual produto obtido por substituição de cache, sem afirmar reconstrução local indevida.
+- [x] Bibliotecas e manifesto real identificam URL imutável do fonte, commit, receita, licença e hashes dos artefatos originais/transformados.
+- [x] Arquitetura e plataforma de simulador são comprovadas; uma entrada incompatível ou sem origem permanece bloqueada.
+- [x] O registro distingue produto construído localmente de eventual produto obtido por substituição de cache, sem afirmar reconstrução local indevida.
 
 ### T2: Provar a sessão isolada
 
@@ -215,4 +215,4 @@ T5 → T6
 
 ## Estado
 
-T1 em andamento; T2 concluída como ambiente com controle UIKit sintético e preflight real. T7 concluída: CACHE_ROOT e caches efetivos confinados e gate repetido; T3–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.
+T1 concluída: fonte realizado, cinco bibliotecas/4.187 objetos qualificados e falhas discriminadas; T2 concluída como ambiente com controle UIKit sintético e preflight real. T7 concluída: CACHE_ROOT e caches efetivos confinados e gate repetido; T3–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.
