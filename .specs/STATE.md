@@ -6,9 +6,10 @@ As decisões canônicas ficam em [docs/taverna/decisions](../docs/taverna/decisi
 
 ## Handoff
 
-- Feature: invitation-only, issue pública #7. TLC Spec Driven 3.3.0. Spec/contexto e pressupostos aprovados pelo proprietário em 2026-10-16; publicação do plano e prova isolada autorizadas; gates antes da integração preservados.
-- Fase: pesquisa para Design, comparando autorização individual e compatibilidade dos serviços. Nenhum produto Taverna ou prova operacional declarados prontos.
-- Próximo passo: publicar PR do plano; qualificar o fonte fixado e as alternativas de enforcement, registrar evidências e limites; confirmar abordagem antes de detalhar arquitetura conforme TLC.
-- Entrega anterior: PR #10 integrado em stable 9bfd78275a6f354ce3d18aaa7f2d47b48ba71756. Primeiro build: duas provas, quatro métodos por prova, zero falhas/skips, 70 testes, Verifier 20/20 e sensor 6/6. Aparelho/APNs não executados; distribuição bloqueada.
-- Responsável/integrador: Codex; branch codex/7-invitation-only-plan; worktree irmão taverna-app-worktrees/invitation-only-plan. Escopo: artefatos desta feature, README, roadmap e handoff. Sem reversão de mudanças de outros agentes.
-- Preservação: worktrees/evidências e preview existentes mantidos. Tudo em Projects; sem mudanças em produção, app, CI, locks, licenças, ambiente externo, rede administrativa, serviço externo, DNS, credenciais ou contas Apple.
+- Feature: invitation-only. Plano aprovado/integrado pelo PR #11 em stable 984a21659e6b846a874ae1a672fef5a890865070; issue #7 é a especificação. A issue #12 é somente a prova mínima de fronteira de acesso.
+- Método: TLC Spec Driven dimensionado para experimento delimitado em três passos. O proprietário orientou usar a alternativa mais simples, reutilizando o piloto SimpleX, sem overengineering; rota A apenas experimental.
+- Estado: fornecedores oficiais fixados e ponte/driver implementados; 11 testes reais SMP/XFTP em run-b, mais 70 regressões Foundation, passaram. A prova não integra app ou produção; os 34 critérios do produto seguem Pending.
+- Próximo passo: Verifier independente e sensor no commit final da prova; publicar e integrar somente após CI e revisão verdes. Download em andamento e semântica completa de egress do app permanecem pendentes.
+- Ownership: Codex, responsável e integrador; branch codex/access-control-qualification; worktree irmão taverna-app-worktrees/access-control-qualification. Escopo: tools/taverna/access_proof, artefatos invitation-only, este handoff e guia documental relacionado.
+- Recursos: fixture Docker de dados fictícios, redes internas e nenhuma porta publicada; logs/chaves/bancos sob .build no worktree. Preservar arquivos ao encerrar os containers atribuídos. Não remover worktrees de prova anteriores nem o preview no simulador.
+- Limites: ambiente externo, rede administrativa, serviço externo, produção, DNS, app iOS, CI, locks, licenças e contas Apple sem alteração. Não publicar binários, convites, chaves, bancos, logs brutos ou conteúdo de mensagens, mesmo da fixture.

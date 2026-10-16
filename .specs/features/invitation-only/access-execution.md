@@ -32,3 +32,9 @@ A retirada da associação e a falta/invalidez da política fecharam os dois flu
 Asserções novas se limitam a AP-01 a AP-06; AP-07 é documentação/origem/revisão. As provas existentes da fundação continuam 70/70, sem mudança de asserções. Nenhum controle echo substitui SMP/XFTP. Scripts de prova não entram automaticamente na CI, que continua sem segredos e sem containers de aplicação.
 
 Próximo passo: relatório delimitado, Verifier independente e CI antes da integração da issue #12. Os critérios completos do app permanecem Pending.
+
+## Passo 3: relatório e entrega
+
+O guia docs/taverna/access-proof.md registra origem, execução, encerramento e limites. A prova usa binários oficiais de fornecedor; não os apresenta como compilados localmente ou idênticos ao binário iOS. A lista local de acesso, os adaptadores de teste e a prova da ponte não implementam entrada no app ou grupos.
+
+A execução final do componente passou 11 testes em 11,888 segundos, zero skips; os 70 testes de regressão também passaram. Revisão independente e sensores de comportamento ainda precisam aprovar o commit final antes da integração. Logs completos e credenciais fictícias ficam ignorados sob .build; nenhuma conversa ou convite foi versionado.
