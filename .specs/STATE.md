@@ -9,11 +9,11 @@ Registro posterior de 2026-10-16: especificação e rota Nix aprovadas; exceçã
 ## Handoff
 
 - **Feature**: [ios-first-build](features/ios-first-build/spec.md), issue pública #6.
-- **Phase / Task**: preparo administrativo autorizado, pré-requisito do Design; nenhum código do app alterado.
-- **Completed**: qualificação pré-compilada BLOCKED; rota Nix e exceção autorizadas; pacote 2.34.9 com SHA oficial conferido; autenticação macOS confirmada pelo proprietário.
-- **In-progress**: instalação manual pelo Terminal gráfico solicitada ao proprietário. O controle automatizado do Terminal foi recusado pela ferramenta por segurança; não contornar por outra ferramenta.
-- **Next step**: conferir .build/attempts/nix-bootstrap-20261016/gui-install.exit e gui-install.log; validar versão, montagem e daemon. Depois avaliar derivação fixada sem atualizar o lock e fechar Design/tarefas antes de modificar código.
-- **Blockers**: instalação inicial exit 1 em vifs: error creating /etc/fstab. /nix e volume APFS vazio criados, binário/daemon ainda ausentes. Falta execução manual do helper pelo proprietário.
-- **Uncommitted files**: conferir Git ao retomar; checkpoint documental a commitar nesta sessão.
+- **Phase / Task**: avaliação da receita Nix aprovada; nenhum código do app alterado.
+- **Completed**: instalação gráfica exit 0; Nix 2.34.9, daemon e montagem validados; fonte upstream fixado recuperado e sete arquivos-chave comparados com hashes idênticos ao fork.
+- **In-progress**: avaliação do atributo iOS arm64 com import-from-derivation requerido pelo upstream. Pode construir auxiliares de resolução Haskell; nenhum app lançado.
+- **Next step**: conferir drv-path-ifd-receipt.json e logs da avaliação, obter a derivação e planejar a compilação/qualificação nativa. Fechar tarefas antes de modificar código de build/testes.
+- **Blockers**: nenhum bloqueio administrativo pendente; compatibilidade da receita ainda não comprovada. Bibliotecas reais, destino/rede isolados, build e testes continuam sem prova.
+- **Uncommitted files**: conferir Git; registro de execução e atualização de ambiente nesta sessão.
 - **Branch**: codex/6-ios-first-build-plan.
-- **Ownership**: Codex, .specs/features/ios-first-build, handoff e docs/taverna/decisions/README.md. Estado ignorado: .build/attempts/nix-bootstrap-20261016. Helper install-nix.command pronto, bash -n aprovado; não foi executado automaticamente.
+- **Ownership**: Codex, .specs/features/ios-first-build e handoff. Estado local em .build/attempts/nix-validation-20261016 e nix-core-evaluation-20261016; cache/configuração sob .build/nix.

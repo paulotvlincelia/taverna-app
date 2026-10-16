@@ -1,7 +1,7 @@
 # Design do primeiro build iOS
 
 **Spec:** [spec.md](spec.md), aprovada em 2026-10-16.
-**Status:** rota Nix e exceção administrativa autorizadas pelo proprietário em 2026-10-16. Instalação em andamento; compilação ainda não realizada.
+**Status:** rota Nix e exceção administrativa autorizadas pelo proprietário em 2026-10-16. Instalação concluída e ambiente Nix validado; avaliação da receita em andamento. Compilação do app ainda não realizada.
 
 ## Architecture Overview
 
@@ -95,3 +95,7 @@ A primeira tentativa autenticou no macOS, criou o ponto /nix e um volume APFS va
 O [relato no repositório Nix](https://github.com/NixOS/nix/issues/13723#issuecomment-3251454726) apresenta o mesmo erro e informa sucesso ao executar pela sessão gráfica. Isso indica um caminho de investigação; a causa neste MacBook ainda não foi comprovada. Não desativar SIP ou alterar permissões globais como atalho.
 
 O controle automatizado do Terminal foi recusado pela ferramenta de UI por segurança. Foi preparado um helper local interativo, com verificação de hash e logs próprios, para execução manual pelo proprietário. Nenhum instalador foi reiniciado automaticamente após a falha, e o volume vazio foi preservado. Depois da execução manual, validar versão, conexão com o daemon e montagem antes de iniciar a avaliação da receita.
+
+## Ambiente após a execução gráfica
+
+O proprietário concluiu o helper com exit 0. A validação confirmou Nix 2.34.9, conexão com o daemon e /nix montado. Os registros posteriores estão em [execution.md](execution.md). A avaliação usa o commit upstream fixado, com locks preservados e cache/configuração do cliente no worktree; não depende de um PATH configurado por um harness específico.
