@@ -1,6 +1,6 @@
 # Primeiro build iOS da Taverna
 
-Status: aprovado pelo proprietário em 2026-10-16. Núcleo realizado do fonte e entradas qualificadas; build do app e onboarding comprovados em tentativa local, suíte completa/reprodução/verificação final pendentes.
+Status: concluído em 2026-10-16, com 20/20 critérios aprovados pelo Verifier independente no commit de implementação 6ea482bd4a1912d8eef52904d930c7f6c57bf746. Duas reproduções limpas e CI aprovadas; [relatório](validation.md). Matriz integral, aparelho/push e distribuição permanecem fora do PASS.
 
 Issue canônica: [taverna-app #6](https://github.com/paulotvlincelia/taverna-app/issues/6), vinculada ao épico E2. Método: TLC Spec Driven 3.3.0, escopo Large, pois há dependências entre bibliotecas nativas, SwiftPM, Xcode, simulador e evidências. Esta proposta preserva a fundação integrada e os critérios da issue.
 
@@ -131,28 +131,28 @@ Não há promessa de duração antes da qualificação do núcleo. A segunda exe
 
 | Requirement ID | Story / critério | Tasks | Phase | Status |
 | --- | --- | --- | --- | --- |
-| IOS-01 | Entradas: proveniência | T1, T8 | Execute | In Progress |
-| IOS-02 | Entradas: rejeição | T1, T8, T4 | Execute | In Progress |
-| IOS-03 | Entradas: pins SwiftPM | T3 | Execute | In Progress |
-| IOS-04 | Entradas: estado isolado | T2, T7, T8, T5 | Execute | In Progress |
-| IOS-05 | Entradas: destino Xcode | T2 | Execute | In Progress |
-| IOS-06 | Entradas: assinatura | T3 | Execute | In Progress |
-| IOS-07 | Entradas: download/extração | T1, T8, T5 | Execute | In Progress |
-| IOS-08 | App: produtos do scheme | T3 | Execute | In Progress |
-| IOS-09 | App: plataforma/arquitetura | T1, T8, T4 | Execute | In Progress |
-| IOS-10 | App: rede isolada | T2, T3, T4 | Execute | In Progress |
-| IOS-11 | App: abertura observável | T3 | Execute | In Progress |
-| IOS-12 | App: navegação observável | T3 | Execute | In Progress |
-| IOS-13 | App: suíte preservada | T3 | Execute | In Progress |
-| IOS-14 | App: falha detectada | T4 | Tasks | In Tasks |
-| IOS-15 | App: retomada | T2, T7, T8, T5 | Execute | In Progress |
-| IOS-16 | App: registro de prova | T1, T8, T4, T5 | Execute | In Progress |
-| IOS-17 | App: segunda execução | T4, T6 | Tasks | In Tasks |
-| IOS-18 | App: Verifier e CI | T6 | Tasks | In Tasks |
-| IOS-19 | App: alcance do PASS | T1, T4, T5, T6 | Execute | In Progress |
-| IOS-20 | App: publicação de evidências | T4, T5, T6 | Tasks | In Tasks |
+| IOS-01 | Entradas: proveniência | T1, T8 | Execute | Verified |
+| IOS-02 | Entradas: rejeição | T1, T8, T4 | Execute | Verified |
+| IOS-03 | Entradas: pins SwiftPM | T3 | Execute | Verified |
+| IOS-04 | Entradas: estado isolado | T2, T7, T8, T5 | Execute | Verified |
+| IOS-05 | Entradas: destino Xcode | T2 | Execute | Verified |
+| IOS-06 | Entradas: assinatura | T3 | Execute | Verified |
+| IOS-07 | Entradas: download/extração | T1, T8, T5 | Execute | Verified |
+| IOS-08 | App: produtos do scheme | T3 | Execute | Verified |
+| IOS-09 | App: plataforma/arquitetura | T1, T8, T4 | Execute | Verified |
+| IOS-10 | App: rede isolada | T2, T3, T4 | Execute | Verified |
+| IOS-11 | App: abertura observável | T3 | Execute | Verified |
+| IOS-12 | App: navegação observável | T3 | Execute | Verified |
+| IOS-13 | App: suíte preservada | T3 | Execute | Verified |
+| IOS-14 | App: falha detectada | T4 | Execute | Verified |
+| IOS-15 | App: retomada | T2, T7, T8, T5 | Execute | Verified |
+| IOS-16 | App: registro de prova | T1, T8, T4, T5 | Execute | Verified |
+| IOS-17 | App: segunda execução | T4, T6 | Execute | Verified |
+| IOS-18 | App: Verifier e CI | T6 | Execute | Verified |
+| IOS-19 | App: alcance do PASS | T1, T4, T5, T6 | Execute | Verified |
+| IOS-20 | App: publicação de evidências | T4, T5, T6 | Execute | Verified |
 
-Coverage: 20 requisitos mapeados às oito tarefas de tasks.md, sem requisitos sem destino. T1 concluída como qualificação de entradas; nenhum requisito declarado verificado pelo Verifier. Build do app e onboarding passaram em tentativa local; suíte completa e reprodução continuam pendentes.
+Coverage: 20 requisitos mapeados às oito tarefas e verificados independentemente no commit 6ea482bd4a1912d8eef52904d930c7f6c57bf746. Duas provas limpas do perfil aprovado e CI aprovadas, conforme validation.md. Não houve conclusão da matriz integral ou prova de aparelho/push/distribuição.
 
 ## Success Criteria
 

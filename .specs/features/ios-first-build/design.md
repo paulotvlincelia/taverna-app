@@ -1,7 +1,7 @@
 # Design do primeiro build iOS
 
 **Spec:** [spec.md](spec.md), aprovada em 2026-10-16.
-**Status:** núcleo realizado do fonte e entradas locais qualificadas em 2026-10-16. T1 concluída; build do app/onboarding comprovados em tentativa local, suíte completa/reprodução pendentes.
+**Status:** implementado e verificado em 2026-10-16 no SHA 6ea482bd4a1912d8eef52904d930c7f6c57bf746. Duas provas limpas do perfil aprovado, CI e Verifier PASS. As seções abaixo preservam a sequência das decisões; o estado final está em [validation.md](validation.md).
 
 ## Architecture Overview
 

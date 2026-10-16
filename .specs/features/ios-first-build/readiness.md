@@ -2,21 +2,21 @@
 
 ## Estado atualizado em 2026-10-16
 
-Compilação e navegação inicial comprovadas localmente; perfil first-build aprovado pelo proprietário, com quatro métodos reais aprovados e zero falhas/skips. Não há aprovação final do Verifier/CI nem duas reproduções limpas do commit final.
+Primeiro build de base comprovado: duas reproduções limpas, CI e Verifier independente aprovados no commit 6ea482bd4a1912d8eef52904d930c7f6c57bf746. Perfil first-build com quatro métodos por execução, zero falhas/skips; 20/20 critérios verificados. Ver [relatório](validation.md).
 
 | Parte | Estado atual | Evidência |
 | --- | --- | --- |
 | Núcleo | Realizado localmente do fonte fixado, com Nix; cinco arquivos e 4.187 objetos de simulador | T1/T8 em [execution.md](execution.md) e [manifesto](native-inputs.json). |
-| App/framework/extensões | Build-for-testing aprovado, arm64 iOS Simulator e ad hoc | Tentativas ios-app-build-20261016-02/-03; quatro produtos e símbolos reais inspecionados. |
-| Navegação inicial | Get started → Your profile aprovado, sem envio do formulário | Probe novo onboarding-evidence-probe-20261016: 12,912 s, um método aprovado, zero falhas/skips; duas screenshots reais inspecionadas no estado ignorado. |
+| App/framework/extensões | Build-for-testing aprovado, arm64 iOS Simulator e ad hoc | Duas provas limpas no SHA 6ea482bd4, quatro produtos e símbolos reais inspecionados em cada uma; hashes em execution.md. |
+| Navegação inicial | Get started → Your profile aprovado, sem envio do formulário | Método real aprovado nas duas reproduções limpas, com limites de 30 s por tela e screenshots inspecionadas localmente. |
 | Contenção | Prova antes do main no processo real do app | IPv4/IPv6 remotos negados e loopback permitido; dados/UDID próprios, conforme APP-004. |
-| Ferramentas Python | 70 testes locais aprovados | 51 já versionados e 19 novos testes de T4 ainda em trabalho; não equivalem a prova de suíte iOS completa. |
-| Perfil first-build | Quatro métodos aprovados, zero falhas/skips em 85,065 s | first-build-profile-build/tests/proof; nove eventos before-main; dados novos e shutdown 0. |
+| Ferramentas Python | 70 testes aprovados, zero falhas/skips | Autor, Verifier e CI; mantidos os 28 testes anteriores à feature. |
+| Perfil first-build | Quatro métodos aprovados por reprodução, zero falhas/skips | Duas provas limpas com dados novos; nove eventos before-main e shutdown 0 em cada uma. |
 | Matriz integral | Incompleta por timeout, sem PASS | Terceira tentativa: 60 min, 541 execuções positivas/zero falhas observadas; dados preservados e simulador desligado. |
 | Decisão de gate | Aprovada pelo proprietário | Perfil first-build em inglês/portrait/light, quatro métodos/asserts e zero skips; matriz integral disponível e pendente. |
-| Repetição/CI/Verifier | Pendentes | Continuam obrigatórios; distribuição/assinatura/push em aparelho não comprovados. |
+| Repetição/CI/Verifier | Aprovados | Mesmo SHA/manifesto/perfil em ambientes distintos; 20/20 critérios, sensor 6/6 e CI no SHA exato. Aparelho/push NOT RUN; distribuição BLOCKED. |
 
-O texto abaixo preserva o levantamento inicial de planejamento. Seus estados de ausência e rotas candidatas são históricos; a execução e o bloqueio atuais estão registrados acima e em execution.md.
+O texto abaixo preserva o levantamento inicial de planejamento. Seus estados de ausência e rotas candidatas são históricos; o estado atual e os limites do PASS estão registrados acima e em execution.md.
 
 ## Levantamento inicial, antes da implementação
 

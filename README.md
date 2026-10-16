@@ -6,7 +6,7 @@ A Taverna está em desenvolvimento. O primeiro destino é um app iOS com mensage
 
 ## Estado em 16 de outubro de 2026
 
-Este repositório público é um fork independente do [SimpleX Chat](https://github.com/simplex-chat/simplex-chat), iniciado em `stable`, commit `479548ee53ffb73db73841e77acbeee5a78dbbd5`. A base do fork já compilou e executou neste MacBook: app, framework, Notification Service Extension e Share Extension, com núcleo SimpleX real. O perfil first-build passou com quatro métodos de UI, zero falhas/skips e navegação Get started → Your profile. **A interface ainda é a herdada do SimpleX; não há release ou TestFlight da Taverna.**
+Este repositório público é um fork independente do [SimpleX Chat](https://github.com/simplex-chat/simplex-chat), iniciado em `stable`, commit `479548ee53ffb73db73841e77acbeee5a78dbbd5`. A base do fork já compilou e executou neste MacBook: app, framework, Notification Service Extension e Share Extension, com núcleo SimpleX real. Duas reproduções limpas do mesmo commit passaram no perfil first-build, com quatro métodos de UI em cada uma, zero falhas/skips e navegação Get started → Your profile. **A interface ainda é a herdada do SimpleX; não há release ou TestFlight da Taverna.**
 
 O núcleo Haskell foi construído localmente do fonte fixado por Nix; cinco bibliotecas e 4.187 objetos de simulador foram qualificados. O WebRTC continua sendo um binário do fornecedor, com origem/checksum registrados. Assinatura ad hoc no simulador não comprova assinatura em aparelho, APNs ou distribuição. A matriz integral de idiomas/orientações/aparências permanece pendente; o perfil aprovado usa inglês/portrait/light.
 
@@ -29,10 +29,10 @@ python3.12 -m unittest discover -s tools/taverna/tests -v
 python3.12 tools/taverna/check_foundation.py
 ```
 
-Siga o [guia de build iOS](docs/taverna/ios-build.md) e as regras de [ambientes isolados](docs/taverna/environments.md). Os [registros da primeira prova](.specs/features/ios-first-build/execution.md) distinguem tentativas interrompidas, prova local e gates finais. Duas reproduções limpas no mesmo commit, CI e Verifier independente são exigidos para concluir a entrega; o estado atual está nas [tarefas](.specs/features/ios-first-build/tasks.md). Os comandos upstream em [apps/ios/README.md](apps/ios/README.md) são referências técnicas; use o procedimento isolado versionado, com entradas fixadas.
+Siga o [guia de build iOS](docs/taverna/ios-build.md) e as regras de [ambientes isolados](docs/taverna/environments.md). Os [registros da primeira prova](.specs/features/ios-first-build/execution.md) distinguem tentativas interrompidas, prova local e gates finais. As duas reproduções, a CI e o Verifier independente aprovaram o commit `6ea482bd4`; o [relatório](.specs/features/ios-first-build/validation.md) cobre os 20 critérios e seis falhas injetadas detectadas. O estado está nas [tarefas](.specs/features/ios-first-build/tasks.md). Os comandos upstream em [apps/ios/README.md](apps/ios/README.md) são referências técnicas; use o procedimento isolado versionado, com entradas fixadas.
 
 ## Próximas entregas
 
-Concluir os gates de reprodução do primeiro build; depois, inventariar assets/dependências e validar identidade e notificações próprias. Depois, especificar convites e testar distribuição. TestFlight é um canal beta com expiração; sua continuidade precisa de decisão própria.
+Inventariar assets/dependências e preparar identidade Taverna e notificações próprias. O primeiro build de base está comprovado; a distribuição ainda depende desses gates. Depois, especificar convites e testar distribuição. TestFlight é um canal beta com expiração; sua continuidade precisa de decisão própria.
 
 Acompanhe o [roadmap](docs/taverna/roadmap.md), o [Project público](https://github.com/users/paulotvlincelia/projects/5) e as [issues](https://github.com/paulotvlincelia/taverna-app/issues). O [plano público da fundação](.specs/features/foundation/spec.md) é autossuficiente. Infraestrutura em uso, conversas e credenciais não pertencem a este repositório.
