@@ -156,7 +156,7 @@ Coverage: 20 requisitos mapeados às sete tarefas de tasks.md, sem requisitos se
 
 O marco estará concluído quando as duas execuções passarem nos critérios IOS-01 a IOS-20 e o Verifier aprovar a entrega no commit validado pela CI. O relatório deve permitir seguir os comandos em um worktree novo e abrir o app no simulador sem recorrer a memória de chat.
 
-O resultado esperado para a rota recomendada é: build do app no simulador PASS; núcleo pré-compilado com origem qualificada; reconstrução do núcleo do fonte NOT RUN; assinatura/APNs em aparelho NOT RUN; distribuição BLOCKED pelas entregas próprias. Uma falha real permanece FAIL; falta de pré-requisito permanece BLOCKED.
+A rota oficial pré-compilada não foi qualificada. Na rota Nix autorizada em APP-002, registrar separadamente o build Swift e a origem do núcleo: reconstrução local só pode receber PASS com a realização e os produtos finais comprovados, sem atribuir ao fonte local um produto obtido de cache. Ferramentas e dependências de cache não substituem essa prova. Assinatura/APNs em aparelho permanecem NOT RUN; distribuição permanece BLOCKED pelas entregas próprias. Uma falha real permanece FAIL; falta de pré-requisito permanece BLOCKED.
 
 Estado factual e fontes: [readiness.md](readiness.md). Regras de trabalho: [AGENTS.md](../../../AGENTS.md) e [ambientes](../../../docs/taverna/environments.md).
 

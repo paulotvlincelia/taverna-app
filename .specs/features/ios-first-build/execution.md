@@ -216,3 +216,40 @@ git diff --check
 | IOS-05/10/15: preservar destino, contenção e evidências | Asserções existentes de T2, sem alteração; integração real do controle e preflight citada acima | Nenhum teste herdado removido/relaxado. Nova tentativa com nome distinto preserva a falha anterior. |
 
 Todos os casos novos se vinculam ao defeito observado em IOS-04. Padrão unittest/CONTRIBUTING preservado; sem testes de framework. T7 concluída, sem declarar build ou teste UI da Taverna. T1 e T3–T6 continuam pendentes.
+
+
+## T1: inspeção antecipada dos auxiliares, em 2026-10-16
+
+A realização principal segue ativa; esta inspeção não fecha T1 e não declara a biblioteca SimpleX produzida. Em .build/attempts/native-platform-qualification-20261016 foram preservados derivations, registros de fontes/licenças, logs de build locais e inspeção dos arquivos .a. Os três auxiliares libffi 3.4.4, GMP 6.3.0 e mac2ios têm logs de realização local/ultimate no Nix; a conferência adicional da store verificou o conteúdo local, sem mudar a política de assinaturas de importação. Não atribuir esses produtos ao cache.
+
+Os cinco arquivos do fonte mac2ios na derivação realizada coincidem com os hashes da revisão 4dcb77d5ea896d749381806dfab5358851b08951 previamente consultada. A ferramenta da store, não uma cópia modificada, foi usada com -s sobre cópias próprias. Original e transformação permanecem separados. A licença da ferramenta continua sem identificação no fonte consultado; ela não será vendorizada/distribuída. Código de inspeção operacional próprio e resultados em inspect_archives.py/archive-inspection.json, no diretório local acima.
+
+| Biblioteca auxiliar | Objetos inspecionados | Original | Cópia de simulador |
+| --- | --- | --- | --- |
+| libffi.a | 8 | arm64, LC_BUILD_VERSION platform 1 | arm64, platform 7 |
+| libgmp.a | 516 | arm64, LC_BUILD_VERSION platform 1 | arm64, platform 7 |
+| libgmpxx.a | 12 | arm64, LC_BUILD_VERSION platform 1 | arm64, platform 7 |
+
+Todos os 536 objetos dessas cópias têm a plataforma esperada. Não há objeto legacy sem plataforma nesse conjunto inspecionado. Isso não qualifica automaticamente a biblioteca Haskell ainda ausente. SHA-256 de fontes, originais e transformações em summary.json/support-provenance.json; arquivos COPYING.LESSERv3 e LICENSE foram lidos diretamente das fontes tar correspondentes, sem extrair caminhos arbitrários. Hashes das fontes coincidem com os fixed-output hashes das respectivas derivações Nix.
+
+O filtro do núcleo contém 291 arquivos: 290 coincidem byte a byte com o fork; a diferença é README.md, que a fundação substituiu. Não há diferença do código/receita do núcleo entre o upstream fixado e o fork atual. Relatório por arquivo: filtered-core-source-correspondence.json. Nenhum arquivo de runtime foi alterado por essa conferência.
+
+### WebRTC fixado pelo SwiftPM
+
+O [release M110](https://github.com/simplex-chat/WebRTC/releases/tag/110.0.0) declara o fonte WebRTC 218b56e516386cd57c7513197528c3124bcd7ef3 e o SHA-256 2598307f788ab668e0f42b2a1daef4306adbb9ec9c3959441064e8e84f7310ee. O objeto de commit foi confirmado no endpoint público Googlesource. O pacote da base permanece em 34bedc50f9c58dccf4967ea59c7e6a47d620803b; sua receita e patch estão preservados, sem atualizar revisão ou reconstruir esse binário.
+
+O ZIP de 34.279.775 bytes foi recebido sob o limite de 5 GiB/30 minutos e bate com esse SHA. API do asset identificada pelo ID 97488736. Inspeção de todos os caminhos e symlinks do ZIP não encontrou escape; a fatia efetivamente resolvida pelo SwiftPM coincide byte a byte com o arquivo no ZIP. Seu SHA-256 é 1318935eb67b5443a52a0ea7a48fba163a88dd0e2afd5eea153dff28f1ad5249. A inspeção otool da arquitetura arm64 confirma LC_BUILD_VERSION platform 7, minos 14.0, SDK 16.2. A licença do artefato foi preservada localmente.
+
+Evidências locais ignoradas em .build/attempts/webrtc-qualification-20261016: release.json, download-receipt.json, source-commit.json, manifest.json, artifact-LICENSE.txt e comandos de arquitetura/plataforma. Este é um WebRTC pré-compilado já fixado pela base; não é a biblioteca Haskell nem uma reconstrução local. App e testes iOS continuam NOT RUN.
+
+
+Precisão adicional de proveniência WebRTC: o tag 110.0.0 aponta para 28dd8570a3482d46b90ce4e924e8ff1d17614e78, anterior ao patch; ele não deve ser tratado como a receita completa do binário consumido. O pacote fixado 34bedc50 inclui o patch de frame encryption e a mudança de origem/checksum de stasel para simplex-chat. O commit e493ce51785bbadb286fe68fa2f5929293db6821 registra a atualização do release M110; os símbolos RTCFrameEncryptor/RTCFrameDecryptor estão exportados no binário recebido. Manifesto local explicita a garantia: metadados do fornecedor + checksum/receita fixados + API modificada observada, sem atestação de build nem reconstrução local. Preservar essa precisão no relatório; não afirmar fonte upstream puro ou que o tag antigo sozinho reproduz o artefato. Comparação de commits, diff do pacote e símbolos permanecem em webrtc-qualification-20261016.
+
+
+## T1: limite da realização e nova tentativa, em 2026-10-16
+
+A primeira realização nativa atingiu seu limite absoluto em 16:12:35 UTC. Ambos os clientes encerraram com exit 124, ainda em módulos GHC 9.6.3 Stage1. O texto interrupted by the user veio do sinal emitido pelos monitores ao vencer o prazo; não indica cancelamento pelo proprietário. Nenhuma biblioteca Haskell final foi produzida; build/testes da Taverna permanecem NOT RUN.
+
+Preservados build.stdout, build.stderr.log e receipt.json dos dois clientes sob nix-core-realization-20261016, incluindo scheduler-02. A nova execução só foi iniciada depois de conferir ambos os receipts. Ela usa a mesma derivação c27zzp98xz7brkfbs4cgkp6gy4cfxix6-simplex-chat-lib-simplex-chat-7.0.0.12.drv, sem alterar receita, flags compiladas, fontes ou locks. O ajuste operacional é max-jobs=2/cores=5, para distribuir os dez núcleos disponíveis entre os builds. Não atribuir uma aceleração medida antes de observar o resultado.
+
+A nova tentativa começou às 16:12:41 UTC, com novo limite de 5.400 s, até 17:42:41 UTC. Não é extensão da tentativa anterior nem uma segunda reprodução do app. Estado/receipts próprios em .build/attempts/nix-core-realization-20261016-02; comando e PIDs em .build/active-native-core-retry.json. O runner local .build/native-core-retry.py recusa iniciar se os clientes anteriores estiverem ativos ou se a falha não for exclusivamente timeout. Nenhum limite de download ou testes foi aumentado.
