@@ -36,3 +36,9 @@ Android, desktop, chamadas e integração futura de Alfred/OpenClaw. Nenhuma alt
 ## Handoff local
 
 Responsável e integrador: Codex, sessão de planejamento invitation-only. Harness: Codex. Branch: codex/7-invitation-only-plan. Worktree: diretório irmão taverna-app-worktrees/invitation-only-plan. Escopo: esta feature, README, roadmap público e handoff. CI, código do app, lockfiles, licenças e estado de simuladores não são alterados. Não publicar detalhes operacionais privados.
+
+## Execução da publicação
+
+Passo atômico de suporte: incluir a nova feature na cópia isolada usada pela suíte Foundation. Arquivo: tools/taverna/tests/test_foundation.py, somente preparação da fixture. Sucesso: as 70 verificações existentes passam, sem alteração de asserção, skip ou código do checker. A primeira execução detectou quatro links ausentes nessa cópia; o checkout real já passava.
+
+O primeiro commit documental foi criado antes da correção da fixture por falta de interrupção do shell após a falha da suíte; não foi publicado nesse estado. A correção recebe commit próprio e toda publicação é precedida por gates com interrupção no primeiro erro.
