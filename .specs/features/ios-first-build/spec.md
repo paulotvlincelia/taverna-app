@@ -1,6 +1,6 @@
 # Primeiro build iOS da Taverna
 
-Status: aprovado pelo proprietário em 2026-10-16. Qualificação de bibliotecas iniciada; build ainda não executado.
+Status: aprovado pelo proprietário em 2026-10-16. Núcleo realizado do fonte e entradas qualificadas; build do app ainda não executado.
 
 Issue canônica: [taverna-app #6](https://github.com/paulotvlincelia/taverna-app/issues/6), vinculada ao épico E2. Método: TLC Spec Driven 3.3.0, escopo Large, pois há dependências entre bibliotecas nativas, SwiftPM, Xcode, simulador e evidências. Esta proposta preserva a fundação integrada e os critérios da issue.
 
@@ -129,28 +129,28 @@ Não há promessa de duração antes da qualificação do núcleo. A segunda exe
 
 | Requirement ID | Story / critério | Tasks | Phase | Status |
 | --- | --- | --- | --- | --- |
-| IOS-01 | Entradas: proveniência | T1 | Tasks | In Tasks |
-| IOS-02 | Entradas: rejeição | T1, T4 | Tasks | In Tasks |
+| IOS-01 | Entradas: proveniência | T1 | Execute | In Progress |
+| IOS-02 | Entradas: rejeição | T1, T4 | Execute | In Progress |
 | IOS-03 | Entradas: pins SwiftPM | T3 | Tasks | In Tasks |
 | IOS-04 | Entradas: estado isolado | T2, T7, T5 | Execute | In Progress |
 | IOS-05 | Entradas: destino Xcode | T2 | Execute | In Progress |
 | IOS-06 | Entradas: assinatura | T3 | Tasks | In Tasks |
-| IOS-07 | Entradas: download/extração | T1, T5 | Tasks | In Tasks |
+| IOS-07 | Entradas: download/extração | T1, T5 | Execute | In Progress |
 | IOS-08 | App: produtos do scheme | T3 | Tasks | In Tasks |
-| IOS-09 | App: plataforma/arquitetura | T1, T4 | Tasks | In Tasks |
+| IOS-09 | App: plataforma/arquitetura | T1, T4 | Execute | In Progress |
 | IOS-10 | App: rede isolada | T2 | Execute | In Progress |
 | IOS-11 | App: abertura observável | T3 | Tasks | In Tasks |
 | IOS-12 | App: navegação observável | T3 | Tasks | In Tasks |
 | IOS-13 | App: suíte preservada | T3 | Tasks | In Tasks |
 | IOS-14 | App: falha detectada | T4 | Tasks | In Tasks |
 | IOS-15 | App: retomada | T2, T7, T5 | Execute | In Progress |
-| IOS-16 | App: registro de prova | T1, T4, T5 | Tasks | In Tasks |
+| IOS-16 | App: registro de prova | T1, T4, T5 | Execute | In Progress |
 | IOS-17 | App: segunda execução | T6 | Tasks | In Tasks |
 | IOS-18 | App: Verifier e CI | T6 | Tasks | In Tasks |
-| IOS-19 | App: alcance do PASS | T1, T4, T5, T6 | Tasks | In Tasks |
+| IOS-19 | App: alcance do PASS | T1, T4, T5, T6 | Execute | In Progress |
 | IOS-20 | App: publicação de evidências | T4, T5, T6 | Tasks | In Tasks |
 
-Coverage: 20 requisitos mapeados às sete tarefas de tasks.md, sem requisitos sem destino. T1 em andamento; nenhum requisito verificado e nenhum build do app declarado.
+Coverage: 20 requisitos mapeados às sete tarefas de tasks.md, sem requisitos sem destino. T1 concluída como qualificação de entradas; nenhum requisito declarado verificado pelo Verifier e nenhum build do app declarado.
 
 ## Success Criteria
 

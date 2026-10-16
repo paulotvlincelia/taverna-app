@@ -286,3 +286,43 @@ A tentativa nix-ghc-normal-20261016-04 terminou às 18:42:05 UTC com exit 0. O o
 O conteúdo dos dois outputs GHC foi revalidado com nix store verify --no-trust, exit 0, em nix-compilers-content-check-20261016. --no-trust aplica-se à conferência de conteúdo de produtos locais; não modifica require-sigs, chaves ou importação de cache. Os compiladores foram realizados localmente, sem atribuí-los ao cache.
 
 O núcleo continua ativo na tentativa -05, prazo original 19:23:16 UTC; o log iniciou 134 derivações até 18:42 UTC. Falta realizar e qualificar a biblioteca final; não há build do app nem teste UI da Taverna. A consulta ao manual xcodebuild.xctestrun instalado foi preservada em xctest-execution-research-20261016: documenta build-for-testing/test-without-building e distingue EnvironmentVariables do test host de UITargetAppEnvironmentVariables. Isso orienta a próxima tarefa, sem afirmar propagação real ao app ou editar testes antes do gate T1.
+
+## T1 concluída: núcleo local e cinco entradas de simulador
+
+A realização nativa -05 terminou com exit 0 às 18:57:24 UTC de 2026-10-16, preservando fonte/receita/locks. O output by4ic9... foi conferido por path-info e store verify de conteúdo, exit 0; ultimate=true/signatures=[], narHash sha256-ZFKAmu/8pvBZFMK2I04JvtSd9A40L+qshJQmtOjscjs=. O ZIP local tem 70.599.757 bytes e SHA-256 18a6835191b226fc1b9a9961b9e3bd053aaa42c4e376261cf048c5d130a4fa66. Não é um binário do núcleo baixado de release.
+
+O [manifesto de entradas](native-inputs.json), SHA-256 ae89d70ece47ce7e5f850a403b4fd1f74cd3fcf80c537369f3c8d77712cf1ce8, fixa o commit upstream 479548ee..., fonte Nix/NAR, receita, hashes e licenças. Os 290 arquivos filtrados pertinentes do fonte correspondem ao fork; a única diferença entre os 291 arquivos comparados é README.md. A configuração instalada declara AGPL-3.0-only. A inspeção das declarações Haskell no closure encontrou 150 registros, sem licença ausente; isso não é SBOM por objeto ou aprovação de distribuição. Foram preservados os textos de licença do GHC/runtime, OpenSSL 3.0.10, libffi, GMP e WebRTC.
+
+A primeira conversão mac2ios -s falhou: 3.424 objetos continuaram LC_VERSION_MIN_IPHONEOS. Receipt BLOCKED/exit 1 e arquivos originais preservados em native-core-qualification-20261016. Os probes oficiais estão em native-legacy-platform-probe-20261016: ld recusou o objeto original, vtool converteu uma cópia preservando minos=11.0/sdk=0.0 e ld aceitou a cópia para simulador, exit 0. Não foi enfraquecida a checagem para aceitar tag de aparelho físico.
+
+A nova tentativa native-core-qualification-20261016-02 usa vtool/libtool locais, com receipt exit 0 às 19:02:48 UTC. Conferiu todos os membros, inclusive nomes repetidos por ordinal: cinco arquivos, 4.187 objetos arm64/platform 7, payload e comandos fora da versão preservados. Código, dados, tabelas de símbolos e relocações permaneceram byte a byte idênticos; somente metadados de versão e o índice/empacotamento do arquivo mudaram. Nenhum arquivo da store foi alterado.
+
+| Arquivo | Objetos | SHA-256 da cópia de simulador |
+| --- | --- | --- |
+| libHSsimplex-chat-7.0.0.12-4ehbYDRAXlKGgyS4p1jhJT-ghc9.6.3.a | 3.424 | 308563dc40b253a82183257c6b9d1641b0a39be5a7d1a27068fcc2fc97015c40 |
+| libHSsimplex-chat-7.0.0.12-4ehbYDRAXlKGgyS4p1jhJT.a | 227 | e574e99a39f7c9d82dc6d544b293dd35ebc489a620ad8092e5f96e4ecab11999 |
+| libffi.a | 8 | 8289154f2f75f63e3950ba997ba0e3a4b324fc05acb25f9803effb8ebe6c708a |
+| libgmp.a | 516 | 2b8b504b45e943d4e1842bd446e2c466664ba58cb1e9dc8c76e484f7f39baf3b |
+| libgmpxx.a | 12 | 99373f1e81e6702696a10b57c378939b002590e34d94cfc8787ca4a97c401d58 |
+
+### Gate e adequação de T1
+
+Full Native: realização fixada, inspeção completa, verificação de conteúdo, origem/licenças/hashes e python3.12 .build/check-native-inputs.py terminaram exit 0. Os 40 testes Python existentes passaram, incluindo os 28 Foundation originais; nenhum teste removido, alterado ou ignorado. Foundation/compileall/diff checks também aprovados. Fonte desconhecida, hash divergente e objeto de iPhone físico foram injetados somente em cópias de manifestos/bindings em native-input-negative-checks-20261016; todos foram recusados com exit 1 e motivo correto. Os artefatos reais permaneceram intactos.
+
+| Critério / AC | Evidência e asserção | Resultado exigido | Coberto |
+| --- | --- | --- | --- |
+| Origem/receita/locks e hashes; IOS-01/02/16 | .build/check-native-inputs.py:8: m['upstream_commit']=='479548ee53ffb73db73841e77acbeee5a78dbbd5'; linhas 11–15, 22–23 e 34–36 conferem conteúdo/locks/fonte | Fonte fixado e bytes correspondentes | Sim |
+| Licença declarada; IOS-01 | .build/check-native-inputs.py:28: m['licenses']['simplex']['sha256']==sha(root/'LICENSE'); linha 29 exige zero ausência nos 150 registros declarados | Licença com evidência do fonte; sem aprovar distribuição | Sim |
+| Todos os objetos; IOS-09 | .build/check-native-inputs.py:25: all(o['cpu']==16777228 and o['platforms']==[dict(kind='build',platform=7)] for o in actual['objects']) | arm64 e iOS Simulator em todos os objetos | Sim |
+| Somente conversão de metadados; invariantes de AGENTS | .build/convert-core-vtool.py:58: before!=after bloqueia; linha 68 exige identity(data)==identity(outdata), linha 69 confere hash de cada objeto recomposto | Payload, offsets, símbolos, relocações e versões minos/sdk preservados | Sim |
+| Local versus cache; IOS-19 | .build/check-native-inputs.py:31: actual_core['ultimate'] is True e NAR/derivação correspondentes; linha 32 exige receipt 0; linha 37 mantém WebRTC como artefato de fornecedor, não rebuild local | Estados separados | Sim |
+| Rejeição; IOS-02 | native-input-negative-checks-20261016/results.json: unknown-source/wrong-hash/device-object com exit 1 e AssertionError correspondente | Zero falso PASS | Sim |
+
+| Prova nova | Vínculo | Manter |
+| --- | --- | --- |
+| Fonte/locks/hashes e licenças acima | T1 Done when 1; IOS-01/02/16 | Sim |
+| Objetos/payload e recusa da entrada de aparelho físico | T1 Done when 2; IOS-09 e invariantes de segurança | Sim |
+| Realização local/receipts e WebRTC separado | T1 Done when 3; IOS-19 | Sim |
+| Três entradas negativas | T1 Tests; IOS-02 | Sim |
+
+Adequação: asserções de estado/conteúdo e resultados reais, sem mocks ou testes especulativos. As verificações operacionais desta tarefa estão no estado local; T4/T5 ainda devem publicar a checagem/procedimento reproduzível, conforme sua ordem aprovada. T1 concluída; isso não declara build do app, teste UI, reprodução ou Verifier aprovados.

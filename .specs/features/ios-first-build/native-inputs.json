@@ -1,0 +1,144 @@
+{
+  "bundle_bytes": 70599757,
+  "bundle_kind": "local Nix product, not downloaded core binary",
+  "bundle_sha256": "18a6835191b226fc1b9a9961b9e3bd053aaa42c4e376261cf048c5d130a4fa66",
+  "cabal_project_sha256": "6432c2578402b0d010d4f822b26293f24c6a0c6e02a3606a9eeecf48a1291ad9",
+  "conversion": {
+    "method": "Apple vtool per member + libtool -static -D; source minos/sdk preserved; all non-version commands and payload unchanged",
+    "tool_sha256": {
+      "libtool": "6e0a9c96cc9896ee392ee691133e51cfff0216234d9a21b8dfa53bdc3ffbc410",
+      "vtool": "2750e40544ec380d7ad549f8adcee65f08b8df0a3d41d7ca584d0d9c326cd9c0"
+    }
+  },
+  "core_derivation": "/nix/store/c27zzp98xz7brkfbs4cgkp6gy4cfxix6-simplex-chat-lib-simplex-chat-7.0.0.12.drv",
+  "core_nar_hash": "sha256-ZFKAmu/8pvBZFMK2I04JvtSd9A40L+qshJQmtOjscjs=",
+  "core_realization": "LOCAL_SOURCE_REALIZED",
+  "distribution": "BLOCKED: identity/assets/license release gates remain separate",
+  "flake_lock_sha256": "60e3540ec79205bd9fda2fceb28836ed9e93d05a74de63ce92a253bcbb60ea6c",
+  "libraries": [
+    {
+      "architecture": "arm64",
+      "code_data_relocations_preserved": true,
+      "licenses": [
+        "simplex",
+        "ghc_runtime",
+        "openssl",
+        "libffi",
+        "gmp"
+      ],
+      "name": "libHSsimplex-chat-7.0.0.12-4ehbYDRAXlKGgyS4p1jhJT-ghc9.6.3.a",
+      "objects": 3424,
+      "original_sha256": "c7628044e19ef0918c76b0985fdf5cf0b7bae4093a4139a94a4bf04695c13300",
+      "platform": 7,
+      "sha256": "308563dc40b253a82183257c6b9d1641b0a39be5a7d1a27068fcc2fc97015c40"
+    },
+    {
+      "architecture": "arm64",
+      "code_data_relocations_preserved": true,
+      "licenses": [
+        "simplex",
+        "ghc_runtime",
+        "openssl",
+        "libffi",
+        "gmp"
+      ],
+      "name": "libHSsimplex-chat-7.0.0.12-4ehbYDRAXlKGgyS4p1jhJT.a",
+      "objects": 227,
+      "original_sha256": "fea184ff29caf116097e28949cbb33399d39b7c5a81c79df7cf3113554505de4",
+      "platform": 7,
+      "sha256": "e574e99a39f7c9d82dc6d544b293dd35ebc489a620ad8092e5f96e4ecab11999"
+    },
+    {
+      "architecture": "arm64",
+      "code_data_relocations_preserved": true,
+      "licenses": [
+        "libffi"
+      ],
+      "name": "libffi.a",
+      "objects": 8,
+      "original_sha256": "5049681d69b5b74d8477ae802f8d2a55aba90a7fb6bd934ee654e357613967c7",
+      "platform": 7,
+      "sha256": "8289154f2f75f63e3950ba997ba0e3a4b324fc05acb25f9803effb8ebe6c708a"
+    },
+    {
+      "architecture": "arm64",
+      "code_data_relocations_preserved": true,
+      "licenses": [
+        "gmp"
+      ],
+      "name": "libgmp.a",
+      "objects": 516,
+      "original_sha256": "b3a7da07e98c4cd99a6be4785613a070f2e762c34a0c6352389da55e553ae145",
+      "platform": 7,
+      "sha256": "2b8b504b45e943d4e1842bd446e2c466664ba58cb1e9dc8c76e484f7f39baf3b"
+    },
+    {
+      "architecture": "arm64",
+      "code_data_relocations_preserved": true,
+      "licenses": [
+        "gmp"
+      ],
+      "name": "libgmpxx.a",
+      "objects": 12,
+      "original_sha256": "caa12362913cfa3ba5d5a3baf3af04eadcfa56670332fca8231834b08f4f09c1",
+      "platform": 7,
+      "sha256": "99373f1e81e6702696a10b57c378939b002590e34d94cfc8787ca4a97c401d58"
+    }
+  ],
+  "licenses": {
+    "ghc_runtime": {
+      "declared": "BSD-3-Clause",
+      "sha256": "e06c13b8a117652621781c15d622bd4c62c568307954f7136955b4b656d14ec1",
+      "source": "https://downloads.haskell.org/~ghc/9.6.3/ghc-9.6.3-src.tar.xz"
+    },
+    "gmp": {
+      "license_sha256": "a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c",
+      "selected_license": "LGPL-3.0-or-later",
+      "source": "https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.bz2",
+      "source_sha256": "ac28211a7cfb609bae2e2c8d6058d66c8fe96434f740cf6fe2e47b000d1c20cb"
+    },
+    "libffi": {
+      "declared": "MIT",
+      "license_sha256": "2c9c2acb9743e6b007b91350475308aee44691d96aa20eacef8e199988c8c388",
+      "source": "https://github.com/libffi/libffi/releases/download/v3.4.4/libffi-3.4.4.tar.gz",
+      "source_sha256": "d66c56ad259a82cf2a9dfc408b32bf5da52371500b84745f7fb8b645712df676"
+    },
+    "openssl": {
+      "derivation": "/nix/store/wr0dw7vdm0cig6pm74pxxwabq28i9f72-openssl-3.0.10.drv",
+      "license": "Apache-2.0",
+      "license_member": "openssl-3.0.10/LICENSE.txt",
+      "license_sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "source": "https://www.openssl.org/source/openssl-3.0.10.tar.gz",
+      "source_archive_sha256": "1761d4f5b13a1028b9b6f3d4b8e17feb0cedc9370f6afe61d7193d2cdce83323",
+      "version": "3.0.10"
+    },
+    "simplex": {
+      "declared": "AGPL-3.0-only",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+      "source": "https://github.com/simplex-chat/simplex-chat/blob/479548ee53ffb73db73841e77acbeee5a78dbbd5/LICENSE"
+    },
+    "webrtc": {
+      "declared": "BSD-3-Clause",
+      "license_sha256": "ab00a482b6a3902e40211b43c5d0441962ea99b6cc7c25c0f243fa270b78d482"
+    }
+  },
+  "recipe_url": "https://github.com/simplex-chat/simplex-chat/blob/479548ee53ffb73db73841e77acbeee5a78dbbd5/flake.nix",
+  "schema": 1,
+  "source_nar_hash": "sha256-UnuHHuOg1GHTAHYLuht16IuLQvoQRK71MN2DYeGr3po=",
+  "source_url": "https://github.com/simplex-chat/simplex-chat/tree/479548ee53ffb73db73841e77acbeee5a78dbbd5",
+  "swiftpm_lock_sha256": "1b894975e60be2417dd202dce69b644f7d201560d98d4e661689e8df3cbb02ae",
+  "upstream_commit": "479548ee53ffb73db73841e77acbeee5a78dbbd5",
+  "webrtc": {
+    "asset_api": "https://api.github.com/repos/simplex-chat/WebRTC/releases/assets/97488736",
+    "origin_assurance": "release metadata + locked package checksum and recipe + patched API exports; not a local rebuild or build attestation",
+    "package_commit": "34bedc50f9c58dccf4967ea59c7e6a47d620803b",
+    "patch_source_sha256": "bc2a6b0293edb66046845bbe0384e68ee389abacf6a06b8d18387af1b24114e3",
+    "received_sha256": "2598307f788ab668e0f42b2a1daef4306adbb9ec9c3959441064e8e84f7310ee",
+    "recipe_commit": "34bedc50f9c58dccf4967ea59c7e6a47d620803b",
+    "release_metadata": "https://github.com/simplex-chat/WebRTC/releases/tag/110.0.0",
+    "source_commit": "218b56e516386cd57c7513197528c3124bcd7ef3",
+    "source_note": "Provider-declared upstream commit plus frame-encryption patch in the pinned package recipe; release tag alone predates that patch",
+    "source_repository": "https://webrtc.googlesource.com/src",
+    "used_binary_sha256": "1318935eb67b5443a52a0ea7a48fba163a88dd0e2afd5eea153dff28f1ad5249"
+  }
+}

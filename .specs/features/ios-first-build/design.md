@@ -1,7 +1,7 @@
 # Design do primeiro build iOS
 
 **Spec:** [spec.md](spec.md), aprovada em 2026-10-16.
-**Status:** rota Nix e exceção administrativa autorizadas pelo proprietário em 2026-10-16. Instalação concluída e ambiente Nix validado; avaliação da receita em andamento. Compilação do app ainda não realizada.
+**Status:** núcleo realizado do fonte e entradas locais qualificadas em 2026-10-16. T1 concluída; build do app e suíte iOS ainda não executados.
 
 ## Architecture Overview
 
@@ -119,3 +119,12 @@ Dois controles concretos permitem uma alternativa local:
 O procedimento aprovado ainda precisa ser implementado e testado na Taverna real. O preflight deve rejeitar entradas sem origem, helper ausente ou divergente, destino estranho e ausência de prova de contenção. O resultado final precisa manter estados separados: build do app, teste UI, origem do núcleo e distribuição. A prova sintética não substitui os testes herdados, as novas asserções, a segunda execução ou o Verifier.
 
 A alternativa preserva Git/worktrees nativos e evita instalar outro gerenciador de ambientes. Usa uma API de sandbox marcada como deprecated; a compatibilidade precisa ser requalificada a cada mudança de SDK/macOS. Manter os critérios originais exigirá outra abordagem de isolamento ainda não qualificada, possivelmente um ambiente macOS separado. Não instalar VM ou alterar proteções como consequência automática desta proposta.
+
+
+## Conversão dos metadados legados do núcleo
+
+Refinamento de T1, sem alterar critérios, fonte, locks ou flags: a derivação produziu o núcleo, mas mac2ios -s manteve LC_VERSION_MIN_IPHONEOS nos 3.424 objetos da biblioteca agregada. A tentativa foi bloqueada e preservada. O vtool do Xcode 27.1 instalado aceitou um objeto de amostra e o linker oficial recusou a entrada original/aceitou a convertida para iOS Simulator. O manual instalado ainda afirma não suportar objetos; o resultado aqui vem dos probes reais dessa versão, sem generalizar para outros Xcodes.
+
+A cópia final usa vtool por membro, preservando os números minos/sdk originais, e libtool -static -D para recompor cada arquivo. Nomes repetidos recebem diretórios por ordinal; nunca extrair sobrescrevendo basenames. Conferir igualdade do cabeçalho fora do tamanho dos comandos, comandos que não são de versão, offsets, bytes de payload, relocações e símbolos. A plataforma final precisa ser LC_BUILD_VERSION 7 em todos os objetos. Qualquer divergência bloqueia. Não há edição de instruções, criptografia, protocolo ou fonte do núcleo.
+
+Foram conferidos 4.187 objetos em cinco arquivos. O [manifesto](native-inputs.json) fixa origem, licenças declaradas, receita e hashes, com estado do núcleo distinto do app. Os comandos e provas estão em [execution.md](execution.md); o procedimento reproduzível de T5 ainda está pendente.
