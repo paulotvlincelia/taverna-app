@@ -11,4 +11,4 @@ As decisões canônicas ficam em [docs/taverna/decisions](../docs/taverna/decisi
 - Próximo passo: publicar PR do plano; qualificar o fonte fixado e as alternativas de enforcement, registrar evidências e limites; confirmar abordagem antes de detalhar arquitetura conforme TLC.
 - Entrega anterior: PR #10 integrado em stable 9bfd78275a6f354ce3d18aaa7f2d47b48ba71756. Primeiro build: duas provas, quatro métodos por prova, zero falhas/skips, 70 testes, Verifier 20/20 e sensor 6/6. Aparelho/APNs não executados; distribuição bloqueada.
 - Responsável/integrador: Codex; branch codex/7-invitation-only-plan; worktree irmão taverna-app-worktrees/invitation-only-plan. Escopo: artefatos desta feature, README, roadmap e handoff. Sem reversão de mudanças de outros agentes.
-- Preservação: worktrees/evidências e preview existentes mantidos. Tudo em Projects; sem mudanças em produção, app, CI, locks, licenças, Mac mini, Tailscale, Alfred, DNS, credenciais ou contas Apple.
+- Preservação: worktrees/evidências e preview existentes mantidos. Tudo em Projects; sem mudanças em produção, app, CI, locks, licenças, DNS, credenciais ou contas Apple.

@@ -10,4 +10,4 @@ Nunca publicar chaves, convites reais, participantes, conversas, endereços admi
 
 CI sem segredos e sem mutações live. Credenciais Apple/APNs, release, gastos, produção e contas exigem autorização específica. Plano aprovado autoriza commits locais; push/merge dependem da autorização correspondente, CI e Verifier no último commit. Nenhum PASS local significa ambiente iOS ou operação prontos.
 
-Commits atômicos Conventional Commits. Execute os checks de CONTRIBUTING.md, preserve testes e asserções, registre comando/commit/resultado/limites. Não usar Hermes, Obsidian ou harness exclusivo como dependência de desenvolvimento.
+Commits atômicos Conventional Commits. Execute os checks de CONTRIBUTING.md, preserve testes e asserções, registre comando/commit/resultado/limites. As instruções e ferramentas necessárias ao desenvolvimento devem estar versionadas ou documentadas neste repositório.

@@ -122,7 +122,7 @@ O padrão investigado para roteamento vem do código público de [XcodeBuildOper
 
 CFFIXED_USER_HOME muda o logPath informado pelo cliente simctl, mas o runtime ainda gravava sob Library/Logs do usuário. Essa diferença foi medida, sem tratar o caminho informado como prova física. Após encerrar somente o dispositivo próprio, seus logs foram movidos integralmente para .build/SimulatorLogs, preservando nove arquivos. O índice por UDID criado pelo CoreSimulator ficou como symlink para esse armazenamento. Caminhos e realpath estão em session.json e simulator-isolation-20261016-04/log-relocation.json; reconciliar esse índice antes de qualquer remoção futura do worktree.
 
-Situação de T2: controles parciais obtidos; contenção da sessão e destino efetivo do executor ainda não aprovados. O mensageiro permanece sem instalação ou lançamento. Nenhuma alteração de firewall global, VPN, Tailscale ou proteção do macOS foi feita.
+Situação de T2: controles parciais obtidos; contenção da sessão e destino efetivo do executor ainda não aprovados. O mensageiro permanece sem instalação ou lançamento. Nenhuma alteração de firewall global, VPN ou proteção do macOS foi feita.
 
 O probe de destino explícito gerou um bundle de erro no temporário do macOS, apesar de TMPDIR local. Esse bundle específico foi preservado em xcode-device-set-20261016-02/error.xcresult; sua movimentação consta do receipt. Os próximos comandos precisam de resultBundlePath explícito, sem presumir que TMPDIR controla todos os caminhos do Xcode.
 
@@ -265,7 +265,7 @@ Os dois outputs GHC exatos retornaram HTTP 404 no cache autorizado, usando User-
 
 A preparação foi retomada às 17:08:30 UTC em uma dependência por vez, começando pela derivação 700zdsaz65dn4war5jzc6pwj20dbssfl-ghc-9.6.3.drv, já pertencente ao grafo aprovado. Agendamento max-jobs=1/cores=10; cores continua sendo uma indicação, não quota rígida. Limite de 5.400 segundos preservado, até 18:38:30 UTC. Logs, metadados e receipt próprio em .build/attempts/nix-ghc-small-20261016-03; sessão exec 57073. Isso prepara somente um compilador, não realiza o núcleo nem comprova o app. Não há compilação concorrente da tentativa anterior.
 
-T2/T7 permanecem concluídas; T1 continua sem seu gate final e T3–T6 pendentes. Todos os arquivos existentes e as evidências anteriores foram preservados. Nenhuma mudança no Tailscale, Mac mini, Alfred ou produção.
+T2/T7 permanecem concluídas; T1 continua sem seu gate final e T3–T6 pendentes. Todos os arquivos existentes e as evidências anteriores foram preservados. Nenhuma mudança em serviços de produção.
 
 ### Primeiro GHC exato realizado
 
@@ -499,6 +499,6 @@ Hashes de binários de sessões distintas não precisam ser iguais; cada conjunt
 
 O Verifier independente aprovou 20/20 critérios e matou 6/6 falhas em cópias isoladas: plataforma, payload, hash de bundle, destino estrangeiro, aparência e skips. Porcelain real vazio antes/depois. Autor/Verifier: 70 testes Python, Foundation, compileall, diff e gates TLC aprovados. [CI push](https://github.com/paulotvlincelia/taverna-app/actions/runs/38968716168) e [CI PR](https://github.com/paulotvlincelia/taverna-app/actions/runs/38968724419) aprovaram o SHA de implementação exato. A CI verifica ferramentas/documentação; as provas de iOS são locais.
 
-As screenshots reais de A e B foram exportadas e inspecionadas localmente: Get started habilitado e Your profile vazio/Create profile desabilitado, em light/portrait. Binários, PNGs, xcresult, dados e receipts continuam ignorados em cada worktree. Nenhum perfil/conversa foi criado. Tailscale/Mac mini/Alfred/produção e contas Apple não foram alterados.
+As screenshots reais de A e B foram exportadas e inspecionadas localmente: Get started habilitado e Your profile vazio/Create profile desabilitado, em light/portrait. Binários, PNGs, xcresult, dados e receipts continuam ignorados em cada worktree. Nenhum perfil/conversa foi criado. Serviços de produção e contas Apple não foram alterados.
 
 Adequação final: [validation.md](validation.md), 20 critérios com file:line/asserção/resultado, sensor e gates independentes. O PASS é de build Debug no simulador, núcleo realizado do fonte e perfil inicial aprovado. Matriz integral PENDING; assinatura/push em aparelho NOT RUN; identidade/assets/distribuição mantêm gates próprios. Não há pendência que bloqueie o marco aprovado.
