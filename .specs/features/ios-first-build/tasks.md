@@ -5,7 +5,7 @@
 Usar tlc-spec-driven conforme a skill versionada. A especificação, sua execução e a rota Nix foram autorizadas pelo proprietário. Esta decomposição preserva os critérios aprovados. Verificar e fechar cada tarefa separadamente, sem marcar uma etapa concluída só porque sua preparação terminou. O preparo de T2 independe das bibliotecas e pode ocorrer enquanto a operação Nix de T1 aguarda; T3 exige ambas aprovadas. O Verifier independente é obrigatório após o último commit de implementação.
 
 **Design:** [design.md](design.md).
-**Status:** In Progress — T1, T2, T7 e T8 concluídas; núcleo/entradas qualificados localmente. T3 concluída: build, onboarding e quatro métodos first-build aprovados; T4 em fechamento; T5/T6 pendentes.
+**Status:** In Progress — T1, T2, T7 e T8 concluídas; núcleo/entradas qualificados localmente. T3 concluída: build, onboarding e quatro métodos first-build aprovados; T4 concluída; T5/T6 pendentes.
 
 Ferramentas: Git nativo, Python 3.12 stdlib, Nix 2.34.9 e ferramentas do Xcode instalado. A integração de handoff, CI e locks nesta branch pertence ao Codex. Não há delegação de implementação; oito tarefas cabem em uma sequência local. A verificação final será independente.
 
@@ -159,10 +159,10 @@ T5 → T6
 **Gate**: Build + validação dos artefatos reais.
 **Done when**:
 
-- [ ] Tests derivam dos critérios, preservando pelo menos os 28 testes Foundation anteriores.
-- [ ] Falha ou ausência de etapa/produto/teste impede PASS e produz exit não zero com indicação da etapa.
-- [ ] Registros contêm fonte, manifesto, versões, destino, comandos sanitizados, saídas e hashes; build do app, origem do núcleo e assinatura/push têm estados separados.
-- [ ] Binários, screenshots e xcresult permanecem no estado ignorado.
+- [x] Tests derivam dos critérios, preservando pelo menos os 28 testes Foundation anteriores.
+- [x] Falha ou ausência de etapa/produto/teste impede PASS e produz exit não zero com indicação da etapa.
+- [x] Registros contêm fonte, manifesto, versões, destino, comandos sanitizados, saídas e hashes; build do app, origem do núcleo e assinatura/push têm estados separados.
+- [x] Binários, screenshots e xcresult permanecem no estado ignorado.
 
 ### T5: Documentar o procedimento reproduzível
 

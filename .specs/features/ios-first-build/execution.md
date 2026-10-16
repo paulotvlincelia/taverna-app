@@ -420,7 +420,7 @@ Esta prova fecha T3, mas não as duas reproduções limpas, CI ou Verifier. O fo
 | --- | --- | --- |
 | IOS-11, Get started em 30 s | apps/ios/Tests iOS/Tests_iOS.swift:57, XCTAssertTrue(getStarted.waitForExistence(...)); :58 isHittable; :59 isEnabled; :60 XCTAssertLessThanOrEqual(..., 30) | Visível/habilitado dentro do limite; método real aprovado. |
 | IOS-12, Your profile sem envio | apps/ios/Tests iOS/Tests_iOS.swift:69, waitForExistence; :74 XCTAssertTrue(profile.isHittable); :75 limite 30 | Navegação real aprovada; método termina após screenshot, sem entrada/envio. |
-| IOS-10, cada lançamento | apps/ios/Tests iOS/Tests_iOS.swift:184, event.pid > 0, executable == SimpleX, phase == before_main, errno EPERM/EACCES para IPv4/IPv6 e loopback | Ausência/divergência lança erro, inclusive dentro da medição; nove eventos reais conferidos. |
+| IOS-10, cada lançamento | apps/ios/Tests iOS/Tests_iOS.swift:190, event.pid > 0, executable == SimpleX, phase == before_main, errno EPERM/EACCES para IPv4/IPv6 e loopback | Ausência/divergência lança erro, inclusive dentro da medição; nove eventos reais conferidos. |
 | IOS-13, perfil e testes herdados | apps/ios/Tests iOS/Tests_iOS.swift:111, XCTAssertEqual(...orientation, .portrait); :40 measure(metrics: [XCTApplicationLaunchMetric()]); Tests_iOSLaunchTests.swift:29 screenshot keepAlways | Quatro métodos reais aprovados; todos asserts preservados; full-matrix disponível/pendente. |
 | IOS-03/06/08/09 | Settings/build/produtos reais dos receipts first-build-profile-build e proof; Package.resolved hash fixado | Sete pins, quatro produtos e signing ad hoc efetivamente inspecionados; nenhum provisionamento. |
 
@@ -432,3 +432,32 @@ Esta prova fecha T3, mas não as duas reproduções limpas, CI ou Verifier. O fo
 | Build real, assinaturas/símbolos/plataformas e probe State<ObservedObject> | IOS-03/06/08/09 e compatibilidade pontual | Sim |
 
 Adequação: resultados observáveis, sem teste especulativo, sem excluir/skipping/assert enfraquecido. CONTRIBUTING.md e matriz de testes aplicados. A compatibilidade SwiftUI preserva State<ObservedObject<Chat>> e seus bindings; não altera protocolos/criptografia. O gate Full iOS passou no perfil autorizado; matriz integral continua sem PASS.
+
+
+## T4 concluída: recorder e validador da prova
+
+O componente tools/taverna/ios_proof.py registra settings/build/test com comandos, tempo, códigos separados, versão, commit/patch, hashes de fontes/entradas/produtos e guard. Verifica bytes Mach-O, assinaturas ad hoc, símbolos Haskell, todas as bibliotecas ligadas ao manifesto e os quatro métodos reais no xcresult/console. O estado da matriz integral fica PENDING no perfil first-build. O comparador exige fonte limpa, mesmo SHA/manifesto/perfil e caminhos físicos/caches/UDIDs distintos. O procedimento falha fechado se falta qualquer parte; --allow-dirty não satisfaz reprodução final.
+
+Gate: 70 testes Python aprovados (28 Foundation originais preservados, 12 sessão, 11 nativo, 19 prova), Foundation/compileall/diff aprovados. first-build-profile-build/tests foram registrados pelo componente, não por um logger fictício; first-build-profile-proof lê os artefatos reais e aprova quatro produtos, quatro métodos, zero falhas/skips e nove eventos before-main. Como a exploração tinha fonte sujo, clean_source=false e não substitui T6.
+
+Negativo real: actual-partial-outcome-negative aplica validate_results ao xcresult original de uma sessão que executou somente testExample com exit 0. Retorna 2 e identifica os três métodos ausentes. Uma tentativa de revalidar o receipt histórico completo pelo recorder atual foi antes recusada pela mudança legítima da fonte iOS após aquele build; prova-partial-rejection-current preserva essa recusa, sem reinterpretá-la como outro teste. Unit tests também executam um processo exit 65 e timeout 124 e rejeitam cleanup que tenta ocultar falha. Nenhum artefato anterior foi sobrescrito.
+
+### Adequação T4
+
+| Critério | file:line e asserção | Resultado definido |
+| --- | --- | --- |
+| IOS-13/14, quatro métodos/zero skips | tools/taverna/tests/test_ios_proof.py:61, assertEqual(executed, 4); :62/:63 zero; :71/:81/:88 assertRaises para parcial/skip/falha; :206/:208 contagens expandidas | Ausência de método/falha/skip não pode aprovar; prova real positiva e parcial negativa. |
+| IOS-13/16, perfil explícito | tools/taverna/tests/test_ios_proof.py:42, assertEqual(validate_profile(...), first-build); :46/:49/:52 assertRaises para configuração/runner divergente/filtro | Inglês/portrait/light e quatro métodos sem filtro; full-matrix preservado. |
+| IOS-02/09/14, produto/hash/plataforma | tools/taverna/tests/test_ios_proof.py:115 assertEqual(artifact(...), path); :116/:119/:122 assertRaises; :131 arm64/platform 7; :133 rejeição | Artefato ausente/adulterado/externo ou não Simulator não aprova. |
+| IOS-10, rede antes do main | tools/taverna/tests/test_ios_proof.py:142/:144, assertRaises para cada campo inválido/ausência | PID/executável/fase/IPv4/IPv6/loopback conferidos em valor, não contagem de spy. |
+| IOS-14/16, etapas e timeout | tools/taverna/tests/test_ios_proof.py:103/:109 assertRaises; :159 exit 65; :163 exit 124; :164 timed_out true; :172 exit 2 e :174 steps vazio | Falha/ausência impede avançar e não inicializa simulador após build falho. |
+| IOS-17, duas provas independentes | tools/taverna/tests/test_ios_proof.py:183/:184 SHA/manifesto iguais; :185 duas execuções; :188/:195 rejeição | Fonte limpa, roots físicos/UDIDs/cache distintos e mesmo perfil. T6 fará duas provas reais. |
+| IOS-19/20, estados e evidências | tools/taverna/tests/test_ios_proof.py:150/:151 exit 2/NOT PROVEN; :152 NOT CHECKED; :153 NOT RUN; :154 BLOCKED | Falha não promove outros estados. git ls-files .build vazio; PNGs/xcresult ignorados. |
+
+| Asserções | AC / necessidade | Manter |
+| --- | --- | --- |
+| Todos os 19 métodos em test_ios_proof.py:38–226 | IOS-02/09/10/13/14/16/17/19; cada caso está mapeado na tabela acima | Sim |
+| package_args recusa alias externo (:215/:218) e clean gate (:223/:225) | IOS-04/17, sem compartilhar estado gravável ou admitir reprodução suja | Sim |
+| Resultado real e parcial negativa | IOS-08/13/14, fixtures isoladas não provam integração com Xcode | Sim |
+
+Adequação A–D aprovada: valores/estados explícitos, testes derivados dos critérios, nenhum skip/exclusão/assert enfraquecido e padrão unittest/stdlib de CONTRIBUTING. A verificação independente ainda fará sensor; T4 não declara a feature concluída.
