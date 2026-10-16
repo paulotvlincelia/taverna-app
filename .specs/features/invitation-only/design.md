@@ -37,7 +37,7 @@ Provar controle positivo ativo e negativos sem credencial/revogado; sessões nov
 | Grupo inferido do ciphertext | Messaging/Protocol.hs:590 | Promessa incompatível com privacidade do conteúdo | Autoridade dos grupos oficiais sem descriptografar conversas; declarar limites de software modificado |
 | Biblioteca confundida com servidor | Artefatos ios-first-build | Prova sintética declarada real | Executáveis/cliente reais antes de declarar SMP/XFTP provados |
 
-O proprietário autorizou a rota mais simples após a comparação A/B; adotamos A somente para o experimento delimitado abaixo. Não repetir o piloto inteiro do SimpleX. Nenhum deploy, DNS, credencial real, ambiente externo, rede administrativa ou serviço externo será alterado por esse experimento.
+O proprietário autorizou a rota mais simples após a comparação A/B; adotamos A somente para o experimento delimitado abaixo. Não repetir o piloto inteiro do SimpleX. Nenhum deploy, DNS, credencial real ou ambiente administrativo externo será alterado por esse experimento.
 
 ## Desenho mínimo do experimento
 

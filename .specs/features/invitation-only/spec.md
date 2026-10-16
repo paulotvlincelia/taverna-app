@@ -19,7 +19,7 @@ O primeiro build comprova a base iOS derivada do SimpleX. A interface e o modelo
 | Feature | Reason |
 | --- | --- |
 | Android, desktop e chamadas | Entregas posteriores; áudio aqui significa gravação enviada como mensagem. |
-| Bots, ferramenta externa e serviço externo | Integração futura separada; preservar instalações e rede administrativa existentes. |
+| Integração com bots e serviços externos | Exige especificação e autorização próprias. |
 | Criptografia ou protocolo próprios | Reutilizar o núcleo aberto e revisar qualquer adaptação necessária de autorização em entrega específica. |
 | Apagar remotamente cópias recebidas | O administrador não controla cópias, exportações ou capturas nos aparelhos. |
 | Transferir automaticamente o convite pela instalação | O usuário instala e reabre o link original. |

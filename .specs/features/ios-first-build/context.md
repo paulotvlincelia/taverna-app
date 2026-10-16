@@ -12,9 +12,9 @@ Comprovar a base iOS do fork Taverna em simulador no MacBook, preservando a fund
 
 - Produto chamado Taverna, com mensageria privada para pessoas convidadas.
 - Repositório público do app e repositório privado de operação, com planos claros em ambos.
-- GitHub como fonte do projeto, sem depender do ferramenta externa para desenvolvimento.
+- GitHub como fonte do projeto, com instruções de desenvolvimento reproduzíveis.
 - Repos e pastas de trabalho organizados sob Projects; branch e worktree próprios por sessão/harness.
-- Não alterar a rede administrativa externa nem o agente serviço externo existente.
+- Preservar os ambientes e serviços fora da sessão de desenvolvimento.
 
 ## Defaults aprovados e limite encontrado
 
