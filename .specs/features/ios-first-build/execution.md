@@ -266,3 +266,9 @@ Os dois outputs GHC exatos retornaram HTTP 404 no cache autorizado, usando User-
 A preparação foi retomada às 17:08:30 UTC em uma dependência por vez, começando pela derivação 700zdsaz65dn4war5jzc6pwj20dbssfl-ghc-9.6.3.drv, já pertencente ao grafo aprovado. Agendamento max-jobs=1/cores=10; cores continua sendo uma indicação, não quota rígida. Limite de 5.400 segundos preservado, até 18:38:30 UTC. Logs, metadados e receipt próprio em .build/attempts/nix-ghc-small-20261016-03; sessão exec 57073. Isso prepara somente um compilador, não realiza o núcleo nem comprova o app. Não há compilação concorrente da tentativa anterior.
 
 T2/T7 permanecem concluídas; T1 continua sem seu gate final e T3–T6 pendentes. Todos os arquivos existentes e as evidências anteriores foram preservados. Nenhuma mudança no Tailscale, Mac mini, Alfred ou produção.
+
+### Primeiro GHC exato realizado
+
+A tentativa nix-ghc-small-20261016-03 terminou às 17:52:05 UTC com exit 0, dentro de seu limite de 90 minutos. O output 6mrz4w4nri6wq4nzys2grfzml9mk2m97-ghc-9.6.3 pertence à derivação 700zdsaz65dn4war5jzc6pwj20dbssfl-ghc-9.6.3.drv; path-info confirma ultimate=true, signatures=[] e narHash sha256-SE4TuL4yg4YKecGZ2DuJY69gKxC+okJFKRZE2rJWTzA=. O executável ghc --numeric-version retornou 9.6.3, exit 0. Trata-se de realização local de uma ferramenta do host, não de biblioteca iOS nem de build do app. Receipt, logs, path-info e qualification.json preservados no diretório da tentativa.
+
+O segundo compilador exato do grafo, derivação 7r81jvdqpz36bf6aba0j4yfiin2g8xp6-ghc-9.6.3.drv, iniciou às 17:52:10 UTC em nix-ghc-normal-20261016-04, depois do receipt 0 do primeiro. Agendamento max-jobs=1/cores=10; mesma receita/locks, limite de 5.400 segundos até 19:22:10 UTC. Sessão exec 67142, monitor 32420 e cliente 32428; conferir active.json e receipt.json antes de qualquer retomada. Nenhuma biblioteca final ou app foi declarada concluída.
