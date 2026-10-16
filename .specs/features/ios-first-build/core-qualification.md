@@ -26,7 +26,7 @@ A saída mantém qualified_artifacts vazio, downloaded_core_binaries vazio, buil
 
 O [Design](design.md) propõe compilar o núcleo com a derivação Haskell.nix fixada pelo upstream. Isso permite relacionar a biblioteca ao fonte e registrar a transformação mac2ios, os hashes e a plataforma final.
 
-Nix não está instalado neste MacBook: não foi encontrado no PATH, nem no caminho de perfil padrão, nem foi encontrado /nix. A instalação oficial para macOS cria recursos de sistema fora da árvore de projetos e exige administrador. Portanto, a autorização do plano não foi interpretada como permissão para executá-la.
+Nix não está instalado neste MacBook: não foi encontrado no PATH, nem no caminho de perfil padrão, nem foi encontrado /nix. A instalação oficial para macOS cria recursos de sistema fora da árvore de projetos e exige administrador. Essa instalação recebeu autorização explícita posterior do proprietário. A primeira tentativa e o andamento estão registrados no Design; isso não qualifica uma biblioteca do núcleo.
 
 ## Preparo do instalador, sem execução
 
@@ -45,4 +45,4 @@ A extração para revisão leu somente arquivos regulares de instalação por ta
 
 ## Próxima dependência
 
-Autorizar a exceção administrativa descrita no Design, ou escolher a adaptação local GHC/Cabal antes de executá-la. Até essa decisão, não instalar Nix, não modificar o sistema e não afirmar que o primeiro build foi comprovado.
+Concluir e validar a instalação Nix autorizada, preservando as evidências de cada tentativa. Depois, avaliar a receita fixada e produzir as bibliotecas antes de avançar ao Xcode. O primeiro build ainda não foi comprovado.

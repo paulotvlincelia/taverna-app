@@ -1,11 +1,11 @@
 # Design do primeiro build iOS
 
 **Spec:** [spec.md](spec.md), aprovada em 2026-10-16.
-**Status:** rota com bibliotecas oficiais avaliada e bloqueada; alternativa Nix preparada para revisão da exceção administrativa. Nenhuma compilação realizada.
+**Status:** rota Nix e exceção administrativa autorizadas pelo proprietário em 2026-10-16. Instalação em andamento; compilação ainda não realizada.
 
 ## Architecture Overview
 
-O plano aprovado selecionou bibliotecas oficiais pré-compiladas, condicionadas à origem comprovada. O [levantamento](core-qualification.md) não localizou uma entrada qualificada. O avanço agora depende da escolha abaixo; não produzir tarefas de implementação que presumam essa decisão já tomada.
+O plano aprovado selecionou bibliotecas oficiais pré-compiladas, condicionadas à origem comprovada. O [levantamento](core-qualification.md) não localizou uma entrada qualificada. O proprietário escolheu Nix e autorizou a exceção administrativa descrita abaixo. As alternativas permanecem registradas como contexto da escolha.
 
 | Abordagem | Benefício | Custo e condição |
 | --- | --- | --- |
@@ -24,7 +24,7 @@ Ambas miram o mesmo resultado do plano: app com núcleo real em simulador arm64,
 
 O desenho restante do executor Xcode será fechado com as entradas conhecidas. Uma alteração de flake, flags ou locks para resolver erro é uma mudança revisável, não uma atualização automática.
 
-## Exceção administrativa a revisar
+## Exceção administrativa autorizada
 
 A [documentação oficial do Nix](https://nix.dev/manual/nix/2.34/installation/installing-binary.html) e os scripts do pacote revisado descrevem instalação multiusuário no macOS. O instalador 2.34.9 rejeita --no-daemon no Darwin.
 
@@ -86,4 +86,12 @@ Nenhuma mudança de dados da aplicação. O registro local da qualificação con
 
 ## Tech Decisions
 
-Nenhuma nova decisão canônica de instalação foi tomada. A rota pré-compilada permanece bloqueada. Nix é a recomendação para avaliação do proprietário; a alternativa local é uma adaptação de engenharia ainda não executada.
+O proprietário autorizou Nix 2.34.9 no MacBook, com store e serviços fora de Projects, mantendo os projetos e suas evidências na árvore aprovada. A rota pré-compilada permanece bloqueada; a alternativa GHC/Cabal local não foi adotada. A instalação é um pré-requisito administrativo; o restante do executor será detalhado em tarefas antes de alterar código.
+
+## Andamento da instalação
+
+A primeira tentativa autenticou no macOS, criou o ponto /nix e um volume APFS vazio, mas terminou com exit 1 em vifs: error creating /etc/fstab. Não houve instalação do binário ou daemon até essa etapa. Evidência local: .build/attempts/nix-bootstrap-20261016/install.log.
+
+O [relato no repositório Nix](https://github.com/NixOS/nix/issues/13723#issuecomment-3251454726) apresenta o mesmo erro e informa sucesso ao executar pela sessão gráfica. Isso indica um caminho de investigação; a causa neste MacBook ainda não foi comprovada. Não desativar SIP ou alterar permissões globais como atalho.
+
+O controle automatizado do Terminal foi recusado pela ferramenta de UI por segurança. Foi preparado um helper local interativo, com verificação de hash e logs próprios, para execução manual pelo proprietário. Nenhum instalador foi reiniciado automaticamente após a falha, e o volume vazio foi preservado. Depois da execução manual, validar versão, conexão com o daemon e montagem antes de iniciar a avaliação da receita.

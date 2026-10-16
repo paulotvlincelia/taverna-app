@@ -18,7 +18,7 @@ Comprovar a base iOS do fork Taverna em simulador no MacBook, preservando a fund
 
 ## Defaults aprovados e limite encontrado
 
-As opções da tabela Assumptions & Open Questions da especificação foram aprovadas. A pesquisa não qualificou uma biblioteca oficial pré-compilada. O [relatório](core-qualification.md) e o [Design](design.md) detalham a alternativa de compilação do núcleo. O uso de Nix requer uma instalação administrativa fora de Projects, ainda não autorizada.
+As opções da tabela Assumptions & Open Questions da especificação foram aprovadas. A pesquisa não qualificou uma biblioteca oficial pré-compilada. O [relatório](core-qualification.md) e o [Design](design.md) detalham a alternativa de compilação do núcleo. O proprietário autorizou a instalação administrativa do Nix fora de Projects em 2026-10-16. Ela ainda não está concluída.
 
 | Área | Proposta | Alternativa e consequência |
 | --- | --- | --- |
@@ -29,7 +29,7 @@ As opções da tabela Assumptions & Open Questions da especificação foram apro
 
 ## Discricionariedade técnica
 
-O agente deve investigar as lacunas técnicas sem pedir ao proprietário fatos que o código ou o ambiente podem responder. A implementação e suas tarefas serão definidas após revisão da especificação e deste contexto. Não existe autorização implícita para instalar toolchains globais com administrador, aceitar contratos ou consultar credenciais Apple.
+O agente deve investigar as lacunas técnicas sem pedir ao proprietário fatos que o código ou o ambiente podem responder. A implementação e suas tarefas serão definidas após revisão da especificação e deste contexto. A instalação Nix recebeu autorização administrativa explícita. Não existe autorização para aceitar contratos ou consultar credenciais Apple. A execução do restante do plano preserva esses limites.
 
 ## Ideias adiadas
 
