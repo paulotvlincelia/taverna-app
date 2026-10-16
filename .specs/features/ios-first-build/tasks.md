@@ -16,7 +16,7 @@ Gerada de AGENTS.md, CONTRIBUTING.md, docs/taverna/environments.md, CI Foundatio
 | Code Layer | Required Test Type | Coverage Expectation | Location Pattern | Run Command |
 | --- | --- | --- | --- | --- |
 | Receita e preparação do núcleo | integration | Fonte/lock fixados, hashes, licença, plataforma, falhas de origem/extração e limites aplicáveis | Registros próprios de cada tentativa sob .build/attempts | Nix com no-write-lock-file e no-update-lock-file; conferências de produtos reais descritas no registro |
-| Ambiente de execução | integration | Device set e UDID exclusivos, destino efetivo do Xcode, rede negada com controle externo, retomada sem apagar outra sessão | Registros próprios sob .build/attempts e .build/SimulatorDevices | simctl --set e probes reais do executor; comando exato e resultado registrados antes de considerar T2 concluída |
+| Ambiente de execução | integration | UDID exclusivo e armazenamento físico local, destino efetivo do Xcode, rede negada com controle externo, retomada sem apagar outra sessão | Registros próprios sob .build/attempts e .build/SimulatorDevices | simctl e probes reais do executor; comando exato e resultado registrados antes de considerar T2 concluída |
 | Interface inicial iOS | e2e | Get started visível/habilitado, Your profile após toque, sem envio de formulário; suíte herdada preservada | apps/ios/Tests iOS | xcodebuild test do scheme SimpleX (iOS), com destino qualificado e caminhos locais explícitos |
 | Validação da prova | unit + integration | Rejeitar hash/plataforma errados, produto ausente, etapa falha/timeout e zero testes obrigatórios; conferir artefatos reais | tools/taverna/tests | python3.12 -m unittest discover -s tools/taverna/tests; validação da tentativa real |
 | Documentação e handoff | none | Links, comandos comprovados, estado factual e nenhum material privado versionado | docs/taverna e .specs/features/ios-first-build | check_foundation.py, validate_spec.py e conferência de links da feature |
@@ -80,30 +80,30 @@ T5 → T6
 
 ### T2: Provar a sessão isolada
 
-**What**: Demonstrar um executor que seleciona o simulador próprio e contém sua saída de rede antes de abrir o mensageiro.
-**Where**: `.specs/features/ios-first-build/execution.md`
+**What**: Demonstrar um executor que seleciona o simulador próprio e contém IP remoto no processo do app antes do main, conforme APP-004.
+**Where**: `tools/taverna/ios_session.py`, `tools/taverna/ios/`, `tools/taverna/tests/test_ios_session.py`, `.specs/features/ios-first-build/execution.md`
 **Depends on**: None
-**Reuses**: simctl --set e política de estado local da fundação.
+**Reuses**: simctl padrão, controles UIKit qualificados e política de estado local da fundação.
 **Requirement**: IOS-04, IOS-05, IOS-10, IOS-15.
 **Tools**: CLI Xcode e probes locais; TLC Spec Driven.
-**Tests**: integration; controle externo bloqueado e correspondência entre UDID, device set e destino do executor. Um probe sintético é prova do ambiente, não prova do app.
+**Tests**: integration; controle externo bloqueado e correspondência entre UDID, armazenamento físico, aliases e destino do executor; rejeição de destino alheio e helper ausente/divergente. Um probe sintético é prova do ambiente, não prova do app.
 **Gate**: Full Session.
 **Done when**:
 
-- [ ] Produtos, caches, bancos, logs e device set do app pertencem ao worktree, respeitada a exceção de sistema Nix autorizada.
-- [ ] O executor Xcode seleciona o UDID registrado do device set próprio.
-- [ ] A contenção é demonstrada sem alterar VPN/firewall global; se não houver método comprovado, não lançar o app e registrar BLOCKED.
-- [ ] Nova tentativa preserva registros anteriores e não limpa outras sessões.
+- [x] Produtos, caches, bancos, dados e logs físicos do simulador pertencem ao worktree; índices por UDID do SDK são aliases próprios, respeitada a exceção Nix autorizada.
+- [x] O executor Xcode seleciona o UDID exclusivo registrado no índice padrão do SDK, com correspondência física comprovada.
+- [x] A contenção de IP remoto no processo do app antes do main e a comunicação local são demonstradas sem alterar VPN/firewall global; se não houver método comprovado, não lançar o app e registrar BLOCKED.
+- [x] Nova tentativa preserva registros anteriores e não limpa outras sessões.
 
 ### T3: Acrescentar e executar o teste observável
 
 **What**: Acrescentar um teste da navegação inicial e compilar/executar a suíte do app com entradas qualificadas.
-**Where**: `apps/ios/Tests iOS/Tests_iOS.swift`
+**Where**: `apps/ios/Tests iOS/Tests_iOS.swift`, `apps/ios/Tests iOS/Tests_iOSLaunchTests.swift`
 **Depends on**: T1, T2
 **Reuses**: XCTest e testes existentes, sem remover asserções ou usar skips para obter sucesso.
 **Requirement**: IOS-03, IOS-06, IOS-08, IOS-11, IOS-12, IOS-13.
 **Tools**: Xcode/xcodebuild; TLC Spec Driven.
-**Tests**: e2e, no mesmo arquivo; preservar os três métodos de teste herdados nos dois arquivos da suíte e acrescentar um método com asserções do onboarding. Contagens efetivas, inclusive configurações de UI repetidas pelo XCTest, devem constar do resultado.
+**Tests**: e2e, no mesmo arquivo; preservar os três métodos de teste herdados nos dois arquivos da suíte e acrescentar um método com asserções do onboarding. Configurar todas as instâncias de XCUIApplication com o guard qualificado, sem eliminar launch/performance/screenshot herdados. Contagens efetivas, inclusive configurações de UI repetidas pelo XCTest, devem constar do resultado.
 **Gate**: Full iOS.
 **Done when**:
 
@@ -196,4 +196,4 @@ T5 → T6
 
 ## Estado
 
-T1 em andamento; preparação operacional de T2 iniciada enquanto Nix realiza o núcleo. T3–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.
+T1 em andamento; T2 concluída como ambiente com controle UIKit sintético e preflight real. T3–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.

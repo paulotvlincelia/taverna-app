@@ -141,3 +141,45 @@ Foi compilado um app UIKit fictício de controle, separado do fonte Taverna. Ele
 O [Design](design.md) propõe revisar os critérios de isolamento para essa alternativa. A proposta depende da resposta do proprietário; os critérios originais ainda não foram substituídos, e T2 continua sem aprovação de seu gate.
 
 A captura local do app de controle confirmou visualmente a tela Isolation control. A imagem e seu hash permanecem ignorados. Um controle adicional removeu a instrumentação: o mesmo app recebeu connect_errno=36/EINPROGRESS e recusou avançar para a interface, conforme sua asserção de rede. Isso distingue o efeito do sandbox de uma restrição já imposta pelo ambiente. Registros em screenshot-receipt.json e negative-control-no-guard.json do mesmo diretório. Após os controles, somente esse simulador foi encerrado, preservando instalação e evidências. Os dois dispositivos desta sessão estão Shutdown; nenhum teste da Taverna foi executado.
+
+
+## T2: sessão aprovada e ferramentas reproduzíveis, em 2026-10-16
+
+APP-004 registra a revisão aprovada pelo proprietário. Método mantido: TLC Spec Driven, seis tarefas e execução inline. T1 continua independente; este gate de T2 qualifica o ambiente com um controle próprio, sem afirmar execução da Taverna.
+
+**Antes da implementação:** assumir somente o SDK/runtime já identificados; API sandbox deprecated exige prova real, não apenas compilação. Escopo: tools/taverna/ios_session.py, tools/taverna/ios, tools/taverna/tests/test_ios_session.py e este registro, além dos artefatos de aprovação/status. Sucesso: destino próprio confirmado pelo Xcode, caminhos físicos locais, bloqueio externo antes do main com loopback permitido, controle negativo discriminante e tentativas anteriores preservadas.
+
+Ferramentas versionadas:
+
+- create registra pela API padrão do SDK, salva a posse antes de mover o dispositivo desligado e cria somente aliases por UDID para dados/logs físicos no worktree. Conflitos exigem reconciliação; não há comando de erase/delete/limpeza forçada.
+- check e preflight conferem posse, device.plist, aliases, índice padrão e destino efetivo do Xcode. guard compila os dois auxiliares e registra hashes de fontes/binários locais. Uma entrada ausente ou divergente termina com exit 2.
+- control compila um app UIKit próprio de teste, sem código de mensageria. O guard aplica a política por exec no mesmo PID, comprova negação IPv4/IPv6 e conexão local antes do main. O controle também se recusa a abrir a interface se a contenção faltar. Serviços do sistema iOS ficam fora da política.
+
+Comandos comprovados neste worktree:
+
+```bash
+python3.12 tools/taverna/ios_session.py guard --attempt session-guard-20261016-02
+python3.12 tools/taverna/ios_session.py control --attempt session-control-versioned-20261016 --guard-manifest .build/attempts/session-guard-20261016-02/guard-manifest.json
+python3.12 tools/taverna/ios_session.py preflight --attempt session-preflight-final-20261016 --guard-manifest .build/attempts/session-guard-20261016-02/guard-manifest.json
+python3.12 -m unittest discover -s tools/taverna/tests
+python3.12 tools/taverna/check_foundation.py
+python3.12 -m compileall -q tools/taverna
+git diff --check
+```
+
+**Resultado:** controles e preflight exit 0; 39 testes Python, zero falhas/skips, incluindo os 28 Foundation preservados. Xcode aceitou exatamente o UDID próprio e a plataforma iphonesimulator. No controle versionado, o PID 44714 registrou ipv4_errno=1, ipv6_errno=1 e loopback=true antes do main; UIKit emitiu UIKIT_CONTROL_READY. Sem instrumentação, o controle recebeu EINPROGRESS (36) e não abriu a interface. O dispositivo foi desligado pelo próprio executor; nenhum outro UDID foi alterado.
+
+Registros locais ignorados: .build/ios-session.json; .build/attempts/session-control-versioned-20261016/{preflight.json,steps.json,guard.jsonl,receipt.json}; .build/attempts/session-preflight-final-20261016. O primeiro ensaio versionado falhou na verificação local por não aguardar a conexão; failure.json e os logs permanecem em session-control-20261016. A correção aguardou o socket com poll; nenhuma asserção foi removida ou enfraquecida. A segunda tentativa e a ferramenta versionada passaram.
+
+**Revisão da adequação, suficiente e necessária:**
+
+| Obrigação | Asserção localizada | Resultado definido / vínculo reverso |
+| --- | --- | --- |
+| IOS-04, IOS-05: dados/logs físicos locais, índice e identidade | tools/taverna/tests/test_ios_session.py:41 — assertEqual(index.resolve(), storage); :51/:60/:69/:74/:79 — assertRaisesRegex(ValueError, ...) | Aceitar a sessão própria; rejeitar escape, redirecionamento, índice privado e identidade divergente. Todos necessários para IOS-04/05. |
+| IOS-05: destino alheio | tools/taverna/tests/test_ios_session.py:44 — assertRaisesRegex(ValueError, 'destination'); tools/taverna/ios_session.py:200 — validate_session(... TARGET_DEVICE_IDENTIFIER) na integração real | Destino deve ser o UDID registrado da sessão. |
+| IOS-10: auxiliar ausente/adulterado | tools/taverna/tests/test_ios_session.py:88/:91 — assertRaisesRegex(ValueError, 'hash'/'missing') | Bloquear preflight antes do mensageiro. |
+| IOS-10: negação externa e conexão local no PID do app antes do main | tools/taverna/tests/test_ios_session.py:113–118 — assertEqual(pid/executable/phase/errno) e assertIs(loopback, True); :122 — assertRaisesRegex(ValueError, 'containment') | Rejeitar conexão externa permitida, ausência de loopback ou PID alheio; não aceitar mero timeout como negação. |
+| IOS-10: prova real e sensor | tools/taverna/ios_session.py:268–270 — guard_proof(...) e ausência de UIKIT_CONTROL_READY causa ValueError; :282–283 — controle sem guard exige EINPROGRESS e recusa da interface | A política real muda o resultado observado, no app sintético identificado, sem atribuí-lo à Taverna. |
+| IOS-15: preservação/retomada | tools/taverna/tests/test_ios_session.py:97 — assertRaises(FileExistsError); :100–101 — assertNotEqual(attempt, second), assertEqual(evidence, 'keep'); :104 — assertRaisesRegex(ValueError, 'attempt') | Nova tentativa não apaga nem sobrescreve a anterior, nem escapa de seu diretório. |
+
+Cada teste novo corresponde a IOS-04/05/10/15; sem casos especulativos ou testes de framework. O payload de prova é conferido campo a campo. Padrões: CONTRIBUTING.md e unittest da fundação. Sem desvios do ajuste aprovado. **T2 concluída como gate de ambiente.** IOS-10 na Taverna real ainda depende da integração em T3; F1, build, testes iOS e verificação final continuam pendentes.
