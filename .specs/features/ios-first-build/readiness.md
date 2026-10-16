@@ -4,6 +4,8 @@ Em 2026-10-16, o Xcode e os runtimes estão disponíveis. O primeiro build ainda
 
 Este documento é um levantamento de planejamento. Não é o relatório de um Verifier e não declara a issue #6 concluída.
 
+Atualização após aprovação: a [qualificação das bibliotecas](core-qualification.md) terminou BLOCKED; nenhuma entrada oficial iOS foi qualificada. O [Design da alternativa](design.md) detalha a compilação do núcleo via Nix e a exceção administrativa necessária. Não há build ou teste iOS executado.
+
 ## Base examinada
 
 | Referência | Valor |

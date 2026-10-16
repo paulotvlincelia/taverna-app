@@ -1,6 +1,6 @@
 # Primeiro build iOS da Taverna
 
-Status: proposta para revisão do proprietário, em 2026-10-16. Implementação não iniciada.
+Status: aprovado pelo proprietário em 2026-10-16. Qualificação de bibliotecas iniciada; build ainda não executado.
 
 Issue canônica: [taverna-app #6](https://github.com/paulotvlincelia/taverna-app/issues/6), vinculada ao épico E2. Método: TLC Spec Driven 3.3.0, escopo Large, pois há dependências entre bibliotecas nativas, SwiftPM, Xcode, simulador e evidências. Esta proposta preserva a fundação integrada e os critérios da issue.
 
@@ -31,22 +31,22 @@ O resultado desta entrega será um build Debug para simulador arm64, ligado ao n
 
 ## Assumptions & Open Questions
 
-As propostas abaixo ainda precisam da revisão do proprietário. Fatos técnicos pendentes são provas a obter, não decisões transferidas ao usuário.
+Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprovação não comprova fatos técnicos nem autoriza implicitamente uma instalação administrativa fora dos limites do plano.
 
 | Assumption / decision | Chosen default | Rationale | Confirmed? |
 | --- | --- | --- | --- |
-| Aparência da primeira prova | Interface herdada; chamar o resultado de build de base do fork Taverna. | Isolar viabilidade de compilação da entrega de identidade. | n |
-| Origem do núcleo | Tentar bibliotecas oficiais pré-compiladas somente com vínculo verificável ao fonte e hashes fixados. | Reduzir preparação de toolchains sem afirmar reconstrução do núcleo. Nenhum artefato já foi qualificado. | n |
-| Falha na qualificação das bibliotecas | Registrar BLOCKED e detalhar a rota de compilação do núcleo antes de adotá-la. | Evitar binários sem origem ou troca silenciosa do escopo. | n |
-| Destino principal | SDK iOS Simulator 27.1, runtime iOS 27.0, iPhone 17 arm64. | Esse runtime está disponível e lista o modelo; o runtime 27.1 instalado lista somente iPhone Duo. Compatibilidade de execução ainda não comprovada. | n |
-| Credenciais Apple | Tentar Debug para simulador sem provisionamento de conta Apple. | Evitar vincular o primeiro build a certificados ou identidades de distribuição; validar os ajustes efetivos de todos os targets. | n |
-| Teste mínimo de interface | Em inglês, confirmar Get started e navegar até Create your profile, sem enviar o formulário. | Resultado visível e objetivo sem criar identidade, aceitar termos ou iniciar conversa. | n |
-| Execução sem serviços reais | Provar isolamento de saída de rede da sessão antes de abrir o app. | O app herdado contém configuração de servidores reais; não presumir ausência de tráfego só por parar no onboarding. | n |
-| Limites por tentativa | Download de cada arquivo: até 5 GiB e 30 minutos; build: 90 minutos; sessão de testes: 15 minutos. | Limites de interrupção para processos presos; não são promessa de desempenho. Mudança desses limites exige registro. | n |
-| Evidências visuais | Manter screenshots e xcresult apenas no estado local ignorado; relatório público textual. | Assets e conteúdo dos bundles ainda precisam de revisão para publicação. | n |
+| Aparência da primeira prova | Interface herdada; chamar o resultado de build de base do fork Taverna. | Isolar viabilidade de compilação da entrega de identidade. | y |
+| Origem do núcleo | Tentar bibliotecas oficiais pré-compiladas somente com vínculo verificável ao fonte e hashes fixados. | Reduzir preparação de toolchains sem afirmar reconstrução do núcleo. Nenhum artefato já foi qualificado. | y |
+| Falha na qualificação das bibliotecas | Registrar BLOCKED e detalhar a rota de compilação do núcleo antes de adotá-la. | Evitar binários sem origem ou troca silenciosa do escopo. | y |
+| Destino principal | SDK iOS Simulator 27.1, runtime iOS 27.0, iPhone 17 arm64. | Esse runtime está disponível e lista o modelo; o runtime 27.1 instalado lista somente iPhone Duo. Compatibilidade de execução ainda não comprovada. | y |
+| Credenciais Apple | Tentar Debug para simulador sem provisionamento de conta Apple. | Evitar vincular o primeiro build a certificados ou identidades de distribuição; validar os ajustes efetivos de todos os targets. | y |
+| Teste mínimo de interface | Em inglês, confirmar Get started e navegar até Create your profile, sem enviar o formulário. | Resultado visível e objetivo sem criar identidade, aceitar termos ou iniciar conversa. | y |
+| Execução sem serviços reais | Provar isolamento de saída de rede da sessão antes de abrir o app. | O app herdado contém configuração de servidores reais; não presumir ausência de tráfego só por parar no onboarding. | y |
+| Limites por tentativa | Download de cada arquivo: até 5 GiB e 30 minutos; build: 90 minutos; sessão de testes: 15 minutos. | Limites de interrupção para processos presos; não são promessa de desempenho. Mudança desses limites exige registro. | y |
+| Evidências visuais | Manter screenshots e xcresult apenas no estado local ignorado; relatório público textual. | Assets e conteúdo dos bundles ainda precisam de revisão para publicação. | y |
 | Local dos ambientes | Clone principal e worktrees sob a raiz Projects já definida pelo proprietário. | Preservar organização existente; nenhum novo checkout em Downloads ou Desktop. | y |
 
-**Open questions:** none — escolhas não discutidas estão registradas como propostas; origem/ABI das bibliotecas, seleção do simulador isolado e contenção de rede são incertezas técnicas explícitas.
+**Open questions:** none — defaults aprovados; origem/ABI das bibliotecas, seleção do simulador isolado e contenção de rede continuam sendo provas técnicas. A exceção necessária para a rota Nix está apresentada separadamente no Design e ainda não foi adotada.
 
 ## User Stories
 
@@ -88,7 +88,7 @@ As propostas abaixo ainda precisam da revisão do proprietário. Fatos técnicos
 
 ## Proposed Delivery Path
 
-Esta é a sequência proposta para revisão. Design e tarefas atômicas serão produzidos após aprovação desta especificação e de seu [contexto](context.md).
+Esta sequência foi aprovada com a especificação e seu [contexto](context.md). A qualificação foi executada e o [Design](design.md) registra o bloqueio e a alternativa concreta antes de adotá-la.
 
 1. **Qualificar a rota do núcleo.** Localizar artefatos oficiais vinculados ao fonte da base; verificar licença, hashes, arquitetura e ABI. Se não houver prova suficiente, apresentar a rota de compilação do núcleo, sem baixar uma versão latest como substituta.
 2. **Provar o isolamento.** Definir e demonstrar seleção do device set no executor de testes e contenção de rede da sessão. A documentação de simctl --set, sozinha, não prova que xcodebuild usa aquele conjunto.
