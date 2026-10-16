@@ -31,7 +31,7 @@ Nome: Taverna. Fonte aberta SimpleX como base, mantendo licenças, criptografia 
 
 ## Deferred Ideas
 
-Android, desktop, chamadas e integração futura de serviço externo. Nenhuma alteração em ambiente externo, rede administrativa, serviço externo ou serviços de produção nesta fase.
+Android, desktop, chamadas e integração com serviços externos. Nenhuma alteração em serviços de produção nesta fase.
 
 ## Handoff local
 
