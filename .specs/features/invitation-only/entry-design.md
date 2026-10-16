@@ -24,6 +24,8 @@ Não criar painel web, login social, microserviços, Redis, filas ou um protocol
 
 A2 é alternativa caso A1 falhe, não um trabalho paralelo. Não modificar o núcleo ou trocar a arquitetura em silêncio para contornar um gate. A antiga rota de alterar os dois daemons foi descartada para este recorte pela preferência do proprietário por simplicidade.
 
+Loopback não autentica o processo que conecta. O listener deve exigir credencial SOCKS efêmera e aleatória por processo, entregue ao núcleo em memória e nunca em logs/UserDefaults. O núcleo fixado oferece `SocksAuthUsername` em `Messaging/Client.hs:452`; `SocksIsolateByAuth` não é autenticação secreta de processo. Provar rejeição de cliente local sem essa credencial e impedir reuso entre processos/execuções. Porta efêmera sozinha não é controle de acesso.
+
 ### Componentes propostos
 
 | Componente | Local proposto | Responsabilidade e reutilização |
@@ -109,7 +111,7 @@ Manter os 70 testes Foundation e os 12 do experimento. Para o novo recorte, deri
 | Camada | Casos necessários |
 | --- | --- |
 | Admissão/SQLite | Corrida do mesmo convite; mesma chave após resposta perdida; reinício após commit; rollback na emissão; limite 20+proprietário; relógio na expiração; cancelado/usado; papel forjado; CSR inválido; limite por origem; zero token/chave em logs |
-| Adaptador | Somente loopback; porta exclusiva por processo; rejeição antes de DNS/conexão para host/porta fora da lista; frames SOCKS parciais/malformados; backpressure; cancelamento; limite de conexões; TLS externo não confiável e fingerprint interno incorreto |
+| Adaptador | Somente loopback; porta e credencial efêmera exclusivas por processo; cliente local sem credencial/reuso entre processos recusados; rejeição antes de DNS/conexão para host/porta fora da lista; frames SOCKS parciais/malformados; backpressure; cancelamento; limite de conexões; TLS externo não confiável e fingerprint interno incorreto |
 | App/extensões | Inicialização e retomada fechadas sem associação/configuração/Keychain; Share Extension configura antes de iniciar; NSE independente; importação, link curto, contato e edição de rede não escapam da política |
 | Ponta a ponta | Dois clientes reais, SMP e XFTP; arquivo grande em andamento; revogação e base indisponível cortam em até 60 s; sentinela alcançável no controle positivo e zero tentativas durante casos proibidos |
 
@@ -126,6 +128,7 @@ A nova prova de rede requer contenção que permita somente seus destinos fictí
 | Proxy SMP ou resolução de link curto | APITypes.swift:267; Library/Internal.hs:1561 | Relay autorizado encaminha para outro destino | Bloquear caminhos não autorizados e provar proxy interno; filtro de socket sozinho não satisfaz NET-02 |
 | Política espelhada fica antiga | gateway.py:17 | Revogação ou falha de admissão sem efeito | Uma autoridade durável, consulta limitada/fail-closed e prova com base indisponível |
 | Listener/credencial em extensão | Network.framework e KeyChain.swift:12–13 | Falha em suspensão, processo separado ou aparelho | Gate em cada target; credencial ThisDeviceOnly e entitlement próprio antes de aparelho |
+| Listener acessível a outro processo local | Messaging/Client.hs:452 | Uso indevido da credencial de dispositivo pela ponte local | Exigir autenticação SOCKS aleatória por processo em memória; recusar cliente local sem credencial; não tratar SocksIsolateByAuth como segredo |
 | URL completa no logger herdado | SimpleXApp.swift:46 | Token individual em diagnóstico | Interceptar e sanitizar antes do handler; teste de ausência de token em logs |
 | CSR nativo ainda não qualificado | SwiftPM não tem biblioteca X.509/CSR | Emissão funciona só no driver | Qualificar biblioteca padrão de CSR e seu uso com chave do dispositivo; sem encoder/criptografia próprios |
 | Assets ainda bloqueados | docs/taverna/asset-policy.json | Distribuição customizada sem licença | DESIGN.md e inventário antes das telas; preservar gate de distribuição |
