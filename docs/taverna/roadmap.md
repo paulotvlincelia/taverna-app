@@ -1,6 +1,6 @@
 # Roadmap do app
 
-Estado em 2026-10-16: fundação F0 verificada; integração exige CI no commit com o relatório; app iOS, distribuição e push ainda sem prova própria. [Project público Taverna App — Roadmap](https://github.com/users/paulotvlincelia/projects/5).
+Estado em 2026-10-16: fundação e primeiro build iOS integrados; duas reproduções em simulador, CI e Verifier aprovados no PR #10. A interface continua herdada. Identidade Taverna, entrada exclusiva, aparelho, push e distribuição ainda sem prova própria. [Project público Taverna App — Roadmap](https://github.com/users/paulotvlincelia/projects/5).
 
 | Épico | Entregas canônicas | Resultado esperado |
 | --- | --- | --- |
@@ -13,3 +13,11 @@ Milestones: Fundação, TestFlight privado e Piloto até 20 convidados. O roadma
 Antes de mover para Pronto, aprovar a spec TLC e resolver gates de entrada. Na execução, registrar executor/harness, branch/worktree exclusivos, propriedade dos arquivos e integrador. Concluído exige critérios satisfeitos, PR integrado, CI e Verifier aplicáveis aprovados. Uma issue tem apenas um pai canônico; acompanhá-la em outro Project não cria outra spec nem muda sua visibilidade pública. Nenhuma informação operacional privada deve entrar em descrição/comentário.
 
 Não executar o backlog automaticamente: cada entrega de produto tem escopo e provas próprios. Nesta fundação, nenhuma conta Apple, credencial, serviço de produção ou distribuição foi criada. O primeiro build deve distinguir bibliotecas pré-compiladas de núcleo reproduzido do fonte; simulador não prova APNs. Licenças e permissões dos assets seguem gates próprios.
+
+## Próxima fase aprovada
+
+A [spec de entrada e configuração](../../.specs/features/invitation-only/spec.md) e o [contexto](../../.specs/features/invitation-only/context.md) registram as decisões do proprietário e os pressupostos aprovados em 2026-10-16. Somente o proprietário emite convites e cria grupos/escolhe membros. O convite individual basta para entrar, sem aprovação posterior. Os convidados podem conversar entre si com aceite mútuo. Esses comportamentos ainda não estão implementados.
+
+Sequência: requisitos aprovados; comprovar autorização individual e compatibilidade com os serviços em ambiente isolado; preparar identidade e seu DESIGN.md; construir uma fatia completa; qualificar operação, aparelhos e distribuição; iniciar piloto pequeno. As [evidências e lacunas](../../.specs/features/invitation-only/research.md) explicam por que convites de contato e uma senha compartilhada de relay não comprovam o perímetro desejado.
+
+O DESIGN.md será produzido na raiz durante a fase de identidade. Seu contrato na spec cobre marca, tokens, componentes, estados, fluxos, acessibilidade, assets/licenças e tradução para iOS. Não existe identidade visual aprovada nesta etapa.
