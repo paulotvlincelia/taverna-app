@@ -11,7 +11,7 @@ export STACK_ROOT="$PWD/.build/stack"
 export TMPDIR="$PWD/.build/tmp"
 ```
 
-Usar -derivedDataPath "$PWD/.build/DerivedData" e -clonedSourcePackagesDirPath "$PWD/.build/SourcePackages" nos comandos Xcode. Escolher DEVELOPER_DIR por comando, sem mudar globalmente xcode-select. O executável do compilador pode ser compartilhado; store/cache/bancos graváveis ficam locais. Registrar um UDID de simulador exclusivo por sessão; nunca apagar/resetar todos os simuladores. Signing e aparelho físico têm um responsável de uso serializado.
+Usar -derivedDataPath "$PWD/.build/DerivedData" e -clonedSourcePackagesDirPath "$PWD/.build/SourcePackages" nos comandos Xcode. Escolher DEVELOPER_DIR por comando, sem mudar globalmente xcode-select. O executável do compilador pode ser compartilhado; store/cache/bancos graváveis ficam locais. Registrar um UDID de simulador exclusivo por sessão em um device set sob .build/SimulatorDevices; nunca apagar/resetar todos os simuladores. Signing e aparelho físico têm um responsável de uso serializado.
 
 Execute o preflight a partir do worktree:
 
@@ -20,6 +20,14 @@ python3.12 tools/taverna/preflight.py
 ```
 
 A saída JSON registra versões e motivos. Exit 2 e overall BLOCKED são esperados enquanto faltarem Xcode/SDK/toolchain, prova das bibliotecas ou assinatura. foundation_tools pode passar sem que os gates iOS passem. O check de layout comprova confinamento de caminhos, não a atribuição de responsável/UDID; registre isso na sessão.
+
+O preflight consulta somente .build/SimulatorDevices se esse device set já existir; não inicializa diretórios nem usa os dispositivos globais de outra sessão. Preparar o set exige runtime instalado e um device type suportado por ele:
+
+```bash
+xcrun simctl --set "$PWD/.build/SimulatorDevices" list devices available --json
+```
+
+A criação explícita via simctl create pertence ao preparo da sessão; registrar runtime, tipo e UDID no handoff ignorado. A entrega do build deve provar como instalar/executar o app nesse set e como o teste Xcode o seleciona; criar um dispositivo não é prova de build ou teste.
 
 O preflight usa Python stdlib. Seus gates distinguem compilação em simulador, núcleo compilado do fonte e assinatura em aparelho. Instalar/abrir Xcode, aceitar licença e autenticar conta são etapas do proprietário; nenhuma credencial é consultada pelo preflight.
 
