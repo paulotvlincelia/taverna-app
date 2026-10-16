@@ -10,7 +10,7 @@ Gates: hashes exatos, versão/ajuda e inicialização oficial; regressões Found
 
 Próximo passo: ponte TLS mínima e driver de integração, conforme access-proof-plan.md. Os 34 critérios do produto permanecem Pending.
 
-## Passo 2: ponte e integração real
+## Passo 2: ponte e integração real, antes da revisão independente
 
 Concluído localmente em 2026-10-16. Componente experimental em tools/taverna/access_proof/gateway.py: TLS com certificado por dispositivo, dois backends administrativos fixos, lista local de associações e consulta periódica para encerrar conexões. Não implementa emissão de convites ou um serviço administrativo de produção.
 
@@ -38,3 +38,11 @@ Próximo passo: relatório delimitado, Verifier independente e CI antes da integ
 O guia docs/taverna/access-proof.md registra origem, execução, encerramento e limites. A prova usa binários oficiais de fornecedor; não os apresenta como compilados localmente ou idênticos ao binário iOS. A lista local de acesso, os adaptadores de teste e a prova da ponte não implementam entrada no app ou grupos.
 
 A execução final do componente passou 11 testes em 11,888 segundos, zero skips; os 70 testes de regressão também passaram. Revisão independente e sensores de comportamento ainda precisam aprovar o commit final antes da integração. Logs completos e credenciais fictícias ficam ignorados sob .build; nenhuma conversa ou convite foi versionado.
+
+## Correção após reprodução independente
+
+O Verifier detectou redirecionamentos de log fixados em run-a no preparo da fixture. A rodada do autor tinha esse diretório preservado, mas um checkout limpo com outro slug não tinha, e os relays não iniciaram. A falha torna insuficiente aquela primeira reprodução como evidência de preparo em clone novo.
+
+Correção: usar o diretório da execução selecionada para os dois logs e verificar por asserção que ambos registram o bind nesse diretório. Nenhuma asserção anterior removida ou enfraquecida. Nova reprodução com run-c, credenciais/bancos/configuração novos, e revisão independente novamente exigidas. O resultado anterior permanece registrado como tentativa, não como fonte final aprovada.
+
+A reprodução corretiva run-c iniciou configuração, certificados e bancos novos usando o slug selecionado. Doze testes de integração passaram em 12,248 segundos, zero skips; 70 regressões e checker Foundation também passaram. A asserção adicional confere os dois logs sob o diretório ativo. Revisão e sensor independentes continuam exigidos antes da integração.
