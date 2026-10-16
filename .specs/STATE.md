@@ -8,10 +8,9 @@ Registro posterior de 2026-10-16: especificação e rota Nix aprovadas; exceçã
 
 ## Handoff
 
-- **Feature**: ios-first-build #6, TLC Spec Driven (Large, oito tarefas), retomada após aprovação explícita do perfil first-build.
-- **Completed**: T1/T2/T7/T8, HEAD 23f14dba8. Núcleo real local, 4.187 objetos; builds -02/-03 e onboarding comprovados; tentativas integrais -01/-02/-03 preservadas sem PASS.
-- **In progress**: T3 perfil inglês/portrait/light aprovado, todos quatro métodos/asserts e zero skips. T4 gravação/validação/comparação preparada; T5 rascunhada; T6 pendente.
-- **Next**: rebuild das fontes novas, sessão própria nova, execução real do perfil; fechar T3/T4 com provas; guia e dois builds limpos do mesmo SHA, CI e Verifier independente.
-- **Constraints**: Projects e exceção Nix aprovada; não tocar Mac mini/Tailscale/Alfred/produção/credenciais Apple. Sem perfil/conversa/binários publicados. Matriz integral disponível e pendente, 541 execuções positivas da tentativa -03 não são suíte aprovada.
-- **Ownership**: Codex, branch codex/6-ios-first-build-plan, integrador feature/tools/docs/CI/locks. Três Swift T3, dois arquivos Python T4 e spec/handoff não commitados; nenhum push/PR F1 ainda.
-- **Sessions**: todas anteriores Shutdown; record atual 22C3C673 onboarding probe preservado. Dois UDIDs finais devem ser criados antes de qualquer UI paralelo, evitando falso new_device_ids.
+- **Feature**: ios-first-build #6; TLC Spec Driven, Large (oito tarefas).
+- **Completed**: T1/T2/T7/T8/T3/T4/T5. App e quatro produtos reais; perfil first-build com quatro métodos/zero falhas/skips (85,065 s), onboarding 13,334 s; nove eventos before-main. 70 testes Python, Foundation/compileall/diff aprovados.
+- **In progress**: T6 README/proveniência atualizados factual; commit final de implementação preparado. Próximas alterações só de relatório, salvo falha de gate que exija novo SHA e duas novas provas.
+- **Next**: criar dois worktrees/branches/UDIDs novos do mesmo SHA; autor e fresh Verifier repetem guia completo com caches próprios; comparar receipts, CI e relatório independente; fechar gates e integrar apenas com autorização.
+- **Constraints**: Projects; Nix/store exceção aprovada. Sem Tailscale/Mac mini/Alfred/produção/conta Apple/perfil/conversa. Matriz integral disponível e PENDING. Nada de binários/screenshots/xcresult publicados.
+- **Ownership**: Codex integrador, branch codex/6-ios-first-build-plan; nenhum push/PR F1 ainda. Sessão exploratória B096FCF6 encerrada Shutdown, registros anteriores preservados. Registrar ambos UDIDs finais antes de qualquer UI paralelo.
