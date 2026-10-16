@@ -33,4 +33,4 @@ O [guia do MacBook](docs/taverna/environments.md) descreve o preflight e a prepa
 
 Primeiro comprovar toolchain e build iOS, inventariar assets/dependências e validar identidade e notificações próprias. Depois, especificar convites e testar distribuição. TestFlight é um canal beta com expiração; sua continuidade precisa de decisão própria.
 
-Acompanhe as [issues](https://github.com/paulotvlincelia/taverna-app/issues). O [plano público da fundação](.specs/features/foundation/spec.md) é autossuficiente. Infraestrutura em uso, conversas e credenciais não pertencem a este repositório.
+Acompanhe o [roadmap](docs/taverna/roadmap.md), o [Project público](https://github.com/users/paulotvlincelia/projects/5) e as [issues](https://github.com/paulotvlincelia/taverna-app/issues). O [plano público da fundação](.specs/features/foundation/spec.md) é autossuficiente. Infraestrutura em uso, conversas e credenciais não pertencem a este repositório.
