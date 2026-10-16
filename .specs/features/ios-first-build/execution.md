@@ -475,3 +475,30 @@ O primeiro gate unitário detectou que a cópia de teste da fundação não incl
 ## T6: fonte final de implementação preparada
 
 README, CONTRIBUTING e proveniência agora descrevem o build local comprovado e seus limites, com caminhos para o guia e estados atuais. Gates estáticos aprovados antes do commit. T6 permanece aberta: as duas provas precisam executar o SHA resultante deste commit, depois CI e Verifier independente. Esse SHA não pode ser conhecido dentro de seu próprio conteúdo; status/evidências de fechamento entrarão somente como relatório posterior, sem alterar o código testado. O último commit de implementação será identificado explicitamente nos dois receipts e na validação independente. Nenhum gate foi removido por essa ordem.
+
+
+## T6 concluída: duas reproduções limpas e verificação independente
+
+Último commit de implementação: 6ea482bd4a1912d8eef52904d930c7f6c57bf746. Este registro e os demais ajustes de estado são somente relatório; não alteram fontes, testes, ferramentas ou comandos comprovados. As duas sessões partiram desse SHA limpo e seguiram o guia em worktrees/caches/UDIDs próprios. A store Nix imutável foi reaproveitada; isso não representa uma segunda reconstrução do núcleo. Cada sessão repetiu a conversão nativa e os cinco hashes qualificados.
+
+| Prova | Build e suíte | Resultado |
+| --- | --- | --- |
+| ios-proof-author | Build 2026-10-16T21:22:14.815463+00:00 → 2026-10-16T21:29:56.792485+00:00; sessão UI terminou 2026-10-16T21:34:42.437507+00:00 | Exit 0 no build/test/prova strict; fonte limpa; 4 métodos, 0 falhas/skips; 9 eventos before-main; shutdown 0, nenhum destino novo. |
+| ios-proof-verifier | Build 2026-10-16T21:23:25.344184+00:00 → 2026-10-16T21:29:50.510248+00:00; sessão UI terminou 2026-10-16T21:34:46.724538+00:00 | Exit 0 no build/test/prova strict; fonte limpa; 4 métodos, 0 falhas/skips; 9 eventos before-main; shutdown 0, nenhum destino novo. |
+
+Manifesto idêntico nas duas sessões: ae89d70ece47ce7e5f850a403b4fd1f74cd3fcf80c537369f3c8d77712cf1ce8. Xcode 27.1 (27A9275), SDK 27.1 e runtime 27.0/iPhone 17. Perfil first-build inglês/portrait/light. O comparador versionado do autor e a comparação independente do Verifier retornaram exit 0, com roots físicos, caches e UDIDs distintos. Os oito métodos executados nas duas sessões não são a matriz integral; full_matrix permanece PENDING.
+
+| Produto arm64 iOS Simulator, ad hoc | SHA-256 autor | SHA-256 Verifier |
+| --- | --- | --- |
+| SimpleX.app | a2424d54b03fe3d0417fb6493760380ed926d009538e4ec2408462bd59b85c86 | e4975fe6a04103a6cc145f93463fbfc407bad4bbc4855c326001723741785c82 |
+| SimpleXChat.framework | 418431a852d3537daa0e83a8862c83b95a265cd379e0b1be8ac44a3fd37b262b | 2cb5c86a3002132afce7ebee2a8664f1f0eb22c37696004ab1e0b44cba8ebea1 |
+| SimpleX NSE.appex | 90b0cd54e7a8eb81808557c0743b9a2f83d8457909f3d2c36166f39786e6d506 | e91bdfd47fc1bd26d7d89eb2a30e76e1a6f413c784e488e72cbbcc18cad5bfee |
+| SimpleX SE.appex | f8be7adf0df22491ae9957bf8eabdff1edff4c0a6c5dc1d0bd940517018ea17b | e6eceae242dde5d3305a4f9293f4cd40f668f27b353d457ae958627aed6c54e1 |
+
+Hashes de binários de sessões distintas não precisam ser iguais; cada conjunto foi validado contra suas próprias fontes/entradas e produtos reais. Os símbolos Haskell exigidos foram encontrados nos dois frameworks. Os nomes/configurações herdados são os da base, não identidade de distribuição Taverna.
+
+O Verifier independente aprovou 20/20 critérios e matou 6/6 falhas em cópias isoladas: plataforma, payload, hash de bundle, destino estrangeiro, aparência e skips. Porcelain real vazio antes/depois. Autor/Verifier: 70 testes Python, Foundation, compileall, diff e gates TLC aprovados. [CI push](https://github.com/paulotvlincelia/taverna-app/actions/runs/38968716168) e [CI PR](https://github.com/paulotvlincelia/taverna-app/actions/runs/38968724419) aprovaram o SHA de implementação exato. A CI verifica ferramentas/documentação; as provas de iOS são locais.
+
+As screenshots reais de A e B foram exportadas e inspecionadas localmente: Get started habilitado e Your profile vazio/Create profile desabilitado, em light/portrait. Binários, PNGs, xcresult, dados e receipts continuam ignorados em cada worktree. Nenhum perfil/conversa foi criado. rede administrativa/ambiente externo/serviço externo/produção e contas Apple não foram alterados.
+
+Adequação final: [validation.md](validation.md), 20 critérios com file:line/asserção/resultado, sensor e gates independentes. O PASS é de build Debug no simulador, núcleo realizado do fonte e perfil inicial aprovado. Matriz integral PENDING; assinatura/push em aparelho NOT RUN; identidade/assets/distribuição mantêm gates próprios. Não há pendência que bloqueie o marco aprovado.

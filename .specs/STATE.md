@@ -8,9 +8,10 @@ Registro posterior de 2026-10-16: especificação e rota Nix aprovadas; exceçã
 
 ## Handoff
 
-- **Feature**: ios-first-build #6; TLC Spec Driven, Large (oito tarefas).
-- **Completed**: T1/T2/T7/T8/T3/T4/T5. App e quatro produtos reais; perfil first-build com quatro métodos/zero falhas/skips (85,065 s), onboarding 13,334 s; nove eventos before-main. 70 testes Python, Foundation/compileall/diff aprovados.
-- **In progress**: T6 README/proveniência atualizados factual; commit final de implementação preparado. Próximas alterações só de relatório, salvo falha de gate que exija novo SHA e duas novas provas.
-- **Next**: criar dois worktrees/branches/UDIDs novos do mesmo SHA; autor e fresh Verifier repetem guia completo com caches próprios; comparar receipts, CI e relatório independente; fechar gates e integrar apenas com autorização.
-- **Constraints**: Projects; Nix/store exceção aprovada. Sem rede administrativa/ambiente externo/serviço externo/produção/conta Apple/perfil/conversa. Matriz integral disponível e PENDING. Nada de binários/screenshots/xcresult publicados.
-- **Ownership**: Codex integrador, branch codex/6-ios-first-build-plan; nenhum push/PR F1 ainda. Sessão exploratória B096FCF6 encerrada Shutdown, registros anteriores preservados. Registrar ambos UDIDs finais antes de qualquer UI paralelo.
+- **Feature**: ios-first-build #6 concluída; TLC Spec Driven, oito tarefas; relatório independente em features/ios-first-build/validation.md.
+- **Implementation SHA**: 6ea482bd4a1912d8eef52904d930c7f6c57bf746; alterações posteriores somente de relatório.
+- **Evidence**: autor/Verifier em worktrees/caches/UDIDs distintos, mesmo manifesto/perfil, quatro métodos por execução, zero falhas/skips, nove eventos before-main cada. 70 testes Python; CI exata; sensor 6/6; 20/20 critérios PASS.
+- **Integration**: PR #10 publicado e condicionado aos gates; CI da fonte aprovada. Repetir checks textuais/CI do commit de relatório e integrar conforme autorização já dada. Não remover as worktrees de prova: contêm evidências locais a preservar.
+- **Next product work**: inventário de assets/dependências e identidade/capabilities, nas issues existentes. Não iniciar backlog automaticamente. Matriz integral PENDING; aparelho/push NOT RUN; distribuição BLOCKED.
+- **Constraints**: Projects e exceção Nix aprovada. ambiente externo/rede administrativa/serviço externo/produção/contas Apple intocados. Nenhum perfil/conversa nem binário/PNG/xcresult publicado.
+- **Ownership**: Codex integrador, branch codex/6-ios-first-build-plan. Fontes A/B permanecem limpas no SHA acima; documentação de encerramento é o único diff posterior.

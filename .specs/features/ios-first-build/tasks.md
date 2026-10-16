@@ -5,7 +5,7 @@
 Usar tlc-spec-driven conforme a skill versionada. A especificação, sua execução e a rota Nix foram autorizadas pelo proprietário. Esta decomposição preserva os critérios aprovados. Verificar e fechar cada tarefa separadamente, sem marcar uma etapa concluída só porque sua preparação terminou. O preparo de T2 independe das bibliotecas e pode ocorrer enquanto a operação Nix de T1 aguarda; T3 exige ambas aprovadas. O Verifier independente é obrigatório após o último commit de implementação.
 
 **Design:** [design.md](design.md).
-**Status:** In Progress — T1, T2, T7 e T8 concluídas; núcleo/entradas qualificados localmente. T3 concluída: build, onboarding e quatro métodos first-build aprovados; T4 concluída; T5/T6 pendentes.
+**Status:** Completed — oito tarefas concluídas; 20/20 critérios e gates aprovados no commit de implementação 6ea482bd4a1912d8eef52904d930c7f6c57bf746. Fechamento em commit somente de relatório; ver validation.md.
 
 Ferramentas: Git nativo, Python 3.12 stdlib, Nix 2.34.9 e ferramentas do Xcode instalado. A integração de handoff, CI e locks nesta branch pertence ao Codex. Não há delegação de implementação; oito tarefas cabem em uma sequência local. A verificação final será independente.
 
@@ -192,9 +192,9 @@ T5 → T6
 **Done when**:
 
 - [x] README informa resultado e data reais, com link para o guia e limites de identidade, assinatura, push e distribuição.
-- [ ] Autor e Verifier registram execuções do mesmo commit final de implementação; commits posteriores somente de relatório identificam esse SHA explicitamente.
-- [ ] Verifier cobre todos os critérios e confirma que as checagens matam falhas injetadas em cópia isolada.
-- [ ] Publicação/CI remota respeitam a autorização correspondente. Gate remoto pendente não é apresentado como aprovado.
+- [x] Autor e Verifier registram execuções do mesmo commit final de implementação; commits posteriores somente de relatório identificam esse SHA explicitamente.
+- [x] Verifier cobre todos os critérios e confirma que as checagens matam falhas injetadas em cópia isolada.
+- [x] Publicação/CI remota respeitam a autorização correspondente. Gate remoto pendente não é apresentado como aprovado.
 
 ## Task Granularity Check
 
@@ -237,7 +237,7 @@ T5 → T6
 
 ## Estado
 
-T8 concluída: preparador versionado, 51 testes Python e repetição real dos cinco hashes; T1 concluída: fonte realizado, cinco bibliotecas/4.187 objetos qualificados e falhas discriminadas; T2 concluída como ambiente com controle UIKit sintético e preflight real. T7 concluída: CACHE_ROOT e caches efetivos confinados e gate repetido; T3 concluída no perfil aprovado; T4–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.
+T1, T2, T7, T3, T8, T4, T5 e T6 concluídas. Duas provas limpas no mesmo SHA 6ea482bd4a1912d8eef52904d930c7f6c57bf746, manifesto/perfil iguais, CI e Verifier independente aprovados. Sensor 6/6, 70 testes Python e quatro métodos reais por reprodução, sem falhas/skips. Somente o escopo de simulador/first-build está aprovado; matriz integral e demais gates de produto continuam pendentes. As seções de decomposição abaixo preservam o histórico da execução.
 
 ## Ajuste de decomposição em 2026-10-16
 
