@@ -84,3 +84,11 @@ Comando completo, ambiente, saída JSON e resumo estão em .build/attempts/xcode
 Os cinco arquivos necessários para inspecionar mac2ios foram recuperados do commit 4dcb77d5ea896d749381806dfab5358851b08951, com URLs imutáveis e hashes individuais sob .build/attempts/mac2ios-qualification-20261016. Não foram compilados ou executados nessa preparação. A árvore e os headers examinados não declaram licença da ferramenta; ela não foi incorporada aos arquivos públicos do fork nem autorizada para redistribuição.
 
 A implementação trata LC_BUILD_VERSION com a plataforma escolhida por -s, mas trata o comando antigo LC_VERSION_MIN_MACOSX como iPhoneOS mesmo com essa opção. Portanto, executar mac2ios -s não basta como prova de compatibilidade: a inspeção dos objetos e dos produtos reais continua obrigatória.
+
+## Cache autorizado e nova avaliação
+
+O proprietário autorizou o cache assinado, conforme APP-003. A segunda avaliação foi interrompida com SIGINT enviado somente ao cliente registrado, em 2026-10-16 às 14:36:50 UTC; terminou com exit 1 e erro interrupted by the user. Não houve timeout dessa tentativa nem derivação final. Seus registros foram preservados.
+
+O helper administrativo conferiu os hashes da configuração original e da proposta, recusou alterações concorrentes ou workers ativos e acrescentou somente extra-trusted-substituters e extra-trusted-public-keys. O proprietário autenticou no macOS. Aplicação e reinício do daemon Nix terminaram com exit 0 às 14:37:57 UTC. O arquivo anterior está preservado sob .build/attempts/nix-cache-configuration-20261016.
+
+A validação confirmou require-sigs=true, trusted-users=root e cliente trusted=false. O cache não foi incluído como substituter padrão de todos os projetos: a terceira avaliação o seleciona explicitamente por extra-substituters. Receita, commit e locks permanecem os mesmos, com limite de 5.400 s e log de build habilitado. Registros próprios em .build/attempts/nix-core-evaluation-20261016-03; receipt.json será gravado ao término.
