@@ -99,3 +99,23 @@ O controle automatizado do Terminal foi recusado pela ferramenta de UI por segur
 ## Ambiente após a execução gráfica
 
 O proprietário concluiu o helper com exit 0. A validação confirmou Nix 2.34.9, conexão com o daemon e /nix montado. Os registros posteriores estão em [execution.md](execution.md). A avaliação usa o commit upstream fixado, com locks preservados e cache/configuração do cliente no worktree; não depende de um PATH configurado por um harness específico.
+
+## Ajuste proposto para o isolamento no SDK 27.1
+
+**Proposta pendente de revisão do proprietário.** Os critérios IOS-05 e IOS-10 aprovados continuam valendo até a resposta. Nenhum teste ou requisito foi relaxado para declarar T2 aprovada. A realização do núcleo segue independentemente.
+
+O SDK recusou o UDID criado apenas no set privado. A tentativa de roteamento por biblioteca não encontrou esse destino; não remover a validação de bibliotecas do Xcode para contornar isso. O sandbox aplicado ao launchd_sim impediu a inicialização, inclusive com allow default. O controle do mesmo exec sem sandbox inicializou normalmente. A causa interna da recusa de vínculo ainda não foi determinada.
+
+Dois controles concretos permitem uma alternativa local:
+
+- Um dispositivo novo, exclusivo do Codex, foi registrado pela API padrão simctl. Antes de inicializar, seu armazenamento foi movido para o worktree, com um alias por UDID no índice do SDK. Xcode showBuildSettings aceitou o destino com exit 0 e TARGET_DEVICE_IDENTIFIER igual ao UDID solicitado. O set privado não lista esse registro: o índice é o padrão do SDK, e o armazenamento físico é exclusivo da sessão. Evidências em .build/attempts/xcode-native-registration-20261016.
+- Um app UIKit sintético foi compilado e assinado ad hoc, sem conta Apple. Um helper próprio aplicou sandbox no macOS e retornou ao mesmo processo iOS antes do main. O processo confirmou EPERM na conexão externa e chegou ao callback de criação da interface. Registros de PID, perfil, conexão e UIKIT_CONTROL_READY em .build/attempts/uikit-process-containment-20261016. Esse app de controle não contém código, perfil ou mensagens da Taverna e não prova o build do mensageiro.
+
+| Critério | Alteração proposta | Limite preservado |
+| --- | --- | --- |
+| IOS-04 e IOS-05 | Usar UDID exclusivo registrado no índice padrão do SDK; preflight compara o destino efetivo e o caminho físico dos dados com a sessão/worktree. Estado do app, caches e logs permanecem no worktree; índices por UDID do SDK podem ser aliases. | Nenhum dispositivo de outra sessão pode ser selecionado, resetado ou removido. Registro existente com outro destino físico exige reconciliação. |
+| IOS-10 | Aplicar e comprovar contenção de IP remoto no processo do app sob teste antes de sua inicialização, com controle externo negado e comunicação local permitida. | Não alterar firewall/VPN global, não criar perfil nem enviar mensagens. Processos do sistema operacional simulado ficam fora dessa contenção; não afirmar que toda a sessão iOS está offline. |
+
+Após aprovação, o procedimento ainda precisa ser implementado e testado na Taverna real. O preflight deve rejeitar entradas sem origem, helper ausente ou divergente, destino estranho e ausência de prova de contenção. O resultado final precisa manter estados separados: build do app, teste UI, origem do núcleo e distribuição. A prova sintética não substitui os testes herdados, as novas asserções, a segunda execução ou o Verifier.
+
+A alternativa preserva Git/worktrees nativos e evita instalar outro gerenciador de ambientes. Usa uma API de sandbox marcada como deprecated; a compatibilidade precisa ser requalificada a cada mudança de SDK/macOS. Manter os critérios originais exigirá outra abordagem de isolamento ainda não qualificada, possivelmente um ambiente macOS separado. Não instalar VM ou alterar proteções como consequência automática desta proposta.
