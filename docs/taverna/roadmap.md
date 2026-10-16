@@ -1,6 +1,6 @@
 # Roadmap do app
 
-Estado em 2026-10-16: fundação em verificação; app iOS, distribuição e push ainda sem prova própria. [Project público Taverna App — Roadmap](https://github.com/users/paulotvlincelia/projects/5).
+Estado em 2026-10-16: fundação F0 verificada; integração exige CI no commit com o relatório; app iOS, distribuição e push ainda sem prova própria. [Project público Taverna App — Roadmap](https://github.com/users/paulotvlincelia/projects/5).
 
 | Épico | Entregas canônicas | Resultado esperado |
 | --- | --- | --- |
