@@ -38,3 +38,7 @@ Identidade visual Taverna, inventário completo de assets, assinatura própria, 
 ## Correção factual do alvo UI, em 2026-10-16
 
 O texto inicialmente proposto, Create your profile, foi obtido da view CreateProfile de edição genérica. A navegação Get started abre CreateFirstProfile, definida no mesmo arquivo e com cabeçalho Your profile (CreateProfile.swift:195 e :233; SimpleXInfo.swift:128). Corrigido o texto do teste planejado antes de implementá-lo, preservando a intenção aprovada de provar a interface herdada e sem alterar a tela do app. Nenhum teste ou asserção existente foi modificado.
+
+## Revisão do isolamento aprovada em 2026-10-16
+
+O proprietário aprovou UDID exclusivo registrado no índice padrão do Xcode, com dados/caches/logs físicos no worktree, e contenção de IP remoto no processo do app antes do main. Serviços do sistema iOS ficam fora dela. IOS-04, IOS-05 e IOS-10 foram atualizados; os demais critérios permanecem. Não criar perfil nem mensagens, não alterar firewall/VPN. APP-004 registra a decisão; controles UIKit sintéticos não comprovam a execução da Taverna.

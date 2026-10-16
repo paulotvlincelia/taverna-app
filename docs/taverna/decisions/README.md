@@ -17,3 +17,11 @@ O histórico desta execução fica nos artefatos de ios-first-build sob .specs/f
 O proprietário autorizou cache.iog.io e a chave pública hydra.iohk.io publicada no Haskell.nix fixado. A configuração do Nix permite esse substituter; cada comando do projeto o seleciona explicitamente. A verificação de assinaturas permanece habilitada e trusted-users continua restrito a root. Não conceder privilégios adicionais ao usuário ou aceitar chaves fornecidas por um flake sem revisão.
 
 O auxiliar GHC 8.10.7 foi localizado no cache com a derivação exata esperada e assinatura dos metadados validada. Importação de conteúdo, hash local e resultado da avaliação são provas posteriores. Registrar separadamente os itens obtidos do cache e os compilados localmente; o uso do cache não comprova reconstrução local do núcleo.
+
+## APP-004: isolamento do primeiro build, em 2026-10-16
+
+O proprietário aprovou um UDID exclusivo da sessão registrado no índice padrão do Xcode. Dados, caches e logs físicos do simulador ficam no worktree sob Projects; somente entradas por UDID do SDK apontam para esse armazenamento. O preflight compara registro, caminhos canônicos e destino efetivo. Não selecionar, resetar ou remover dispositivos alheios. Reconciliar aliases e estado antes de encerrar o worktree.
+
+A contenção de IP remoto será aplicada e comprovada no processo do app antes do main, com controle externo negado e comunicação local permitida. Serviços do sistema iOS ficam fora dela; não declarar a sessão inteira offline. Não criar perfis, enviar mensagens ou alterar VPN/firewall global. O mecanismo usa sandbox do macOS, API deprecated cuja compatibilidade precisa de prova a cada mudança de SDK.
+
+Esta revisão substitui a exigência de set privado e de contenção da sessão inteira em IOS-05/IOS-10, e esclarece o armazenamento de IOS-04. A alternativa já teve controle UIKit sintético; app real, suíte herdada, repetição e Verifier continuam obrigatórios.

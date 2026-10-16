@@ -41,7 +41,7 @@ Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprova
 | Destino principal | SDK iOS Simulator 27.1, runtime iOS 27.0, iPhone 17 arm64. | Esse runtime está disponível e lista o modelo; o runtime 27.1 instalado lista somente iPhone Duo. Compatibilidade de execução ainda não comprovada. | y |
 | Credenciais Apple | Tentar Debug para simulador sem provisionamento de conta Apple. | Evitar vincular o primeiro build a certificados ou identidades de distribuição; validar os ajustes efetivos de todos os targets. | y |
 | Teste mínimo de interface | Em inglês, confirmar Get started e navegar até Your profile, sem enviar o formulário. | Resultado visível e objetivo sem criar identidade, aceitar termos ou iniciar conversa. | y |
-| Execução sem serviços reais | Provar isolamento de saída de rede da sessão antes de abrir o app. | O app herdado contém configuração de servidores reais; não presumir ausência de tráfego só por parar no onboarding. | y |
+| Execução sem serviços reais | Provar contenção de IP remoto no processo do app antes do main; serviços do iOS ficam fora dela. | O app herdado contém configuração de servidores reais; não presumir ausência de tráfego só por parar no onboarding. | y |
 | Limites por tentativa | Download de cada arquivo: até 5 GiB e 30 minutos; build: 90 minutos; sessão de testes: 15 minutos. | Limites de interrupção para processos presos; não são promessa de desempenho. Mudança desses limites exige registro. | y |
 | Evidências visuais | Manter screenshots e xcresult apenas no estado local ignorado; relatório público textual. | Assets e conteúdo dos bundles ainda precisam de revisão para publicação. | y |
 | Local dos ambientes | Clone principal e worktrees sob a raiz Projects já definida pelo proprietário. | Preservar organização existente; nenhum novo checkout em Downloads ou Desktop. | y |
@@ -58,8 +58,8 @@ Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprova
 1. WHEN uma biblioteca nativa for qualificada THEN o manifesto SHALL registrar URL imutável, commit do fonte correspondente, evidência desse vínculo, licença, SHA-256 do arquivo recebido e hashes das bibliotecas efetivamente usadas (IOS-01).
 2. IF a origem, o vínculo com o fonte, o hash ou a compatibilidade das bibliotecas não puderem ser comprovados THEN o preparo SHALL terminar com status BLOCKED e código diferente de zero (IOS-02).
 3. WHEN as dependências SwiftPM forem resolvidas THEN a resolução SHALL preservar as sete revisões do Package.resolved da base, com qualquer alteração submetida a revisão explícita (IOS-03).
-4. WHILE uma sessão de build estiver ativa o procedimento SHALL manter seus produtos, downloads, caches graváveis controlados pelo build, bancos, logs e device set dentro do próprio worktree (IOS-04).
-5. WHEN o destino de teste for escolhido THEN o preflight SHALL comprovar que o UDID selecionado pelo executor Xcode pertence ao device set exclusivo daquela sessão (IOS-05).
+4. WHILE uma sessão de build estiver ativa o procedimento SHALL manter seus produtos, downloads, caches graváveis controlados pelo build, bancos, dados físicos do simulador e logs dentro do próprio worktree, permitindo somente os índices por UDID do SDK como aliases e a exceção Nix autorizada (IOS-04).
+5. WHEN o destino de teste for escolhido THEN o preflight SHALL comprovar que o UDID selecionado pelo executor Xcode é exclusivo daquela sessão, registrado no índice padrão do SDK, e que seus dados e logs físicos pertencem ao worktree (IOS-05).
 6. WHEN os ajustes de build forem preparados THEN o relatório SHALL registrar a configuração efetiva de assinatura de cada target sem autenticar conta Apple ou habilitar atualização de provisionamento (IOS-06).
 7. IF um download ultrapassar os limites definidos ou contiver caminhos que escapem do destino de extração THEN o preparo SHALL rejeitar esse artefato com código diferente de zero (IOS-07).
 
@@ -72,7 +72,7 @@ Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprova
 **Acceptance Criteria**:
 1. WHEN a compilação Debug do scheme SimpleX (iOS) terminar com sucesso THEN a prova SHALL identificar os produtos gerados para app, framework SimpleXChat, Notification Service Extension e Share Extension (IOS-08).
 2. WHEN esses produtos forem inspecionados THEN a prova SHALL confirmar a arquitetura arm64 e a plataforma iOS Simulator dos executáveis e do código nativo ligado ao app (IOS-09).
-3. WHEN o teste iniciar o aplicativo THEN a sessão SHALL ter uma contenção de saída de rede comprovada por uma tentativa externa de controle bloqueada, sem alteração da VPN ou do firewall global do Mac (IOS-10).
+3. WHEN o teste iniciar o aplicativo THEN o processo do app SHALL comprovar, antes do main, contenção de IP remoto por tentativa externa negada e comunicação local permitida, sem alteração da VPN ou do firewall global do Mac; os serviços do sistema iOS ficam fora dessa contenção (IOS-10).
 4. WHEN o aplicativo for lançado com dados novos THEN o teste SHALL confirmar que Get started está visível e habilitado em até 30 segundos (IOS-11).
 5. WHEN o teste tocar Get started THEN o teste SHALL confirmar Your profile em até 30 segundos, encerrando a navegação antes de enviar o formulário (IOS-12).
 6. WHEN a suíte iOS do scheme for executada THEN o relatório SHALL registrar todos os testes descobertos, executados, falhos e ignorados, sem remover testes ou asserções nem acrescentar skips para obter sucesso (IOS-13).
@@ -91,7 +91,7 @@ Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprova
 Esta sequência foi aprovada com a especificação e seu [contexto](context.md). A qualificação foi executada e o [Design](design.md) registra o bloqueio e a alternativa concreta antes de adotá-la.
 
 1. **Qualificar a rota do núcleo.** Localizar artefatos oficiais vinculados ao fonte da base; verificar licença, hashes, arquitetura e ABI. Se não houver prova suficiente, apresentar a rota de compilação do núcleo, sem baixar uma versão latest como substituta.
-2. **Provar o isolamento.** Definir e demonstrar seleção do device set no executor de testes e contenção de rede da sessão. A documentação de simctl --set, sozinha, não prova que xcodebuild usa aquele conjunto.
+2. **Provar o isolamento.** Demonstrar seleção do UDID exclusivo pelo executor e contenção de IP remoto no processo do app antes do main. A documentação de simctl --set, sozinha, não prova que xcodebuild usa aquele conjunto.
 3. **Preparar entradas locais.** Fixar manifestos, resolver SwiftPM sem atualizar pins e preparar bibliotecas dentro do worktree. Adaptar somente os pontos necessários dos scripts herdados, que hoje usam Downloads e substituem diretórios.
 4. **Compilar e testar.** Construir o scheme completo, inspecionar produtos, preservar a suíte existente e acrescentar o teste de navegação com asserções observáveis.
 5. **Repetir e verificar.** Refazer em sessão limpa, executar CI dos checks automatizáveis e obter a revisão independente com falhas injetadas em cópias isoladas. Registrar os limites da prova no README/guia do build.
@@ -105,7 +105,7 @@ Não há promessa de duração antes da qualificação do núcleo. A segunda exe
 | Biblioteca arm64 de macOS ou de iPhone físico | IOS-02 e IOS-09: arquitetura sozinha não comprova a plataforma. |
 | Download oficial com hash local, mas sem vínculo verificável ao fonte | IOS-01 e IOS-02: recalcular SHA não substitui evidência de origem. |
 | Pacote SwiftPM muda de revisão para resolver um erro | IOS-03: revisão explícita antes de adotar o novo conjunto. |
-| Xcode só enxerga o device set global | IOS-05: bloqueio técnico; não usar o simulador de outra sessão. |
+| Índice padrão aponta para dados alheios ou destino divergente | IOS-04 e IOS-05: bloquear; não usar o simulador de outra sessão nem substituir seus arquivos. |
 | App precisa de entitlements para abrir no simulador | IOS-06 e IOS-14: registrar incompatibilidade; não consultar certificados ou credenciais como atalho. |
 | Contenção de rede não funciona | IOS-10: não lançar o app; registrar BLOCKED com a prova que faltou. |
 | xcodebuild termina com zero, mas não executa teste obrigatório | IOS-14: não emitir PASS. |
@@ -132,18 +132,18 @@ Não há promessa de duração antes da qualificação do núcleo. A segunda exe
 | IOS-01 | Entradas: proveniência | T1 | Tasks | In Tasks |
 | IOS-02 | Entradas: rejeição | T1, T4 | Tasks | In Tasks |
 | IOS-03 | Entradas: pins SwiftPM | T3 | Tasks | In Tasks |
-| IOS-04 | Entradas: estado isolado | T2, T5 | Tasks | In Tasks |
-| IOS-05 | Entradas: destino Xcode | T2 | Tasks | In Tasks |
+| IOS-04 | Entradas: estado isolado | T2, T5 | Execute | In Progress |
+| IOS-05 | Entradas: destino Xcode | T2 | Execute | In Progress |
 | IOS-06 | Entradas: assinatura | T3 | Tasks | In Tasks |
 | IOS-07 | Entradas: download/extração | T1, T5 | Tasks | In Tasks |
 | IOS-08 | App: produtos do scheme | T3 | Tasks | In Tasks |
 | IOS-09 | App: plataforma/arquitetura | T1, T4 | Tasks | In Tasks |
-| IOS-10 | App: rede isolada | T2 | Tasks | In Tasks |
+| IOS-10 | App: rede isolada | T2 | Execute | In Progress |
 | IOS-11 | App: abertura observável | T3 | Tasks | In Tasks |
 | IOS-12 | App: navegação observável | T3 | Tasks | In Tasks |
 | IOS-13 | App: suíte preservada | T3 | Tasks | In Tasks |
 | IOS-14 | App: falha detectada | T4 | Tasks | In Tasks |
-| IOS-15 | App: retomada | T2, T5 | Tasks | In Tasks |
+| IOS-15 | App: retomada | T2, T5 | Execute | In Progress |
 | IOS-16 | App: registro de prova | T1, T4, T5 | Tasks | In Tasks |
 | IOS-17 | App: segunda execução | T6 | Tasks | In Tasks |
 | IOS-18 | App: Verifier e CI | T6 | Tasks | In Tasks |
@@ -159,3 +159,5 @@ O marco estará concluído quando as duas execuções passarem nos critérios IO
 O resultado esperado para a rota recomendada é: build do app no simulador PASS; núcleo pré-compilado com origem qualificada; reconstrução do núcleo do fonte NOT RUN; assinatura/APNs em aparelho NOT RUN; distribuição BLOCKED pelas entregas próprias. Uma falha real permanece FAIL; falta de pré-requisito permanece BLOCKED.
 
 Estado factual e fontes: [readiness.md](readiness.md). Regras de trabalho: [AGENTS.md](../../../AGENTS.md) e [ambientes](../../../docs/taverna/environments.md).
+
+Ajuste de IOS-04, IOS-05 e IOS-10 aprovado pelo proprietário em 2026-10-16 após revisão dos controles. Decisão canônica APP-004; não equivale a prova de execução da Taverna.
