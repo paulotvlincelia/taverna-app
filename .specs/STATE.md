@@ -8,12 +8,12 @@ Registro posterior de 2026-10-16: especificação e rota Nix aprovadas; exceçã
 
 ## Handoff
 
-- **Feature**: [ios-first-build](features/ios-first-build/spec.md), issue pública #6. TLC Spec Driven, sete tarefas, execução inline.
-- **Phase / Task**: Execute; T1/T2/T7 concluídas. Próxima T3: build e teste observável do app.
-- **Completed**: Nix/cache assinado autorizados; fonte/locks fixados; sete pins SwiftPM preservados. Ambiente/guard e caches Xcode provados com controle UIKit próprio; 40 testes Python, incluindo os 28 herdados. Isso não prova a Taverna.
-- **In-progress**: nenhum build nativo ativo. -05 terminou exit 0 em 18:57:24 UTC; source/local NAR conferidos. Conversão mac2ios legada bloqueada/preservada; vtool/libtool do Xcode resolveram as cópias e conferiram payload inalterado nos 4.187 objetos/cinco arquivos. Entradas versionadas em native-inputs.json; bindings em .build/native-input-bindings.json; .build/check-native-inputs.py passou e três entradas negativas foram recusadas. Manifesto SHA ae89d70ece47ce7e5f850a403b4fd1f74cd3fcf80c537369f3c8d77712cf1ce8. App ainda não compilado/instalado/aberto.
-- **Next step**: T3; copiar bibliotecas qualificadas ao caminho de simulador, integrar guard em todos os lançamentos herdados e acrescentar navegação Get started → Your profile, depois executar build e suíte completos.
-- **Blockers**: nenhum bloqueio técnico aberto; faltam build, testes reais, validador, guia, reprodução e Verifier. Nenhuma aprovação/autenticação pendente.
-- **Uncommitted files**: conferir git; checkpoint documental da retomada não conclui T1.
-- **Branch**: codex/6-ios-first-build-plan.
-- **Ownership**: Codex, feature ios-first-build e tools/taverna; integrador de CI/locks nesta sessão. Repos/estado em Projects, store Nix como exceção aprovada. UDID próprio 0DE957D3-B2E4-42D6-BEFC-006CC04315B2 e dispositivo anterior DE62C0FF-4FB1-4AAE-AF52-A1161ED5BB95 desligados. Reconciliar aliases/dados antes de remoção, sem limpeza forçada. Taverna nunca instalada/aberta. Preservar rede administrativa, ambiente externo e serviço externo. Verifier independente após último commit.
+- **Feature**: ios-first-build, issue #6; TLC Spec Driven, oito tarefas, implementação inline.
+- **Phase / Task**: Execute; T1/T2/T7/T8 concluídas; T3 validação automática ativa.
+- **Completed**: núcleo real local/4.187 objetos; build-for-testing -02/-03 exit 0; quatro produtos arm64 Simulator, ad hoc e símbolos Haskell verificados; onboarding real passou nas tentativas. 51 testes Python (28 Foundation herdados preservados).
+- **In-progress**: UI ios-app-ui-20261016-03, início 20:04:39 UTC/prazo 21:04:39 UTC, sessão exec 3351. UDID 4C162668-2CB6-4460-AC24-82A854980A81. Build -03/patch iOS e dois hashes Swift vinculados; não editar código iOS durante a sessão. T8 final passou em public-native-preparation-20261016-02, exit 0 e cinco hashes reproduzidos. Probe parcial separado (partial-suite-rejection-probe-20261016, sessão 44507) serve somente ao formato/recusa de suíte incompleta, não ao gate positivo.
+- **Next step**: conferir UI completa, xcresult e adequação T3; depois T4, guia, duas execuções limpas no commit final e Verifier/CI.
+- **Blockers**: UI -01 venceu 15 min/130 positivos e -02 venceu 20 min/177 positivos, sem falhas de asserção observadas, suítes incompletas. Nova janela 60 min registrada antes da -03, sem mudar limites de 30 s ou cortar casos. Enumeração oficial mostra quatro métodos lógicos, sem expansão. Nenhuma autorização/autenticação pendente.
+- **Uncommitted files**: dois testes iOS e ChatView.swift; novo componente/testes nativos; spec/design/tasks/execution/handoff. T3 permanece aberta; conferir git.
+- **Branch**: codex/6-ios-first-build-plan; HEAD 53a06d25c.
+- **Ownership**: Codex, feature/tools/integração CI/locks; Projects e store Nix como exceção. Preservar dados/aliases antigos DE62C0FF, 0DE957D3 e 2775E39A, Shutdown confirmado; sem limpeza forçada. rede administrativa, ambiente externo, serviço externo e produção intocados. Sem conta Apple, perfil, mensagem ou distribuição.

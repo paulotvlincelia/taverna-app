@@ -326,3 +326,55 @@ Full Native: realização fixada, inspeção completa, verificação de conteúd
 | Três entradas negativas | T1 Tests; IOS-02 | Sim |
 
 Adequação: asserções de estado/conteúdo e resultados reais, sem mocks ou testes especulativos. As verificações operacionais desta tarefa estão no estado local; T4/T5 ainda devem publicar a checagem/procedimento reproduzível, conforme sua ordem aprovada. T1 concluída; isso não declara build do app, teste UI, reprodução ou Verifier aprovados.
+
+## T3 em andamento: primeira incompatibilidade do SDK
+
+As bibliotecas qualificadas foram copiadas, com hashes conferidos, para apps/ios/Libraries/sim. O preflight ios-app-live-preflight-20261016-01 confirmou novamente o UDID e guard. A primeira tentativa ios-app-build-20261016-01 iniciou às 19:14:08 UTC e terminou exit 65 às 19:15:03 UTC; xcresult/logs/receipt/diff preservados. Falhou na expansão @State @ObservedObject de ChatView, com _chat/$chat duplicados. Nenhum app lançado e nenhum teste executado.
+
+O SDK instalado exporta macro State e o tipo property-wrapper State. Probes com swiftc -typecheck foram preservados em swift-state-composition-20261016: fonte original e especialização genérica falharam; alias interno do tipo State passou com tipos esperados de storage/projeção e inicializador. O ajuste mantém State<ObservedObject<Chat>> por meio de ChatViewState, sem mudar ownership, fonte nativo, protocolo ou dependências. Ainda falta a compilação e a suíte reais para concluir T3.
+
+### Primeiro build e primeira execução real
+
+A tentativa ios-app-build-20261016-02 terminou exit 0 às 19:19:46 UTC com TEST BUILD SUCCEEDED. A inspeção dos produtos SimpleX.app, SimpleXChat.framework, SimpleX NSE.appex e SimpleX SE.appex confirmou arm64/platform 7, assinatura ad hoc sem TeamIdentifier e codesign --verify --strict exit 0. O framework define chat_migrate_init_key, chat_send_cmd, chat_recv_msg_wait e hs_init; a prova usa o núcleo real qualificado. Produtos e hashes em products.json da tentativa.
+
+O xctestrun real tem FormatVersion 1. Foi preservado e copiado para arquivo irmão no mesmo diretório Products, mantendo a resolução de __TESTROOT__. As únicas mudanças são ambiente do test host e do app: arquivos/guard/bindings da sessão. Nenhum Only/Skip foi inserido; ambiente e diagnósticos do SDK preservados.
+
+Na sessão ios-app-ui-20261016-01, o teste Get started → Your profile passou em 10,091 segundos, com screenshots e prova antes do main. Os três métodos herdados foram executados; testLaunch repete em muitas configurações por sua regra original. Ao vencer a janela de 900 segundos havia 130 execuções aprovadas e zero falhas de asserção observadas, mas a suíte ainda não terminara. Não declarar PASS da suíte completa. O monitor interrompeu o Xcode; cleanup limitado pelo prazo esgotado retornou timeout e agregou exit 2. Receipt intacto, causa reconciliada separadamente, nenhum dispositivo clonado e antigo UDID confirmado Shutdown.
+
+A próxima tentativa tem janela agregada de 1.200 segundos registrada no spec; tempos funcionais continuam em 30 segundos. Os argumentos de idioma foram movidos da factory para o novo teste, preservando os argumentos/configurações de lançamento dos métodos herdados. A sessão antiga/dados/índices foram preservados em owned-session.json, sem limpeza forçada. Novo dispositivo criado por ios_session.create: UDID 2775E39A-9AC2-47F0-9025-70E606449968, mesmo runtime/modelo aprovado, dados/logs físicos no worktree. Nenhum app foi lançado nesse novo UDID ainda.
+
+### Segunda sessão real vinculada ao build atual
+
+Após restringir o idioma somente ao onboarding, ios-app-build-20261016-03 recompilou os testes com exit 0 entre 19:40:45 e 19:40:48 UTC. Uma tentativa de despacho que ainda vinculava o build -02 foi corretamente recusada pela comparação do patch iOS antes de inicializar/lançar o app; registro preservado em ui-dispatch-build-binding-check-20261016. O despacho corrigido vincula hashes dos dois fontes de teste e o diff exato ao build -03.
+
+A sessão ios-app-ui-20261016-02 iniciou às 19:42:51 UTC no novo UDID, com prazo 20:02:51 UTC. Configuração xctestrun preserva métodos, configuração de UI, ambiente/diagnósticos do SDK; somente acrescenta os caminhos/guard necessários. Os quatro produtos do build -03 foram reinspecionados: hashes idênticos aos de -02, arm64/platform 7, assinaturas ad hoc válidas e símbolos Haskell presentes. A suíte segue ativa; seu receipt e xcresult final ainda são necessários para fechar T3.
+
+### Limite de -02 e enumeração dos métodos
+
+A sessão -02 terminou às 20:02:51 UTC com test_exit_code=124/test_timed_out=true; agregado também 124, shutdown 0 e new_device_ids vazio. Havia 177 casos aprovados e zero falhas de asserção observadas, mas a suíte permanecia incompleta. Nenhum PASS de suíte. A enumeração ui-enumeration-20261016 terminou exit 0 às 20:03:44 UTC, descobrindo os três métodos herdados e o onboarding; não informa o total de configurações geradas no runtime. A enumeração inicializou apenas o test runner no UDID próprio; não executou testes ou abriu o app. O shutdown adicional retornou 149 porque o Xcode já havia desligado o dispositivo; snapshot posterior confirmou Shutdown, com reconciliação separada e resultado original preservado. A próxima tentativa usa 3.600 segundos agregados conforme revisão registrada antes do despacho, mantendo todos os testes e seus limites funcionais.
+
+## T8 concluída: preparação nativa reproduzível
+
+Premissas: usar somente o ZIP Nix qualificado e as ferramentas Apple cujos hashes constam do manifesto; nada de download implícito, instalação ou alteração das bibliotecas usadas pela suíte ativa. Arquivos: tools/taverna/ios_native.py e tools/taverna/tests/test_ios_native.py. Sucesso: preparar os cinco hashes fixados em tentativa exclusiva, preservar todos os membros/payloads e rejeitar entradas inválidas com exit não zero. T8 depende apenas de T1; o código iOS de T3 permaneceu fixo durante esta validação automática.
+
+A CLI foi executada com --bundle apontando para o ZIP local da derivação by4ic9... e --attempt public-native-preparation-20261016-02. Terminou exit 0 entre 20:08:14 e 20:08:48 UTC. O receipt vincula o fonte do preparador pelo SHA-256 ccc4cb74a79dc63b16f2a48f644df5304c0fdf7fe3c5e1a8291ea59bfcec8e8b e o manifesto ae89d70e.... Cinco arquivos/4.187 objetos reproduziram exatamente os hashes qualificados em T1, com plataforma 7 e preservação de código, dados, versões, offsets e comandos que não são de versão. Não houve cópia para os produtos ativos ou escrita na store. A primeira prova anterior da CLI permanece separada em -01.
+
+A CLI registra active/receipt e prazo agregado de 5.400 s; cada ferramenta respeita o tempo restante. Fonte/locks/licença, conjunto do ZIP, SHA recebido e originais são conferidos antes da conversão. Extração não usa extractall; membros duplicados do arquivo recebem diretórios por ordinal. A CLI recusou ZIP inválido e tentativa existente com exit 2; hash do receipt anterior permaneceu idêntico, em public-native-negative-20261016/results.json. Os 51 testes Python passaram, preservando os 40 anteriores e os 28 Foundation, sem skips. Foundation/compileall/diff e validadores TLC aprovados.
+
+| Critério / requisito | file:line e asserção | Resultado exigido | Coberto |
+| --- | --- | --- | --- |
+| Conjunto e origem fixados; IOS-01/02 | tools/taverna/tests/test_ios_native.py:138, assertRaises(ValueError) para upstream/locks divergentes; ios_native.py:233, validate_manifest(root, manifest) antes da extração | Fonte/pins/licença conferidos | Sim |
+| Extração íntegra/confinada; IOS-07/15 | test_ios_native.py:111, assertEqual(bytes extraídos, data); :112, assertRaises(FileExistsError); :126 e :130, assertRaises(ValueError) para escape/link/duplicatas/limite | Nenhum arquivo fora do destino ou tentativa sobrescrita | Sim |
+| Hash e plataforma reais; IOS-02/09 | test_ios_native.py:64 e :66, assertRaisesRegex(..., arm64.*Simulator); :150 e :153, rejeição de hash/contagem/plataforma | Arm64 físico/macOS não aceito como simulador | Sim |
+| Preservação da transformação; IOS-09 | test_ios_native.py:74, assertEqual(invariant(before), invariant(after)); :77/:81/:89, assertRaisesRegex(..., payload) | Alteração de payload/versões/cabeçalho/comando é rejeitada | Sim |
+| Todos os membros; IOS-09 | test_ios_native.py:52–54, assertEqual nomes, bytes e contagem; :59/:94, assertRaises(ValueError) para truncamento | Nenhum nome repetido sobrescrito; estrutura válida | Sim |
+| Timeout; IOS-14 | test_ios_native.py:142, assertRaisesRegex(ValueError, timeout); ios_native.py:202/211, timeout=remaining(deadline, cap) | Prazo esgotado impede a chamada da ferramenta | Sim |
+| Repetição real; IOS-16 | public-native-preparation-20261016-02/receipt.json, exit_code=0 e cinco hashes; ios_native.py:219/221, hash individual e validate_library | 4.187 objetos e cinco hashes idênticos | Sim |
+
+| Prova nova / asserções | Vínculo | Manter |
+| --- | --- | --- |
+| Dez casos de formato/extração/hash/origem/payload e uma prova de prazo | T8 Done when 1/2; IOS-01/02/07/09/14/15 | Sim |
+| CLI negativa e recusa de sobrescrita | T8 Done when 2/3; IOS-02/15 | Sim |
+| Conversão real com cinco hashes | T8 Done when 3; IOS-09/16 | Sim |
+
+Adequação: todas asserções novas têm vínculo com os critérios, inclusive resultados negativos e bytes reais; nenhuma substitui a suíte iOS. Estilo unittest e gate de CONTRIBUTING preservados. Nenhuma conclusão T3/T4–T6 ou de distribuição.
