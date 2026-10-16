@@ -48,10 +48,10 @@ Alterar criptografia, produzir binário, habilitar APNs, distribuir ou alterar o
 
 | Requirement ID | Task | Status |
 | --- | --- | --- |
-| PUB-01 | P1 | Implementing |
-| PUB-02 | P1 | Implementing |
-| PUB-03 | P2 | Pending |
-| PUB-04 | P2 | Pending |
-| PUB-05 | P1 | Implementing |
-| PUB-06 | P1, P2 | Implementing |
-| PUB-07 | P3 | Pending |
+| PUB-01 | P1 | Verified |
+| PUB-02 | P1 | Verified |
+| PUB-03 | P2 | Verified |
+| PUB-04 | P2 | Verified |
+| PUB-05 | P1 | Verified |
+| PUB-06 | P1, P2 | Verified |
+| PUB-07 | P3 | Verified |
