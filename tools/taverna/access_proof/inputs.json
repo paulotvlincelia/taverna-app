@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "purpose": "isolated transport experiment; not an iOS or production proof",
+  "server_commit": "efaad8e73436d60f5052f07dda6b71151ad5039b",
+  "interop_client_commit": "e11128ce5b0df538c57a0d0b6911de0e88fdb652",
+  "ubuntu_digest": "sha256:534baea6a22c03a63003dbc8dbe78fe34bc0d7e595d9a9dc9834884ff530eb55",
+  "assets": [
+    {
+      "name": "smp-server-ubuntu-24_04-aarch64",
+      "url": "https://github.com/simplex-chat/simplexmq/releases/download/v7.0.0/smp-server-ubuntu-24_04-aarch64",
+      "sha256": "def80bc70800d0dbc0d8f81433b0cfce706691303788d12206853f8714853544"
+    },
+    {
+      "name": "xftp-server-ubuntu-24_04-aarch64",
+      "url": "https://github.com/simplex-chat/simplexmq/releases/download/v7.0.0/xftp-server-ubuntu-24_04-aarch64",
+      "sha256": "4a69d025d6a886b50841d622395f88fa0d97a05663d1f483f1c5d183585dc148"
+    },
+    {
+      "name": "xftp-ubuntu-24_04-aarch64",
+      "url": "https://github.com/simplex-chat/simplexmq/releases/download/v7.0.0/xftp-ubuntu-24_04-aarch64",
+      "sha256": "9c3e73b6bb2dfecbacd97edc6aa60315a52e28256784f68e3a8b5b297af599d2"
+    },
+    {
+      "name": "simplex-chat-ubuntu-24_04-aarch64",
+      "url": "https://github.com/simplex-chat/simplex-chat/releases/download/v7.0.0/simplex-chat-ubuntu-24_04-aarch64",
+      "sha256": "70a439699053c1d9b7f83fef9dcdd5e391a5b6648a28a797b4e1b730a08b1c1b"
+    }
+  ]
+}
