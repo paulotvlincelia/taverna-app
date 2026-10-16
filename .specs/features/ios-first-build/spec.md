@@ -40,7 +40,7 @@ Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprova
 | Falha na qualificação das bibliotecas | Registrar BLOCKED e detalhar a rota de compilação do núcleo antes de adotá-la. | Evitar binários sem origem ou troca silenciosa do escopo. | y |
 | Destino principal | SDK iOS Simulator 27.1, runtime iOS 27.0, iPhone 17 arm64. | Esse runtime está disponível e lista o modelo; o runtime 27.1 instalado lista somente iPhone Duo. Compatibilidade de execução ainda não comprovada. | y |
 | Credenciais Apple | Tentar Debug para simulador sem provisionamento de conta Apple. | Evitar vincular o primeiro build a certificados ou identidades de distribuição; validar os ajustes efetivos de todos os targets. | y |
-| Teste mínimo de interface | Em inglês, confirmar Get started e navegar até Create your profile, sem enviar o formulário. | Resultado visível e objetivo sem criar identidade, aceitar termos ou iniciar conversa. | y |
+| Teste mínimo de interface | Em inglês, confirmar Get started e navegar até Your profile, sem enviar o formulário. | Resultado visível e objetivo sem criar identidade, aceitar termos ou iniciar conversa. | y |
 | Execução sem serviços reais | Provar isolamento de saída de rede da sessão antes de abrir o app. | O app herdado contém configuração de servidores reais; não presumir ausência de tráfego só por parar no onboarding. | y |
 | Limites por tentativa | Download de cada arquivo: até 5 GiB e 30 minutos; build: 90 minutos; sessão de testes: 15 minutos. | Limites de interrupção para processos presos; não são promessa de desempenho. Mudança desses limites exige registro. | y |
 | Evidências visuais | Manter screenshots e xcresult apenas no estado local ignorado; relatório público textual. | Assets e conteúdo dos bundles ainda precisam de revisão para publicação. | y |
@@ -74,7 +74,7 @@ Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprova
 2. WHEN esses produtos forem inspecionados THEN a prova SHALL confirmar a arquitetura arm64 e a plataforma iOS Simulator dos executáveis e do código nativo ligado ao app (IOS-09).
 3. WHEN o teste iniciar o aplicativo THEN a sessão SHALL ter uma contenção de saída de rede comprovada por uma tentativa externa de controle bloqueada, sem alteração da VPN ou do firewall global do Mac (IOS-10).
 4. WHEN o aplicativo for lançado com dados novos THEN o teste SHALL confirmar que Get started está visível e habilitado em até 30 segundos (IOS-11).
-5. WHEN o teste tocar Get started THEN o teste SHALL confirmar Create your profile em até 30 segundos, encerrando a navegação antes de enviar o formulário (IOS-12).
+5. WHEN o teste tocar Get started THEN o teste SHALL confirmar Your profile em até 30 segundos, encerrando a navegação antes de enviar o formulário (IOS-12).
 6. WHEN a suíte iOS do scheme for executada THEN o relatório SHALL registrar todos os testes descobertos, executados, falhos e ignorados, sem remover testes ou asserções nem acrescentar skips para obter sucesso (IOS-13).
 7. IF qualquer etapa obrigatória falhar, exceder seu limite, não executar seus testes ou não produzir seu artefato esperado THEN a execução SHALL terminar sem PASS, com código diferente de zero e identificação da etapa (IOS-14).
 8. WHEN uma tentativa for retomada após falha THEN o procedimento SHALL preservar a evidência anterior em diretório de tentativa distinto sem apagar estado de outras sessões (IOS-15).
