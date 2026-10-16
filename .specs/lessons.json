@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "promote_threshold": 2,
+  "window_days": 45,
+  "quarantine_threshold": 2,
+  "next_id": 2,
+  "lessons": [
+    {
+      "id": "L-001",
+      "key": "gate_fail::derive every fixture output path from the selected run identifier and prove it in a fresh worktree",
+      "text": "Derive every fixture output path from the selected run identifier and prove it in a fresh worktree",
+      "signal": "gate_fail",
+      "scope": "tools/taverna/access_proof",
+      "status": "candidate",
+      "features": [
+        "invitation-only"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        ".specs/features/invitation-only/access-proof-validation.md#ciclo-1 (tools/taverna/access_proof)"
+      ],
+      "created": "2026-10-16T23:24:16Z",
+      "last_seen": "2026-10-16T23:24:16Z"
+    }
+  ]
+}
