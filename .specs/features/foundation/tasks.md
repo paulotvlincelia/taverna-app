@@ -4,7 +4,7 @@
 
 TLC Spec Driven carregada, plano aprovado em 2026-10-16. Codex desktop autor/integrador, branch codex/foundation, worktree exclusivo foundation fora do clone principal. Propriedade: documentação Taverna, .agents, .specs/features/foundation, tools/taverna e CI. Fonte do mensageiro preservada. Verifier independente obrigatório antes de integrar.
 
-**Status**: In Progress
+**Status**: Implementation complete; CI/independent verification pending
 
 ## Test Coverage Matrix
 
