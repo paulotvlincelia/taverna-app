@@ -24,6 +24,9 @@ class FoundationTests(unittest.TestCase):
             shutil.copytree(ROOT / name, self.root / name)
         (self.root / 'assets').mkdir()
         shutil.copy(ROOT / 'assets/ASSETS_LICENSE.md', self.root / 'assets/ASSETS_LICENSE.md')
+        proof_inputs = Path('tools/taverna/access_proof/inputs.json')
+        (self.root / proof_inputs).parent.mkdir(parents=True)
+        shutil.copy(ROOT / proof_inputs, self.root / proof_inputs)
         # Root prose links to original directories; include only targets required by prose.
         for name in ['docs/TRADEMARK.md', 'apps/ios/README.md']:
             target = self.root / name
