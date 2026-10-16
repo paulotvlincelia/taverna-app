@@ -1,7 +1,7 @@
 # Design do primeiro build iOS
 
 **Spec:** [spec.md](spec.md), aprovada em 2026-10-16.
-**Status:** núcleo realizado do fonte e entradas locais qualificadas em 2026-10-16. T1 concluída; build do app e suíte iOS ainda não executados.
+**Status:** núcleo realizado do fonte e entradas locais qualificadas em 2026-10-16. T1 concluída; build do app/onboarding comprovados em tentativa local, suíte completa/reprodução pendentes.
 
 ## Architecture Overview
 
@@ -128,3 +128,25 @@ Refinamento de T1, sem alterar critérios, fonte, locks ou flags: a derivação 
 A cópia final usa vtool por membro, preservando os números minos/sdk originais, e libtool -static -D para recompor cada arquivo. Nomes repetidos recebem diretórios por ordinal; nunca extrair sobrescrevendo basenames. Conferir igualdade do cabeçalho fora do tamanho dos comandos, comandos que não são de versão, offsets, bytes de payload, relocações e símbolos. A plataforma final precisa ser LC_BUILD_VERSION 7 em todos os objetos. Qualquer divergência bloqueia. Não há edição de instruções, criptografia, protocolo ou fonte do núcleo.
 
 Foram conferidos 4.187 objetos em cinco arquivos. O [manifesto](native-inputs.json) fixa origem, licenças declaradas, receita e hashes, com estado do núcleo distinto do app. Os comandos e provas estão em [execution.md](execution.md); o procedimento reproduzível de T5 ainda está pendente.
+
+
+## Compatibilidade SwiftUI observada em T3
+
+O primeiro build-for-testing terminou exit 65 em 2026-10-16: o novo macro State do SDK 27.1 gerou _chat/$chat duplicados na composição @State @ObservedObject de ChatView. O probe swift-state-composition-20261016 reproduziu a falha; explicitar argumentos genéricos ainda escolheu o macro. Um typealias interno do tipo SwiftUI.State compilou com asserções estáticas dos tipos originais State<ObservedObject<ProbeChat>>, Binding<ObservedObject<ProbeChat>> e do inicializador memberwise. Um alias privado impediria o acesso atual da propriedade e foi recusado no probe.
+
+Aplicar somente o alias interno ChatViewState ao atributo composto de ChatView. Não substituir por StateObject, migrar o modelo de observação ou alterar os bindings dos chamadores. A compilação real completa e a suíte continuam sendo o gate de T3; a prova isolada de tipos não prova conversas ou navegação do app.
+
+
+## Janela total da suíte e preservação das configurações
+
+A primeira sessão real atingiu 900 segundos com 130 execuções aprovadas, zero falhas de asserção observadas e configurações herdadas ainda pendentes. O monitor encerrou o teste; o cleanup tinha somente um segundo restante e sobrescreveu o código agregado com 2. O receipt original foi preservado; reconciliation.json distingue timeout do teste, erro de cleanup e sucesso do build/onboarding. O dispositivo antigo foi confirmado Shutdown, sem apagar dados.
+
+A próxima sessão usa 1.200 segundos agregados, conforme a regra de revisão registrada dos limites. Nenhuma espera funcional de 30 segundos foi alterada. O cleanup recebe prazo próprio para desligar somente o dispositivo pertencente à sessão, sem converter uma falha de teste em sucesso ou ocultar seu código.
+
+A revisão do código de teste também restringiu os argumentos de idioma ao novo método de onboarding. Os lançamentos herdados conservam seus argumentos/configurações do SDK, inclusive runsForEachTargetApplicationUIConfiguration=true. Usar novo UDID registrado no índice padrão, com dados/logs no worktree, para garantir dados novos sem apagar a sessão anterior.
+
+### Preparo nativo versionado
+
+A conversão comprovada em T1 será encapsulada no componente ios_native.py (T8), com testes co-localizados e repetição real antes de fechar seu gate. O manifesto continua sendo a referência fixada; o preparo não consulta latest, não escreve na store Nix e não apaga tentativas. O validador T4 reutiliza o leitor de Mach-O/arquivos para conferir bytes reais, e o guia T5 usa somente comandos versionados. Isso fecha a reprodução prevista, sem alterar os critérios.
+
+A segunda sessão real também venceu o limite agregado: 177 execuções aprovadas e zero falhas de asserção observadas, exit 124, shutdown 0, nenhum clone criado. A enumeração suportada do Xcode retornou exit 0 e quatro métodos lógicos; ela não inclui a expansão das configurações de UI. A revisão registrada para a tentativa -03 aumenta somente a janela agregada para 3.600 segundos. O dispositivo anterior foi confirmado Shutdown após enumeração e seu registro foi arquivado na própria tentativa; nova sessão mantém dados novos sem apagar as anteriores.

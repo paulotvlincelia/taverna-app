@@ -1,6 +1,6 @@
 # Primeiro build iOS da Taverna
 
-Status: aprovado pelo proprietário em 2026-10-16. Núcleo realizado do fonte e entradas qualificadas; build do app ainda não executado.
+Status: aprovado pelo proprietário em 2026-10-16. Núcleo realizado do fonte e entradas qualificadas; build do app e onboarding comprovados em tentativa local, suíte completa/reprodução/verificação final pendentes.
 
 Issue canônica: [taverna-app #6](https://github.com/paulotvlincelia/taverna-app/issues/6), vinculada ao épico E2. Método: TLC Spec Driven 3.3.0, escopo Large, pois há dependências entre bibliotecas nativas, SwiftPM, Xcode, simulador e evidências. Esta proposta preserva a fundação integrada e os critérios da issue.
 
@@ -45,6 +45,8 @@ Os defaults abaixo foram aprovados pelo proprietário em 2026-10-16. Essa aprova
 | Limites por tentativa | Download de cada arquivo: até 5 GiB e 30 minutos; build: 90 minutos; sessão de testes: 15 minutos. | Limites de interrupção para processos presos; não são promessa de desempenho. Mudança desses limites exige registro. | y |
 | Evidências visuais | Manter screenshots e xcresult apenas no estado local ignorado; relatório público textual. | Assets e conteúdo dos bundles ainda precisam de revisão para publicação. | y |
 | Local dos ambientes | Clone principal e worktrees sob a raiz Projects já definida pelo proprietário. | Preservar organização existente; nenhum novo checkout em Downloads ou Desktop. | y |
+
+**Revisão operacional de 2026-10-16, após a primeira sessão real:** a janela agregada da suíte passa de 15 para **20 minutos** nas próximas tentativas. A primeira chegou ao prazo com 130 execuções aprovadas e zero falhas de asserção observadas, mas com combinações herdadas ainda pendentes. O plano já exige registro para mudar esses limites; este ajuste fica registrado antes da próxima tentativa. Os limites funcionais de Get started/Your profile continuam em 30 segundos cada, sem remover métodos, asserções ou configurações. A tentativa original permanece não aprovada por timeout. Download e build mantêm seus limites originais.
 
 **Open questions:** none — defaults aprovados; origem/ABI das bibliotecas, seleção do simulador isolado e contenção de rede continuam sendo provas técnicas. A exceção necessária para a rota Nix foi autorizada separadamente pelo proprietário em 2026-10-16; a instalação foi concluída e validada, com o avanço registrado em execution.md.
 
@@ -129,28 +131,28 @@ Não há promessa de duração antes da qualificação do núcleo. A segunda exe
 
 | Requirement ID | Story / critério | Tasks | Phase | Status |
 | --- | --- | --- | --- | --- |
-| IOS-01 | Entradas: proveniência | T1 | Execute | In Progress |
-| IOS-02 | Entradas: rejeição | T1, T4 | Execute | In Progress |
-| IOS-03 | Entradas: pins SwiftPM | T3 | Tasks | In Tasks |
-| IOS-04 | Entradas: estado isolado | T2, T7, T5 | Execute | In Progress |
+| IOS-01 | Entradas: proveniência | T1, T8 | Execute | In Progress |
+| IOS-02 | Entradas: rejeição | T1, T8, T4 | Execute | In Progress |
+| IOS-03 | Entradas: pins SwiftPM | T3 | Execute | In Progress |
+| IOS-04 | Entradas: estado isolado | T2, T7, T8, T5 | Execute | In Progress |
 | IOS-05 | Entradas: destino Xcode | T2 | Execute | In Progress |
-| IOS-06 | Entradas: assinatura | T3 | Tasks | In Tasks |
-| IOS-07 | Entradas: download/extração | T1, T5 | Execute | In Progress |
-| IOS-08 | App: produtos do scheme | T3 | Tasks | In Tasks |
-| IOS-09 | App: plataforma/arquitetura | T1, T4 | Execute | In Progress |
+| IOS-06 | Entradas: assinatura | T3 | Execute | In Progress |
+| IOS-07 | Entradas: download/extração | T1, T8, T5 | Execute | In Progress |
+| IOS-08 | App: produtos do scheme | T3 | Execute | In Progress |
+| IOS-09 | App: plataforma/arquitetura | T1, T8, T4 | Execute | In Progress |
 | IOS-10 | App: rede isolada | T2 | Execute | In Progress |
-| IOS-11 | App: abertura observável | T3 | Tasks | In Tasks |
-| IOS-12 | App: navegação observável | T3 | Tasks | In Tasks |
-| IOS-13 | App: suíte preservada | T3 | Tasks | In Tasks |
+| IOS-11 | App: abertura observável | T3 | Execute | In Progress |
+| IOS-12 | App: navegação observável | T3 | Execute | In Progress |
+| IOS-13 | App: suíte preservada | T3 | Execute | In Progress |
 | IOS-14 | App: falha detectada | T4 | Tasks | In Tasks |
-| IOS-15 | App: retomada | T2, T7, T5 | Execute | In Progress |
-| IOS-16 | App: registro de prova | T1, T4, T5 | Execute | In Progress |
+| IOS-15 | App: retomada | T2, T7, T8, T5 | Execute | In Progress |
+| IOS-16 | App: registro de prova | T1, T8, T4, T5 | Execute | In Progress |
 | IOS-17 | App: segunda execução | T6 | Tasks | In Tasks |
 | IOS-18 | App: Verifier e CI | T6 | Tasks | In Tasks |
 | IOS-19 | App: alcance do PASS | T1, T4, T5, T6 | Execute | In Progress |
 | IOS-20 | App: publicação de evidências | T4, T5, T6 | Tasks | In Tasks |
 
-Coverage: 20 requisitos mapeados às sete tarefas de tasks.md, sem requisitos sem destino. T1 concluída como qualificação de entradas; nenhum requisito declarado verificado pelo Verifier e nenhum build do app declarado.
+Coverage: 20 requisitos mapeados às oito tarefas de tasks.md, sem requisitos sem destino. T1 concluída como qualificação de entradas; nenhum requisito declarado verificado pelo Verifier. Build do app e onboarding passaram em tentativa local; suíte completa e reprodução continuam pendentes.
 
 ## Success Criteria
 
@@ -161,3 +163,5 @@ A rota oficial pré-compilada não foi qualificada. Na rota Nix autorizada em AP
 Estado factual e fontes: [readiness.md](readiness.md). Regras de trabalho: [AGENTS.md](../../../AGENTS.md) e [ambientes](../../../docs/taverna/environments.md).
 
 Ajuste de IOS-04, IOS-05 e IOS-10 aprovado pelo proprietário em 2026-10-16 após revisão dos controles. Decisão canônica APP-004; não equivale a prova de execução da Taverna.
+
+Revisão operacional posterior, em 2026-10-16, antes da tentativa -03: a sessão -02 atingiu 1.200 segundos com 177 execuções aprovadas, zero falhas de asserção observadas e suite incompleta. A enumeração oficial confirmou os quatro métodos lógicos, mas não expôs a expansão por configurações de UI. A próxima sessão terá limite agregado de **60 minutos**, para concluir a expansão herdada sem cortes; não é promessa de duração. Limites de 30 segundos por tela, métodos, configurações e diagnósticos permanecem iguais. As duas tentativas interrompidas continuam sem PASS, com dados/receipts preservados.
