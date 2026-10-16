@@ -17,7 +17,7 @@ Gerada de AGENTS.md, CONTRIBUTING.md, docs/taverna/environments.md, CI Foundatio
 | --- | --- | --- | --- | --- |
 | Receita e preparação do núcleo | integration | Fonte/lock fixados, hashes, licença, plataforma, falhas de origem/extração e limites aplicáveis | Registros próprios de cada tentativa sob .build/attempts | Nix com no-write-lock-file e no-update-lock-file; conferências de produtos reais descritas no registro |
 | Ambiente de execução | integration | Device set e UDID exclusivos, destino efetivo do Xcode, rede negada com controle externo, retomada sem apagar outra sessão | Registros próprios sob .build/attempts e .build/SimulatorDevices | simctl --set e probes reais do executor; comando exato e resultado registrados antes de considerar T2 concluída |
-| Interface inicial iOS | e2e | Get started visível/habilitado, Create your profile após toque, sem envio de formulário; suíte herdada preservada | apps/ios/Tests iOS | xcodebuild test do scheme SimpleX (iOS), com destino qualificado e caminhos locais explícitos |
+| Interface inicial iOS | e2e | Get started visível/habilitado, Your profile após toque, sem envio de formulário; suíte herdada preservada | apps/ios/Tests iOS | xcodebuild test do scheme SimpleX (iOS), com destino qualificado e caminhos locais explícitos |
 | Validação da prova | unit + integration | Rejeitar hash/plataforma errados, produto ausente, etapa falha/timeout e zero testes obrigatórios; conferir artefatos reais | tools/taverna/tests | python3.12 -m unittest discover -s tools/taverna/tests; validação da tentativa real |
 | Documentação e handoff | none | Links, comandos comprovados, estado factual e nenhum material privado versionado | docs/taverna e .specs/features/ios-first-build | check_foundation.py, validate_spec.py e conferência de links da feature |
 
@@ -108,7 +108,7 @@ T5 → T6
 
 - [ ] Sete revisões SwiftPM preservadas e configuração efetiva de assinatura registrada sem provisionamento de conta.
 - [ ] App, framework, NSE e Share Extension compilados e identificados.
-- [ ] Get started visível e habilitado em 30 s; após o toque, Create your profile visível em 30 s; nenhum envio do formulário.
+- [ ] Get started visível e habilitado em 30 s; após o toque, Your profile visível em 30 s; nenhum envio do formulário.
 - [ ] Suíte real aprovada, com contagens de execução/falha/skip e artefatos, sem usar somente screenshot ou medição de launch como prova da interface.
 
 ### T4: Validar os artefatos e estados da prova

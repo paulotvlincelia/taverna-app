@@ -34,3 +34,7 @@ O agente deve investigar as lacunas técnicas sem pedir ao proprietário fatos q
 ## Ideias adiadas
 
 Identidade visual Taverna, inventário completo de assets, assinatura própria, push, aparelho físico e grupos por convite permanecem nas issues existentes. Este marco não encerra essas entregas.
+
+## Correção factual do alvo UI, em 2026-10-16
+
+O texto inicialmente proposto, Create your profile, foi obtido da view CreateProfile de edição genérica. A navegação Get started abre CreateFirstProfile, definida no mesmo arquivo e com cabeçalho Your profile (CreateProfile.swift:195 e :233; SimpleXInfo.swift:128). Corrigido o texto do teste planejado antes de implementá-lo, preservando a intenção aprovada de provar a interface herdada e sem alterar a tela do app. Nenhum teste ou asserção existente foi modificado.

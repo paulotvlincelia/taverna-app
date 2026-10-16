@@ -4,7 +4,7 @@ Em 2026-10-16, o Xcode e os runtimes estão disponíveis. O primeiro build ainda
 
 Este documento é um levantamento de planejamento. Não é o relatório de um Verifier e não declara a issue #6 concluída.
 
-Atualização após aprovação: a [qualificação das bibliotecas](core-qualification.md) terminou BLOCKED; nenhuma entrada oficial iOS foi qualificada. O [Design da alternativa](design.md) detalha a compilação do núcleo via Nix e a exceção administrativa necessária. Não há build ou teste iOS executado.
+Atualização após aprovação: a [qualificação das bibliotecas](core-qualification.md) terminou BLOCKED; nenhuma entrada oficial iOS foi qualificada. O [Design da alternativa](design.md) detalha a compilação do núcleo via Nix e a exceção administrativa autorizada. Nix 2.34.9 foi instalado e validado; a receita está preparando suas ferramentas Haskell. As sete dependências SwiftPM foram resolvidas preservando integralmente Package.resolved. Não há build ou teste iOS executado.
 
 ## Base examinada
 
@@ -29,8 +29,8 @@ Atualização após aprovação: a [qualificação das bibliotecas](core-qualifi
 | Bibliotecas nativas | Ausentes | Nenhum dos diretórios apps/ios/Libraries/mac, ios ou sim existe na base examinada. |
 | Origem imutável das bibliotecas | Não localizada/qualificada | O script de download recebe a URL de jobs e usa latest; isso não fixa artefato nem seu fonte correspondente. |
 | ABI de simulador arm64 | Não comprovada | O upstream tem rotas diferentes para arm64 e x86_64, com transformação mac2ios. É necessário inspecionar plataforma e ligação, não só o nome do arquivo. |
-| GHC, Cabal, Nix e Stack | Ausentes do PATH | Necessários conforme a rota de reconstrução do núcleo escolhida. Ausência não prova que a rota com bibliotecas oficiais falhará. |
-| Dependências SwiftPM | Sete pins versionados | Ainda não resolvidas/compiladas nesta sessão. WebRTC também exige atenção aos binários baixados. |
+| Nix e ferramentas Haskell | Nix 2.34.9 validado; auxiliares Haskell em construção pela receita | Não instalar GHC/Cabal/Stack globais para substituir o conjunto fixado. |
+| Dependências SwiftPM | Sete pins resolvidos; Package.resolved byte a byte preservado | Resolver terminou com exit 0. Compilação dessas dependências no app ainda não executada; WebRTC inclui slice iOS Simulator arm64 segundo seu Info.plist. |
 | Simulador da futura execução | Ainda não preparado | Provar que o executor de testes Xcode usa o UDID do device set do worktree. simctl --set sozinho não basta. |
 | Assinatura para simulador | Estratégia ainda não testada | Projeto contém team IDs, bundle IDs e capabilities herdados; validar overrides sem autenticação Apple. |
 | Contenção de saída de rede | Ainda não demonstrada | Definir mecanismo restrito à sessão e prová-lo antes de abrir o app; não desativar rede/VPN do host. |
@@ -77,7 +77,7 @@ Não executar automaticamente scripts/ios/download-libs.sh, prepare.sh ou prepar
 
 O registro por tentativa reunirá identificação do fonte e das entradas, versões, comandos, saídas por etapa, produtos e contagem de testes. A evidência bruta fica no estado ignorado; o relatório versionado contém apenas dados técnicos sanitizados.
 
-A execução deve confirmar Get started visível/habilitado, tocar no botão e encontrar Create your profile. Não enviar o formulário, criar identidade nem convidar pessoas. Essa prova confirma o início da interface e a ligação do app ao núcleo real; não comprova funções do protocolo nem mensagens ponta a ponta.
+A execução deve confirmar Get started visível/habilitado, tocar no botão e encontrar Your profile. Não enviar o formulário, criar identidade nem convidar pessoas. Essa prova confirma o início da interface e a ligação do app ao núcleo real; não comprova funções do protocolo nem mensagens ponta a ponta.
 
 A segunda sessão parte do mesmo commit e manifesto, sem produtos/caches da primeira. O Verifier verifica os critérios e testa que as checagens rejeitam, pelo menos, hash adulterado, plataforma errada, ausência de produto apesar de saída de sucesso e execução sem o teste obrigatório. Falhas são injetadas em cópias isoladas, preservando o worktree real.
 
