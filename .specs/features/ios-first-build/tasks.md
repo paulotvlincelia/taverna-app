@@ -7,7 +7,7 @@ Usar tlc-spec-driven conforme a skill versionada. A especificação, sua execuç
 **Design:** [design.md](design.md).
 **Status:** In Progress — preparação administrativa concluída; T1 em andamento, sem biblioteca qualificada ainda.
 
-Ferramentas: Git nativo, Python 3.12 stdlib, Nix 2.34.9 e ferramentas do Xcode instalado. A integração de handoff, CI e locks nesta branch pertence ao Codex. Não há delegação de implementação; seis tarefas cabem em uma sequência local. A verificação final será independente.
+Ferramentas: Git nativo, Python 3.12 stdlib, Nix 2.34.9 e ferramentas do Xcode instalado. A integração de handoff, CI e locks nesta branch pertence ao Codex. Não há delegação de implementação; sete tarefas cabem em uma sequência local. A verificação final será independente.
 
 ## Test Coverage Matrix
 
@@ -39,13 +39,13 @@ Ordem completa, incluindo dependências entre fases:
 
 ```text
 T1 → T3 → T4 → T5 → T6
-T2 → T3
+T2 → T7 → T3
 ```
 
 ### Phase 1: Núcleo e sessão
 
 ```text
-T1  T2
+T1  T2 → T7
 ```
 
 ### Phase 2: Compilação e prova
@@ -95,11 +95,27 @@ T5 → T6
 - [x] A contenção de IP remoto no processo do app antes do main e a comunicação local são demonstradas sem alterar VPN/firewall global; se não houver método comprovado, não lançar o app e registrar BLOCKED.
 - [x] Nova tentativa preserva registros anteriores e não limpa outras sessões.
 
+### T7: Confinar os caches efetivos do Xcode
+
+**What**: Corrigir a lacuna encontrada após T2: CFFIXED_USER_HOME e os caches de módulos não relocam CACHE_ROOT do Xcode.
+**Where**: `tools/taverna/ios_session.py`, `tools/taverna/tests/test_ios_session.py`, `.specs/features/ios-first-build/execution.md`
+**Depends on**: T2
+**Reuses**: preflight e controle UIKit de T2; mesma aprovação APP-004, sem mudança de critério.
+**Requirement**: IOS-04, IOS-05, IOS-10, IOS-15.
+**Tools**: Python 3.12 e Xcode; TLC Spec Driven, execução inline.
+**Tests**: unit + integration; rejeitar cache global, campo ausente e alias escapando do worktree; repetir destino/controle com os ajustes efetivos corrigidos.
+**Gate**: Full Session + Build.
+**Done when**:
+
+- [x] CACHE_ROOT, precompilados, estatísticas de SDK e CAS efetivos pertencem ao worktree; campos ausentes ou externos impedem avançar.
+- [x] Controle UIKit e sensor sem guard continuam discriminantes; testes herdados preservados.
+- [x] Falha anterior permanece registrada e a nova tentativa não a sobrescreve.
+
 ### T3: Acrescentar e executar o teste observável
 
 **What**: Acrescentar um teste da navegação inicial e compilar/executar a suíte do app com entradas qualificadas.
 **Where**: `apps/ios/Tests iOS/Tests_iOS.swift`, `apps/ios/Tests iOS/Tests_iOSLaunchTests.swift`
-**Depends on**: T1, T2
+**Depends on**: T1, T7
 **Reuses**: XCTest e testes existentes, sem remover asserções ou usar skips para obter sucesso.
 **Requirement**: IOS-03, IOS-06, IOS-08, IOS-11, IOS-12, IOS-13.
 **Tools**: Xcode/xcodebuild; TLC Spec Driven.
@@ -167,6 +183,7 @@ T5 → T6
 | --- | --- | --- |
 | T1 | Um conjunto nativo e seu registro operacional | Granular |
 | T2 | Um ambiente de execução e seu registro | Granular |
+| T7 | Correção dos caches desse ambiente | Granular |
 | T3 | Um teste UI no arquivo existente, com gate real | Granular |
 | T4 | Um validador da prova e testes do próprio componente | Granular |
 | T5 | Um guia | Granular |
@@ -178,7 +195,8 @@ T5 → T6
 | --- | --- | --- | --- |
 | T1 | None | Entrada da fase 1 | Match |
 | T2 | None | Entrada independente da fase 1 | Match |
-| T3 | T1, T2 | Entrada da fase 2 após os dois gates da fase 1 | Match |
+| T7 | T2 | T2 → T7 na fase 1 | Match |
+| T3 | T1, T7 | Entrada da fase 2 após núcleo e sessão corrigida | Match |
 | T4 | T3 | T3 → T4 | Match |
 | T5 | T4 | Entrada da fase 3 após fase 2 | Match |
 | T6 | T5 | T5 → T6 | Match |
@@ -189,6 +207,7 @@ T5 → T6
 | --- | --- | --- | --- | --- |
 | T1 | Núcleo operacional | integration | integration com artefatos reais | Match |
 | T2 | Ambiente operacional | integration | integration com probes reais | Match |
+| T7 | Caches do ambiente | unit + integration | Python + controle real | Match |
 | T3 | UI | e2e | e2e no arquivo alterado | Match |
 | T4 | Validador | unit + integration | Testes e prova real no mesmo componente | Match |
 | T5 | Documentação | none | none, gate documental | Match |
@@ -196,4 +215,4 @@ T5 → T6
 
 ## Estado
 
-T1 em andamento; T2 concluída como ambiente com controle UIKit sintético e preflight real. T3–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.
+T1 em andamento; T2 concluída como ambiente com controle UIKit sintético e preflight real. T7 concluída: CACHE_ROOT e caches efetivos confinados e gate repetido; T3–T6 pendentes. Nenhuma conclusão de feature declarada; todos os requisitos permanecem sem verificação final.

@@ -183,3 +183,36 @@ Registros locais ignorados: .build/ios-session.json; .build/attempts/session-con
 | IOS-15: preservação/retomada | tools/taverna/tests/test_ios_session.py:97 — assertRaises(FileExistsError); :100–101 — assertNotEqual(attempt, second), assertEqual(evidence, 'keep'); :104 — assertRaisesRegex(ValueError, 'attempt') | Nova tentativa não apaga nem sobrescreve a anterior, nem escapa de seu diretório. |
 
 Cada teste novo corresponde a IOS-04/05/10/15; sem casos especulativos ou testes de framework. O payload de prova é conferido campo a campo. Padrões: CONTRIBUTING.md e unittest da fundação. Sem desvios do ajuste aprovado. **T2 concluída como gate de ambiente.** IOS-10 na Taverna real ainda depende da integração em T3; F1, build, testes iOS e verificação final continuam pendentes.
+
+
+## T7: correção dos caches efetivos do Xcode
+
+A consulta de ajustes de todos os targets encontrou CACHE_ROOT global, apesar de CFFIXED_USER_HOME e dos caches de módulos locais. T2 comprovou destino e contenção; a lacuna de caches exige esta correção adicional antes de T3. Não houve build real do mensageiro usando esse cache. IOS-04 e APP-004 permanecem com a mesma obrigação; nenhuma revisão de critério foi necessária.
+
+**Escopo:** tools/taverna/ios_session.py, seu teste de sessão e este registro. **Hipótese comprovada:** overrides de build para CACHE_ROOT, SHARED_PRECOMPS_DIR, SDK_STAT_CACHE_DIR e COMPILATION_CACHE_CAS_PATH relocam esses campos; ambiente Cocoa sozinho não basta. **Resultado requerido:** todos os campos efetivos dentro do worktree, com rejeição de valor externo/ausente ou symlink de escape e controle de rede preservado.
+
+A implementação acrescenta os quatro ajustes explícitos ao preflight e valida os caminhos efetivos devolvidos pelo Xcode, incluindo produtos/intermediários quando presentes. Caminhos futuros são resolvidos pelos ancestrais existentes; o check não exige que um cache já tenha sido criado para validar seu destino.
+
+A primeira consulta -alltargets com -derivedDataPath foi recusada com exit 64; o SDK exige scheme nessa combinação. A consulta seguinte usou SYMROOT/OBJROOT explícitos, sem mudar preferências globais. A terceira consulta confirmou todos os targets com caches locais e assinatura manual ad hoc, Team/perfil vazios. Esses ajustes não comprovam assinatura em aparelho nem build. Registros preservados nas três tentativas xcode-all-target-settings-20261016, -02 e -03.
+
+**Gate:** 40 testes Python passaram, zero falhas/skips; os 28 anteriores permanecem. Foundation, compileall e diff-check passaram. O controle real em session-cache-correction-20261016 terminou exit 0: PID 91824, negação IPv4/IPv6 EPERM, loopback=true antes do main, UIKIT_CONTROL_READY; sem guard recebeu EINPROGRESS e recusou a interface. O próprio dispositivo foi desligado. O preflight final com os quatro campos obrigatórios passou em session-cache-final-preflight-20261016.
+
+```bash
+python3.12 tools/taverna/ios_session.py control --attempt session-cache-correction-20261016 --guard-manifest .build/attempts/session-guard-20261016-02/guard-manifest.json
+python3.12 tools/taverna/ios_session.py preflight --attempt session-cache-final-preflight-20261016 --guard-manifest .build/attempts/session-guard-20261016-02/guard-manifest.json
+python3.12 -m unittest discover -s tools/taverna/tests
+python3.12 tools/taverna/check_foundation.py
+python3.12 -m compileall -q tools/taverna
+git diff --check
+```
+
+**Adequação suficiente e necessária:**
+
+| Obrigação / resultado | Asserção localizada | Vínculo reverso |
+| --- | --- | --- |
+| IOS-04: caches efetivos locais, rejeição de valores externos | tools/taverna/tests/test_ios_session.py:129 — validate_build_paths(root, settings); :132 — assertRaisesRegex(ValueError, key) para cada campo externo | Reproduz o defeito real de CACHE_ROOT e verifica também os demais caches/produtos presentes. |
+| IOS-04: campo obrigatório ausente | tools/taverna/tests/test_ios_session.py:137 — assertRaisesRegex(ValueError, key) para os quatro campos removidos individualmente | Falta de dado não pode equivaler a isolamento provado. |
+| IOS-04: alias aponta para fora | tools/taverna/tests/test_ios_session.py:142 — assertRaisesRegex(ValueError, 'CACHE_ROOT') | Verificar o caminho físico, não somente o prefixo textual. |
+| IOS-05/10/15: preservar destino, contenção e evidências | Asserções existentes de T2, sem alteração; integração real do controle e preflight citada acima | Nenhum teste herdado removido/relaxado. Nova tentativa com nome distinto preserva a falha anterior. |
+
+Todos os casos novos se vinculam ao defeito observado em IOS-04. Padrão unittest/CONTRIBUTING preservado; sem testes de framework. T7 concluída, sem declarar build ou teste UI da Taverna. T1 e T3–T6 continuam pendentes.

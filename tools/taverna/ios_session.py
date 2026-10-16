@@ -106,6 +106,25 @@ def environment(root):
     return env
 
 
+def build_cache_args(root):
+    return [f'CACHE_ROOT={root}/.build/xcode-build-cache',
+            f'SHARED_PRECOMPS_DIR={root}/.build/PrecompiledHeaders',
+            f'SDK_STAT_CACHE_DIR={root}/.build/SDKStatCaches',
+            f'COMPILATION_CACHE_CAS_PATH={root}/.build/xcode-build-cache/CompilationCache.noindex']
+
+
+def validate_build_paths(root, settings):
+    required = ('CACHE_ROOT', 'SHARED_PRECOMPS_DIR', 'SDK_STAT_CACHE_DIR', 'COMPILATION_CACHE_CAS_PATH')
+    optional = ('PROJECT_TEMP_ROOT', 'CONFIGURATION_BUILD_DIR',
+                'CONFIGURATION_TEMP_DIR', 'DERIVED_FILE_DIR', 'OBJECT_FILE_DIR', 'SYMROOT')
+    for key in required + optional:
+        if key in optional and key not in settings:
+            continue
+        value = settings.get(key)
+        if not value or not Path(value).resolve().is_relative_to(root.resolve()):
+            raise ValueError(f'{key}: build state outside worktree or missing')
+
+
 def run(command, root, env, timeout=120):
     return subprocess.run(command, cwd=root, env=env, text=True, capture_output=True,
                           timeout=timeout, check=True)
@@ -184,6 +203,7 @@ def preflight(root, record, attempt, guard_manifest):
         '-onlyUsePackageVersionsFromResolvedFile', '-skipPackageUpdates', '-scmProvider', 'system',
         '-resultBundlePath', str(attempt / 'settings.xcresult'), 'CODE_SIGNING_ALLOWED=NO',
         'DEVELOPMENT_TEAM=', 'CODE_SIGN_IDENTITY=', 'ARCHS=arm64', 'ONLY_ACTIVE_ARCH=YES']
+    command += build_cache_args(root)
     result = subprocess.run(command, cwd=root, env=environment(root), capture_output=True,
                             text=True, timeout=300)
     (attempt / 'settings.stdout').write_text(result.stdout)
@@ -197,6 +217,7 @@ def preflight(root, record, attempt, guard_manifest):
         raise ValueError('missing Xcode destination settings')
     for target in targets:
         settings = target['buildSettings']
+        validate_build_paths(root, settings)
         validate_session(root, record, settings.get('TARGET_DEVICE_IDENTIFIER'))
         if settings.get('PLATFORM_NAME') != 'iphonesimulator':
             raise ValueError('Xcode destination platform mismatch')
