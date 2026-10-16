@@ -25,7 +25,7 @@ A distinção entre plano e produto está explícita em `.specs/features/invitat
 | `check_commit.py` sobre os três commits do diff | Três mensagens Conventional Commits aprovadas. |
 | CI Foundation do PR #11 no conteúdo `b68a6f87b9c3e0cf927017b1398826ba4e7f561a` | Duas execuções concluídas com `SUCCESS`. |
 | Scanner independente sobre README, roadmap, STATE e todos os Markdown de `invitation-only` | 42 links Markdown inspecionados, 26 relativos; todos resolvem dentro do repositório. |
-| Scanner independente de acesso privado | Nenhum caminho de usuário, IP Tailscale, chave privada, senha, token ou segredo atribuído encontrado no conteúdo novo. |
+| Scanner independente de acesso privado | Nenhum caminho de usuário, endereço administrativo, chave privada, senha, token ou segredo atribuído encontrado no conteúdo novo. |
 | URLs primárias citadas em `research.md` | Guia oficial SimpleX e dois arquivos fixados no commit upstream retornaram HTTP 200. |
 | Conferência dos IDs | 34 critérios únicos, 34 linhas únicas de rastreabilidade, conjuntos idênticos e todos `Pending`. |
 
@@ -54,7 +54,7 @@ No HEAD anterior `44efc731e68287e1416b6dc520a5ff1e0466a689`, `README.md:5` ainda
 - O checker Foundation não percorre recursivamente o conteúdo de `.specs/features/invitation-only`; nesta revisão, links internos e vazamentos foram cobertos pelo scanner independente. Ampliar o checker em entrega própria reduzirá essa dependência manual.
 - A issue #7 permanece aberta e sua descrição ainda apresenta a spec como pendente; isso corresponde ao PR ainda não integrado e deve ser reconciliado ao concluir a issue.
 - Nenhum dos 34 critérios recebeu teste de comportamento ou evidência de implementação. A própria spec os mantém `Pending` em `.specs/features/invitation-only/spec.md:180` a `:213`.
-- Não houve acesso a produção, credenciais, servidores, DNS, Mac mini, Tailscale, Alfred, simuladores ou contas Apple nesta verificação.
+- Não houve acesso a produção, credenciais, servidores, DNS, simuladores ou contas Apple nesta verificação.
 
 ## Gate de integração
 
