@@ -20,7 +20,7 @@ class FoundationTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         for name in ['README.md', 'README.upstream.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'LICENSE']:
             shutil.copy(ROOT / name, self.root / name)
-        for name in ['docs/taverna', '.agents/skills', '.specs/features/foundation', '.github/workflows']:
+        for name in ['docs/taverna', '.agents/skills', '.specs/features/foundation', '.specs/features/ios-first-build', '.github/workflows']:
             shutil.copytree(ROOT / name, self.root / name)
         (self.root / 'assets').mkdir()
         shutil.copy(ROOT / 'assets/ASSETS_LICENSE.md', self.root / 'assets/ASSETS_LICENSE.md')

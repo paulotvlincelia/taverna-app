@@ -10,7 +10,8 @@ import XCTest
 class Tests_iOSLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
-        true
+        // Preserve the upstream matrix unless the owner-approved first-build profile is explicit.
+        ProcessInfo.processInfo.environment["TAVERNA_UI_PROFILE"] != "first-build"
     }
 
     override func setUpWithError() throws {
@@ -18,8 +19,9 @@ class Tests_iOSLaunchTests: XCTestCase {
     }
 
     func testLaunch() throws {
-        let app = XCUIApplication()
-        app.launch()
+        let session = try TavernaUITestSession()
+        let app = session.app
+        try session.launch()
 
         // Insert steps here to perform after app launch but before taking a screenshot,
         // such as logging into a test account or navigating somewhere in the app
