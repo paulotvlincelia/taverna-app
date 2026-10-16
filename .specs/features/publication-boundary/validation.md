@@ -42,4 +42,3 @@ test failed; the real checkout remained unchanged.
 - `python3.12 tools/taverna/check_foundation.py --root .`: PASS.
 - `python3.12 -m compileall -q tools/taverna`: PASS.
 - `git diff --check`: PASS.
-
