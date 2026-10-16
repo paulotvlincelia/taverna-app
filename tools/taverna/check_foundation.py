@@ -43,9 +43,12 @@ def check(root: Path, release_assets: bool = False) -> list[str]:
                              or len(claude.read_text().splitlines()) > 6):
         errors.append("CLAUDE.md must redirect to AGENTS.md")
     docs = [root / n for n in ("README.md", "AGENTS.md", "CLAUDE.md", "CONTRIBUTING.md")]
-    for directory in ("docs/taverna", ".specs/features/foundation", ".agents/skills"):
+    for directory in ("docs/taverna", ".specs", ".agents/skills"):
         docs.extend((root / directory).rglob("*.md"))
     for path in docs:
+        if path.is_symlink() or not path.resolve().is_relative_to(root.resolve()):
+            errors.append(f"{path.relative_to(root)}: document outside repository")
+            continue
         if not path.is_file():
             continue
         text = path.read_text()
@@ -53,7 +56,10 @@ def check(root: Path, release_assets: bool = False) -> list[str]:
             target = target.strip("<>").split("#", 1)[0]
             if not target or re.match(r"[a-zA-Z]+:", target):
                 continue
-            if not (path.parent / unquote(target)).exists():
+            resolved = (path.parent / unquote(target)).resolve()
+            if not resolved.is_relative_to(root.resolve()):
+                errors.append(f"{path.relative_to(root)}: link outside repository")
+            elif not resolved.exists():
                 errors.append(f"{path.relative_to(root)}: broken link {target}")
         # Taverna-owned prose cannot carry local inventory or real access material.
         if re.search(r"/Users/[^/\s]+/|100\.(?:[6-9]\d|1[01]\d|12[0-7])\.\d+\.\d+|-----BEGIN .*PRIVATE KEY", text):
