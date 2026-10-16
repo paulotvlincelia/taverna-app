@@ -2,7 +2,7 @@
 
 Um espaço privado, por convite, para conversar sobre negócios, carreira, startups e assuntos sensíveis com pessoas escolhidas.
 
-A Taverna está em desenvolvimento. O primeiro destino é um app iOS com mensagens, mídia e pequenos grupos. Entrada por convite, configuração da instância e notificações próprias ainda serão especificadas e comprovadas.
+A Taverna está em desenvolvimento. O primeiro destino é um app iOS com mensagens, mídia e pequenos grupos. Entrada por convite e configuração da instância têm especificação aprovada e ainda precisam ser implementadas e comprovadas. Notificações próprias continuam pendentes de especificação detalhada e prova.
 
 ## Estado em 16 de outubro de 2026
 
@@ -33,6 +33,6 @@ Siga o [guia de build iOS](docs/taverna/ios-build.md) e as regras de [ambientes 
 
 ## Próximas entregas
 
-Inventariar assets/dependências e preparar identidade Taverna e notificações próprias. O primeiro build de base está comprovado; a distribuição ainda depende desses gates. Depois, especificar convites e testar distribuição. TestFlight é um canal beta com expiração; sua continuidade precisa de decisão própria.
+O [plano aprovado da próxima fase](.specs/features/invitation-only/spec.md) define entrada por convite, grupos controlados pelo proprietário e conversas entre convidados com aceite mútuo. Primeiro, comprovar a autorização e o uso dos servidores da instância em ambiente isolado. A fase de identidade produzirá um `DESIGN.md` com marca, tokens, componentes, telas e acessibilidade, acompanhado do inventário de assets/dependências. Os requisitos foram aprovados; a prova isolada de autorização e destinos é a próxima entrega, ainda sem funcionalidades entregues. Notificações e distribuição continuam com gates próprios. TestFlight é um canal beta com expiração; sua continuidade precisa de decisão própria.
 
 Acompanhe o [roadmap](docs/taverna/roadmap.md), o [Project público](https://github.com/users/paulotvlincelia/projects/5) e as [issues](https://github.com/paulotvlincelia/taverna-app/issues). O [plano público da fundação](.specs/features/foundation/spec.md) é autossuficiente. Infraestrutura em uso, conversas e credenciais não pertencem a este repositório.
