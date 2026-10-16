@@ -72,3 +72,15 @@ Nenhuma configuração global de confiança de caches foi modificada até esse r
 A tentativa com import-from-derivation e limite inicial de 1.800 s terminou com exit 124. Ela ainda compilava GHC 8.10.7 como auxiliar; nenhum caminho da derivação final foi produzido. O timeout permanece registrado em drv-path-ifd-receipt.json e não é PASS.
 
 A segunda tentativa iniciou em 2026-10-16 às 13:59:59 UTC, com limite de 5.400 s previsto para builds. Usa o mesmo commit, atributo e locks, com keep-failed. Registros próprios em .build/attempts/nix-core-evaluation-20261016-02. O receipt.json dessa tentativa só será emitido ao término; .build/active-native-core.json identifica o processo e a sessão em andamento. Os outputs já completos da store foram preservados. A compilação incompleta do compilador auxiliar reiniciou.
+
+## Consulta das configurações Xcode
+
+A consulta showBuildSettings terminou com exit 0, sem build ou lançamento. Para o alvo do app, confirmou SDK iphonesimulator27.1, plataforma iphonesimulator, arquitetura arm64 e produtos sob .build/DerivedData do worktree. Os overrides deixaram DEVELOPMENT_TEAM e CODE_SIGN_IDENTITY vazios e CODE_SIGNING_ALLOWED=NO; CODE_SIGNING_REQUIRED ainda aparece como YES na configuração consultada. Esses valores não comprovam instalação, assinatura ou execução de testes. A configuração efetiva do runner e dos demais produtos permanece por verificar na tarefa T3.
+
+Comando completo, ambiente, saída JSON e resumo estão em .build/attempts/xcode-settings-20261016. O mesmo isolamento de cache/Library usado na resolução SwiftPM foi mantido.
+
+## Ferramenta de transformação fixada
+
+Os cinco arquivos necessários para inspecionar mac2ios foram recuperados do commit 4dcb77d5ea896d749381806dfab5358851b08951, com URLs imutáveis e hashes individuais sob .build/attempts/mac2ios-qualification-20261016. Não foram compilados ou executados nessa preparação. A árvore e os headers examinados não declaram licença da ferramenta; ela não foi incorporada aos arquivos públicos do fork nem autorizada para redistribuição.
+
+A implementação trata LC_BUILD_VERSION com a plataforma escolhida por -s, mas trata o comando antigo LC_VERSION_MIN_MACOSX como iPhoneOS mesmo com essa opção. Portanto, executar mac2ios -s não basta como prova de compatibilidade: a inspeção dos objetos e dos produtos reais continua obrigatória.
