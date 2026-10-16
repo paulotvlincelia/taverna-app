@@ -2,7 +2,7 @@
 
 Um espaço privado, por convite, para conversar sobre negócios, carreira, startups e assuntos sensíveis com pessoas escolhidas.
 
-A Taverna está em desenvolvimento. O primeiro destino é um app iOS com mensagens, mídia e pequenos grupos. Entrada por convite, configuração da instância e notificações próprias ainda serão especificadas e comprovadas.
+A Taverna está em desenvolvimento. O primeiro destino é um app iOS com mensagens, mídia e pequenos grupos. Entrada por convite e configuração da instância têm especificação aprovada e ainda precisam ser implementadas e comprovadas. Notificações próprias continuam pendentes de especificação detalhada e prova.
 
 ## Estado em 16 de outubro de 2026
 
