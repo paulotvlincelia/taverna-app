@@ -43,4 +43,4 @@ Não havia executáveis nativos SMP/XFTP prontos no MacBook. O Docker Desktop j�
 
 Checkout detached do SimpleXMQ no SHA acima, git status --porcelain vazio; pesquisar newQueueBasicAuth, newFileBasicAuth, verifyQueueTransmission e verifyXFTPTransmission e ler seus ramos completos. Conferir também registros e testes citados, sem inferir funcionamento só pela presença de palavras.
 
-Nenhum acesso novo à VPS ou mudança em produção, DNS, firewall, Tailscale ou Alfred. Compatibilidade com serviços em uso, capacidade e custo ficam em qualificação operacional separada. Esta inspeção não autoriza uso sensível.
+Nenhum acesso novo à VPS ou mudança em produção, DNS, firewall ou ambientes administrativos externos. Compatibilidade com serviços em uso, capacidade e custo ficam em qualificação operacional separada. Esta inspeção não autoriza uso sensível.

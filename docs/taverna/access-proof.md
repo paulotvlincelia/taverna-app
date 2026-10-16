@@ -10,7 +10,7 @@ Onze testes de integração usam relays reais: mensagens SMP nos dois sentidos e
 
 Relays v7.0.0.6 vêm da release oficial v7.0.0, no mesmo commit SimpleXMQ fixado no núcleo do fork. O cliente CLI oficial v7.0.0.11 é de interoperabilidade e tem fonte distinto do build iOS. O XFTP CLI oficial usado como ferramenta de prova é experimental/deprecated; não foi adotado como componente do app. [Entradas e hashes](../../tools/taverna/access_proof/inputs.json).
 
-Duas redes Docker internas separam os clientes da rede dos relays. Somente a ponte participa das duas. Não há portas publicadas no host, modo privilegiado, acesso à VPS ou mudanças no Docker/Tailscale existentes. Estado da aplicação, chaves fictícias e logs ficam em `.build/access-qualification`. Imagens usam o cache do Docker Desktop já instalado; nenhum ambiente de outro projeto é reutilizado ou removido.
+Duas redes Docker internas separam os clientes da rede dos relays. Somente a ponte participa das duas. Não há portas publicadas no host, modo privilegiado, acesso à VPS ou mudanças na configuração do Docker ou de redes administrativas existentes. Estado da aplicação, chaves fictícias e logs ficam em `.build/access-qualification`. Imagens usam o cache do Docker Desktop já instalado; nenhum ambiente de outro projeto é reutilizado ou removido.
 
 ## Reproduzir no MacBook
 
