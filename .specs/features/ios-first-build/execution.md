@@ -253,3 +253,16 @@ A primeira realização nativa atingiu seu limite absoluto em 16:12:35 UTC. Ambo
 Preservados build.stdout, build.stderr.log e receipt.json dos dois clientes sob nix-core-realization-20261016, incluindo scheduler-02. A nova execução só foi iniciada depois de conferir ambos os receipts. Ela usa a mesma derivação c27zzp98xz7brkfbs4cgkp6gy4cfxix6-simplex-chat-lib-simplex-chat-7.0.0.12.drv, sem alterar receita, flags compiladas, fontes ou locks. O ajuste operacional é max-jobs=2/cores=5, para distribuir os dez núcleos disponíveis entre os builds. Não atribuir uma aceleração medida antes de observar o resultado.
 
 A nova tentativa começou às 16:12:41 UTC, com novo limite de 5.400 s, até 17:42:41 UTC. Não é extensão da tentativa anterior nem uma segunda reprodução do app. Estado/receipts próprios em .build/attempts/nix-core-realization-20261016-02; comando e PIDs em .build/active-native-core-retry.json. O runner local .build/native-core-retry.py recusa iniciar se os clientes anteriores estiverem ativos ou se a falha não for exclusivamente timeout. Nenhum limite de download ou testes foi aumentado.
+
+
+Observação da repetição: cores=5 é um parâmetro de paralelismo fornecido à receita pelo Nix, não um limite rígido de CPU. Os dois processos Hadrian observados usam -j sem número explícito. O registro parallelism-observation.json guarda essa informação; resource-observation.json registra a amostra dos processos próprios e memória. Não declarar cinco threads exatos nem aceleração comprovada somente por ter mudado a opção. A origem do worker foi identificada no log desta realização; nenhuma configuração do daemon foi alterada.
+
+### Retomada após atualização do Codex
+
+Em 2026-10-16, às 17:07 UTC, a reconciliação encontrou a tentativa nix-core-realization-20261016-02 sem receipt final, monitor, cliente, worker ou processo GHC/Hadrian ativo. O log parou às 17:04:43 UTC em GHC Stage1; nem o núcleo nem os dois compiladores finais estavam na store. O retorno original é desconhecido. A atualização/interrupção da sessão coincide com esse encerramento; não há prova da causa exata. O registro interruption.json preserva estado INTERRUPTED e exit_code null, sem inventar timeout ou falha de compilação.
+
+Os dois outputs GHC exatos retornaram HTTP 404 no cache autorizado, usando User-Agent Nix/2.34.9; consultas preservadas em update-recovery-20261016/cache-probes.json. Nenhuma fonte, receita, flag de compilação ou lock foi alterado.
+
+A preparação foi retomada às 17:08:30 UTC em uma dependência por vez, começando pela derivação 700zdsaz65dn4war5jzc6pwj20dbssfl-ghc-9.6.3.drv, já pertencente ao grafo aprovado. Agendamento max-jobs=1/cores=10; cores continua sendo uma indicação, não quota rígida. Limite de 5.400 segundos preservado, até 18:38:30 UTC. Logs, metadados e receipt próprio em .build/attempts/nix-ghc-small-20261016-03; sessão exec 57073. Isso prepara somente um compilador, não realiza o núcleo nem comprova o app. Não há compilação concorrente da tentativa anterior.
+
+T2/T7 permanecem concluídas; T1 continua sem seu gate final e T3–T6 pendentes. Todos os arquivos existentes e as evidências anteriores foram preservados. Nenhuma mudança no Tailscale, Mac mini, Alfred ou produção.
