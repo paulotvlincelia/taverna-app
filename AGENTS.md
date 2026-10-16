@@ -11,3 +11,7 @@ Nunca publicar chaves, convites reais, participantes, conversas, endereços admi
 CI sem segredos e sem mutações live. Credenciais Apple/APNs, release, gastos, produção e contas exigem autorização específica. Plano aprovado autoriza commits locais; push/merge dependem da autorização correspondente, CI e Verifier no último commit. Nenhum PASS local significa ambiente iOS ou operação prontos.
 
 Commits atômicos Conventional Commits. Execute os checks de CONTRIBUTING.md, preserve testes e asserções, registre comando/commit/resultado/limites. As instruções e ferramentas necessárias ao desenvolvimento devem estar versionadas ou documentadas neste repositório.
+
+Antes de qualquer push ou escrita de título/corpo/comentário/review/descrição/Project, usar o fluxo de publicação atribuído ao mantenedor: conferir repo canônico, ID, visibilidade, todos os commits enviados e classificação do conteúdo. Revisão independente deve corresponder ao digest exato. Classificação desconhecida bloqueia publicação. Não copiar inventários, restrições de máquinas/serviços externos ou narrativas administrativas para exemplos, planos, descrições e relatórios públicos. A CI detecta padrões genéricos depois de envio e não substitui o gate anterior à publicação.
+
+Após uma limpeza de histórico, branches antigas precisam de reconciliação antes de publicar. Não mesclar ancestrais substituídos para contornar a reescrita; preservar trabalho local e seguir o mapa de reconciliação fornecido pelo mantenedor.

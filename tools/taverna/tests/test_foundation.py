@@ -20,13 +20,26 @@ class FoundationTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         for name in ['README.md', 'README.upstream.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'LICENSE']:
             shutil.copy(ROOT / name, self.root / name)
-        for name in ['docs/taverna', '.agents/skills', '.specs/features/foundation', '.specs/features/ios-first-build', '.specs/features/invitation-only', '.github/workflows']:
+        for name in ['docs/taverna', '.agents/skills', '.specs', '.github/workflows']:
             shutil.copytree(ROOT / name, self.root / name)
         (self.root / 'assets').mkdir()
         shutil.copy(ROOT / 'assets/ASSETS_LICENSE.md', self.root / 'assets/ASSETS_LICENSE.md')
         proof_inputs = Path('tools/taverna/access_proof/inputs.json')
         (self.root / proof_inputs).parent.mkdir(parents=True)
         shutil.copy(ROOT / proof_inputs, self.root / proof_inputs)
+        # The recursive spec checker also inspects technical links from build records.
+        for name in [
+            'apps/ios/SimpleX.xcodeproj/project.pbxproj',
+            'apps/ios/SimpleX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved',
+            'flake.nix', 'flake.lock', 'scripts/ios/download-libs.sh',
+            'scripts/ios/prepare.sh', 'scripts/ios/prepare-x86_64.sh',
+            'apps/ios/Tests iOS/Tests_iOS.swift', 'apps/ios/Tests iOS/Tests_iOSLaunchTests.swift',
+            'apps/ios/Shared/Views/Onboarding/SimpleXInfo.swift',
+            'apps/ios/Shared/Views/Onboarding/CreateProfile.swift', 'apps/ios/Shared/SimpleXApp.swift',
+        ]:
+            target = self.root / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(ROOT / name, target)
         # Root prose links to original directories; include only targets required by prose.
         for name in ['docs/TRADEMARK.md', 'apps/ios/README.md']:
             target = self.root / name
@@ -87,6 +100,43 @@ class FoundationTests(unittest.TestCase):
     def test_attribution_required(self):
         (self.root / '.agents/skills/tlc-spec-lean/NOTICE.md').unlink()
         self.assertIn('skill attribution missing: tlc-spec-lean/NOTICE.md', foundation.check(self.root))
+
+    def test_new_feature_private_material_is_checked(self):
+        path = self.root / '.specs/features/new-feature/spec.md'
+        path.parent.mkdir(parents=True)
+        path.write_text('/Users/example/private\n')
+        self.assertIn('.specs/features/new-feature/spec.md: private access material', foundation.check(self.root))
+
+    def test_new_feature_links_are_checked(self):
+        path = self.root / '.specs/features/new-feature/spec.md'
+        path.parent.mkdir(parents=True)
+        path.write_text('[missing](missing.md)\n')
+        self.assertIn('.specs/features/new-feature/spec.md: broken link missing.md', foundation.check(self.root))
+
+    def test_root_handoff_is_checked(self):
+        (self.root / '.specs/STATE.md').write_text('/Users/example/private\n')
+        self.assertIn('.specs/STATE.md: private access material', foundation.check(self.root))
+
+    def test_owned_document_symlink_is_rejected(self):
+        path = self.root / '.specs/features/new-feature/spec.md'
+        path.parent.mkdir(parents=True)
+        external = Path(self.temp.name).parent / (self.root.name + '-external.md')
+        external.write_text('External content\n')
+        self.addCleanup(external.unlink)
+        path.symlink_to(external)
+        self.assertIn('.specs/features/new-feature/spec.md: document outside repository', foundation.check(self.root))
+
+    def test_relative_link_outside_repository_is_rejected(self):
+        external = Path(self.temp.name).parent / (self.root.name + '-outside.md')
+        external.write_text('External fixture\n')
+        self.addCleanup(external.unlink)
+        (self.root / 'README.md').write_text('[outside](../' + external.name + ')\n')
+        self.assertIn('README.md: link outside repository', foundation.check(self.root))
+
+    def test_broken_document_symlink_is_rejected(self):
+        path = self.root / '.specs/missing.md'
+        path.symlink_to(self.root / 'absent.md')
+        self.assertIn('.specs/missing.md: document outside repository', foundation.check(self.root))
 
     def test_cli_failure_nonzero(self):
         p = subprocess.run([sys.executable, str(ROOT / 'tools/taverna/check_foundation.py'), '--root', str(self.root), '--release-assets'], capture_output=True, text=True)
