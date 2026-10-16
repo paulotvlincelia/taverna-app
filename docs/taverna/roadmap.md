@@ -23,3 +23,5 @@ Sequência: requisitos aprovados; comprovar autorização individual e compatibi
 O DESIGN.md será produzido na raiz durante a fase de identidade. Seu contrato na spec cobre marca, tokens, componentes, estados, fluxos, acessibilidade, assets/licenças e tradução para iOS. Não existe identidade visual aprovada nesta etapa.
 
 O [experimento de fronteira de acesso](access-proof.md) usa relays oficiais isolados, com credenciais fictícias por dispositivo e testes de revogação. A prova local não é integração no app nem operação da VPS. O piloto histórico do proprietário permanece evidência de uso do SimpleX; os novos testes verificam somente a fronteira acrescentada pela Taverna.
+
+O PR #14 integrou a prova local após 12 testes reais, 70 regressões, CI e Verifier com seis mutações detectadas. O [desenho da integração de entrada](../../.specs/features/invitation-only/entry-design.md) está em revisão: transporte nativo antes de construir admissão, seguido de entrada visual guiada por DESIGN.md. O adaptador CLI do experimento não foi apresentado como integração iOS. Os critérios completos de convites, grupos e configuração continuam pendentes.
