@@ -202,3 +202,12 @@ O [Verifier independente](native-payload-review.md) inspecionou esses receipts e
 O sensor detectou seis falhas injetadas em scratch: texto alterado, byte alterado, URI inválido, revogação ignorada, política ausente autorizada e conexão extra à sentinela. Nos dois casos de política, o scratch reduziu somente a espera do mesmo predicado a 5 s; o teste versionado preserva 60 s. O mutante da sentinela prova seu observador, sem recompilar fallback no Swift. Nenhum bootstrap inválido contou como mutante detectado. O checkout, HEAD e produtos permaneceram intactos; somente o relatório foi criado ao fim.
 
 Este registro documental sucede o commit comprovado; não afirma novo build iOS para o commit de documentação. T4 exige lifecycle efetivo de Share Extension/NSE e continua aberta; T6 depende dela. Os oito NP e os 34 requisitos do produto permanecem Pending no agregado. O recorte pode ser publicado como PR em rascunho, sem integração da feature. Não há prova de aparelho, APNs, admissão, convite, distribuição ou operação live.
+
+
+### T5: revalidação da cadeia de publicação
+
+A branch `codex/15-native-access-qualified` preserva os fontes e testes byte a byte após reconciliação documental. A implementação T5 corresponde a `7d248badce6c4882c8ac879619d65bb782059141`; os SHAs anteriores nos relatórios permanecem a proveniência local histórica de suas rodadas. Não representam novos builds. As árvores `apps/ios` e `tools/taverna` e os quatro produtos são idênticos, conforme a [revalidação independente](native-publication-revalidation.md).
+
+No HEAD limpo `8d3d9a7ba3ad4225801e2d0565b2d0f74404e81c`, o build `payload-public-clean-a` passou com quatro produtos e fonte limpa. O autor repetiu os cinco casos em 149,742 s; o Verifier, em 147,802 s, e repetiu o startup padrão com 15 checkpoints em 23,421 s. Zero falhas/skips. Rodadas próprias e receipts novos preservam origem e isolamento. No autor, os cortes ocorreram em 0,1606 s e 0,1491 s; no Verifier, em 0,3059 s e 0,1685 s, dentro do limite de 60 s.
+
+O sensor 6/6 anterior é histórico, não foi reexecutado. O Verifier confirmou sua aplicabilidade por equivalência byte a byte e pela nova execução clean. Este fechamento acrescenta somente documentação, sem alterar código ou alegar novo build para seu commit. T4/T6 continuam NOT RUN; oito NP e 34 requisitos do produto continuam Pending. Revisão do pacote exato e CI ainda precedem a publicação do PR em rascunho; integração da feature continua impedida pelos gates ausentes.
