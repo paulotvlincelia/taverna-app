@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="1820" viewBox="0 0 1360 1820" role="img" aria-labelledby="title desc">
+<title id="title">Taverna: proposta visual 0.1, convite, conversas e conversa nos temas claro e escuro</title>
+<desc id="desc">Referência fictícia para aprovação. As seis telas são ilustrações, não capturas do app. Verde, papel quente, porta em arco e tipografia de sistema. Não representa validação de acessibilidade ou funcionalidades.</desc>
+<rect width="1360" height="1820" fill="#E8E5DE"/>
+<style>text{font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif} .label{font-size:14px;font-weight:600;letter-spacing:2px}</style>
+<text x="54" y="52" fill="#294D3E" font-size="14" font-weight="600">TAVERNA / ESTUDO DE IDENTIDADE</text>
+<text x="54" y="104" fill="#252924" font-size="34" font-weight="650">Um lugar reservado para conversar.</text>
+<text x="54" y="139" fill="#5E625B" font-size="16" font-weight="400">Proposta 0.1 · conteúdo fictício · aguarda aprovação · interface ainda não implementada</text>
+<text x="54" y="178" fill="#294D3E" font-size="14" font-weight="650">CLARO</text>
+<rect x="54" y="200" width="390" height="706" rx="28" fill="#F7F3EB" stroke="#7B8077"/>
+<text x="78" y="235" fill="#252924" font-size="14" font-weight="600">9:41</text>
+<text x="358" y="235" fill="#252924" font-size="13" font-weight="400">••• ▰</text>
+<text x="78" y="292" fill="#252924" font-size="27" font-weight="650">Taverna</text>
+<g transform="translate(218,338) scale(1.25)" fill="none" stroke="#294D3E" stroke-width="4" stroke-linecap="round"><path d="M4 48V22a20 20 0 0 1 40 0v26M0 48h48M14 47V23a10 10 0 0 1 20 0v24"/><circle cx="27" cy="32" r="1.5" fill="#294D3E"/></g>
+<text x="78" y="455" fill="#252924" font-size="22" font-weight="600">Você recebeu um convite.</text>
+<text x="78" y="487" fill="#5E625B" font-size="17" font-weight="400">Um espaço para conversas privadas</text>
+<text x="78" y="513" fill="#5E625B" font-size="17" font-weight="400">com pessoas convidadas.</text>
+<rect x="78" y="546" width="342" height="116" rx="20" fill="#FFFCF6"/>
+<text x="96" y="580" fill="#252924" font-size="17" font-weight="600">Taverna de demonstração</text>
+<text x="96" y="612" fill="#5E625B" font-size="15" font-weight="400">Convite individual · uma utilização</text>
+<text x="96" y="640" fill="#785127" font-size="15" font-weight="400">Válido por mais 2 dias</text>
+<text x="78" y="711" fill="#5E625B" font-size="14" font-weight="400">Ao confirmar, você entra na Taverna.</text>
+<rect x="78" y="736" width="342" height="54" rx="12" fill="#294D3E"/>
+<text x="167" y="770" fill="#FFFCF6" font-size="17" font-weight="600">Confirmar entrada</text>
+<text x="199" y="827" fill="#294D3E" font-size="17" font-weight="600">Agora não</text>
+<rect x="193" y="884" width="112" height="4" rx="2" fill="#252924"/>
+<text x="54" y="937" fill="#252924" font-size="17" font-weight="600">Confirmar convite</text>
+<rect x="489" y="200" width="390" height="706" rx="28" fill="#F7F3EB" stroke="#7B8077"/>
+<text x="513" y="235" fill="#252924" font-size="14" font-weight="600">9:41</text>
+<text x="793" y="235" fill="#252924" font-size="13" font-weight="400">••• ▰</text>
+<text x="513" y="292" fill="#252924" font-size="27" font-weight="650">Conversas</text>
+<rect x="513" y="318" width="342" height="46" rx="12" fill="#FFFCF6" stroke="#7B8077"/>
+<text x="530" y="347" fill="#5E625B" font-size="16" font-weight="400">Buscar conversas</text>
+<text x="513" y="407" fill="#5E625B" font-size="12" font-weight="600">SOLICITAÇÕES</text>
+<rect x="513" y="425" width="342" height="92" rx="18" fill="#FFFCF6"/>
+<text x="531" y="455" fill="#252924" font-size="16" font-weight="600">Solicitação de Ana</text>
+<text x="531" y="488" fill="#294D3E" font-size="17" font-weight="600">Aceitar</text>
+<text x="628" y="488" fill="#5E625B" font-size="17" font-weight="400">Recusar</text>
+<rect x="513" y="548" width="44" height="44" rx="22" fill="#E0EBDD"/>
+<text x="523" y="576" fill="#252924" font-size="14" font-weight="600">MI</text>
+<text x="571" y="565" fill="#252924" font-size="17" font-weight="600">Mesa de ideias</text>
+<text x="789" y="565" fill="#5E625B" font-size="12" font-weight="400">10:12</text>
+<text x="571" y="592" fill="#5E625B" font-size="14" font-weight="400">Podemos conversar amanhã?</text>
+<path d="M571 613H855" stroke="#ECE6DA"/>
+<rect x="513" y="635" width="44" height="44" rx="22" fill="#E0EBDD"/>
+<text x="523" y="663" fill="#252924" font-size="14" font-weight="600">CL</text>
+<text x="571" y="652" fill="#252924" font-size="17" font-weight="600">Clara</text>
+<text x="789" y="652" fill="#5E625B" font-size="12" font-weight="400">Ontem</text>
+<text x="571" y="679" fill="#5E625B" font-size="14" font-weight="400">Recebi o arquivo. Obrigada!</text>
+<path d="M571 700H855" stroke="#ECE6DA"/>
+<rect x="513" y="722" width="44" height="44" rx="22" fill="#E0EBDD"/>
+<text x="523" y="750" fill="#252924" font-size="14" font-weight="600">NO</text>
+<text x="571" y="739" fill="#252924" font-size="17" font-weight="600">Novos caminhos</text>
+<text x="789" y="739" fill="#5E625B" font-size="12" font-weight="400">Ontem</text>
+<text x="571" y="766" fill="#5E625B" font-size="14" font-weight="400">A proposta ficou pronta.</text>
+<path d="M571 787H855" stroke="#ECE6DA"/>
+<text x="542" y="862" fill="#294D3E" font-size="15" font-weight="600">Conversas</text>
+<text x="765" y="862" fill="#5E625B" font-size="15" font-weight="400">Ajustes</text>
+<rect x="628" y="884" width="112" height="4" rx="2" fill="#252924"/>
+<text x="489" y="937" fill="#252924" font-size="17" font-weight="600">Conversas</text>
+<rect x="924" y="200" width="390" height="706" rx="28" fill="#F7F3EB" stroke="#7B8077"/>
+<text x="948" y="235" fill="#252924" font-size="14" font-weight="600">9:41</text>
+<text x="1228" y="235" fill="#252924" font-size="13" font-weight="400">••• ▰</text>
+<text x="948" y="292" fill="#252924" font-size="27" font-weight="650">Mesa de ideias</text>
+<text x="948" y="318" fill="#5E625B" font-size="14" font-weight="400">3 membros · grupo do proprietário</text>
+<text x="1076" y="367" fill="#5E625B" font-size="12" font-weight="600">HOJE</text>
+<rect x="948" y="397" width="288" height="107" rx="18" fill="#FFFCF6"/>
+<text x="964" y="425" fill="#294D3E" font-size="14" font-weight="600">Ana</text>
+<text x="964" y="454" fill="#252924" font-size="17" font-weight="400">Podemos conversar amanhã</text>
+<text x="964" y="478" fill="#252924" font-size="17" font-weight="400">sobre a ideia?</text>
+<text x="1187" y="495" fill="#5E625B" font-size="11" font-weight="400">10:12</text>
+<rect x="1004" y="523" width="286" height="92" rx="18" fill="#E0EBDD"/>
+<text x="1020" y="554" fill="#252924" font-size="17" font-weight="400">Sim. Vou preparar alguns</text>
+<text x="1020" y="580" fill="#252924" font-size="17" font-weight="400">pontos para discutirmos.</text>
+<text x="1158" y="602" fill="#5E625B" font-size="12" font-weight="400">10:14 · Enviada</text>
+<rect x="948" y="642" width="294" height="74" rx="18" fill="#FFFCF6"/>
+<text x="966" y="671" fill="#252924" font-size="16" font-weight="550">Documento de exemplo.pdf</text>
+<text x="966" y="697" fill="#5E625B" font-size="14" font-weight="400">248 KB · Toque para abrir</text>
+<rect x="948" y="792" width="342" height="62" rx="16" fill="#FFFCF6" stroke="#7B8077"/>
+<text x="965" y="829" fill="#294D3E" font-size="23" font-weight="600">+</text>
+<text x="997" y="829" fill="#5E625B" font-size="17" font-weight="400">Mensagem</text>
+<text x="1231" y="829" fill="#294D3E" font-size="24" font-weight="650">↑</text>
+<rect x="1063" y="884" width="112" height="4" rx="2" fill="#252924"/>
+<text x="924" y="937" fill="#252924" font-size="17" font-weight="600">Conversa</text>
+<text x="54" y="958" fill="#294D3E" font-size="14" font-weight="650">ESCURO</text>
+<rect x="54" y="980" width="390" height="706" rx="28" fill="#151C18" stroke="#77897C"/>
+<text x="78" y="1015" fill="#F4EFE5" font-size="14" font-weight="600">9:41</text>
+<text x="358" y="1015" fill="#F4EFE5" font-size="13" font-weight="400">••• ▰</text>
+<text x="78" y="1072" fill="#F4EFE5" font-size="27" font-weight="650">Taverna</text>
+<g transform="translate(218,1118) scale(1.25)" fill="none" stroke="#BDD4B7" stroke-width="4" stroke-linecap="round"><path d="M4 48V22a20 20 0 0 1 40 0v26M0 48h48M14 47V23a10 10 0 0 1 20 0v24"/><circle cx="27" cy="32" r="1.5" fill="#BDD4B7"/></g>
+<text x="78" y="1235" fill="#F4EFE5" font-size="22" font-weight="600">Você recebeu um convite.</text>
+<text x="78" y="1267" fill="#B7C0B8" font-size="17" font-weight="400">Um espaço para conversas privadas</text>
+<text x="78" y="1293" fill="#B7C0B8" font-size="17" font-weight="400">com pessoas convidadas.</text>
+<rect x="78" y="1326" width="342" height="116" rx="20" fill="#1F2923"/>
+<text x="96" y="1360" fill="#F4EFE5" font-size="17" font-weight="600">Taverna de demonstração</text>
+<text x="96" y="1392" fill="#B7C0B8" font-size="15" font-weight="400">Convite individual · uma utilização</text>
+<text x="96" y="1420" fill="#D2AD73" font-size="15" font-weight="400">Válido por mais 2 dias</text>
+<text x="78" y="1491" fill="#B7C0B8" font-size="14" font-weight="400">Ao confirmar, você entra na Taverna.</text>
+<rect x="78" y="1516" width="342" height="54" rx="12" fill="#BDD4B7"/>
+<text x="167" y="1550" fill="#15251C" font-size="17" font-weight="600">Confirmar entrada</text>
+<text x="199" y="1607" fill="#BDD4B7" font-size="17" font-weight="600">Agora não</text>
+<rect x="193" y="1664" width="112" height="4" rx="2" fill="#F4EFE5"/>
+<text x="54" y="1717" fill="#252924" font-size="17" font-weight="600">Confirmar convite</text>
+<rect x="489" y="980" width="390" height="706" rx="28" fill="#151C18" stroke="#77897C"/>
+<text x="513" y="1015" fill="#F4EFE5" font-size="14" font-weight="600">9:41</text>
+<text x="793" y="1015" fill="#F4EFE5" font-size="13" font-weight="400">••• ▰</text>
+<text x="513" y="1072" fill="#F4EFE5" font-size="27" font-weight="650">Conversas</text>
+<rect x="513" y="1098" width="342" height="46" rx="12" fill="#1F2923" stroke="#77897C"/>
+<text x="530" y="1127" fill="#B7C0B8" font-size="16" font-weight="400">Buscar conversas</text>
+<text x="513" y="1187" fill="#B7C0B8" font-size="12" font-weight="600">SOLICITAÇÕES</text>
+<rect x="513" y="1205" width="342" height="92" rx="18" fill="#1F2923"/>
+<text x="531" y="1235" fill="#F4EFE5" font-size="16" font-weight="600">Solicitação de Ana</text>
+<text x="531" y="1268" fill="#BDD4B7" font-size="17" font-weight="600">Aceitar</text>
+<text x="628" y="1268" fill="#B7C0B8" font-size="17" font-weight="400">Recusar</text>
+<rect x="513" y="1328" width="44" height="44" rx="22" fill="#304B3A"/>
+<text x="523" y="1356" fill="#F4EFE5" font-size="14" font-weight="600">MI</text>
+<text x="571" y="1345" fill="#F4EFE5" font-size="17" font-weight="600">Mesa de ideias</text>
+<text x="789" y="1345" fill="#B7C0B8" font-size="12" font-weight="400">10:12</text>
+<text x="571" y="1372" fill="#B7C0B8" font-size="14" font-weight="400">Podemos conversar amanhã?</text>
+<path d="M571 1393H855" stroke="#2A362E"/>
+<rect x="513" y="1415" width="44" height="44" rx="22" fill="#304B3A"/>
+<text x="523" y="1443" fill="#F4EFE5" font-size="14" font-weight="600">CL</text>
+<text x="571" y="1432" fill="#F4EFE5" font-size="17" font-weight="600">Clara</text>
+<text x="789" y="1432" fill="#B7C0B8" font-size="12" font-weight="400">Ontem</text>
+<text x="571" y="1459" fill="#B7C0B8" font-size="14" font-weight="400">Recebi o arquivo. Obrigada!</text>
+<path d="M571 1480H855" stroke="#2A362E"/>
+<rect x="513" y="1502" width="44" height="44" rx="22" fill="#304B3A"/>
+<text x="523" y="1530" fill="#F4EFE5" font-size="14" font-weight="600">NO</text>
+<text x="571" y="1519" fill="#F4EFE5" font-size="17" font-weight="600">Novos caminhos</text>
+<text x="789" y="1519" fill="#B7C0B8" font-size="12" font-weight="400">Ontem</text>
+<text x="571" y="1546" fill="#B7C0B8" font-size="14" font-weight="400">A proposta ficou pronta.</text>
+<path d="M571 1567H855" stroke="#2A362E"/>
+<text x="542" y="1642" fill="#BDD4B7" font-size="15" font-weight="600">Conversas</text>
+<text x="765" y="1642" fill="#B7C0B8" font-size="15" font-weight="400">Ajustes</text>
+<rect x="628" y="1664" width="112" height="4" rx="2" fill="#F4EFE5"/>
+<text x="489" y="1717" fill="#252924" font-size="17" font-weight="600">Conversas</text>
+<rect x="924" y="980" width="390" height="706" rx="28" fill="#151C18" stroke="#77897C"/>
+<text x="948" y="1015" fill="#F4EFE5" font-size="14" font-weight="600">9:41</text>
+<text x="1228" y="1015" fill="#F4EFE5" font-size="13" font-weight="400">••• ▰</text>
+<text x="948" y="1072" fill="#F4EFE5" font-size="27" font-weight="650">Mesa de ideias</text>
+<text x="948" y="1098" fill="#B7C0B8" font-size="14" font-weight="400">3 membros · grupo do proprietário</text>
+<text x="1076" y="1147" fill="#B7C0B8" font-size="12" font-weight="600">HOJE</text>
+<rect x="948" y="1177" width="288" height="107" rx="18" fill="#1F2923"/>
+<text x="964" y="1205" fill="#BDD4B7" font-size="14" font-weight="600">Ana</text>
+<text x="964" y="1234" fill="#F4EFE5" font-size="17" font-weight="400">Podemos conversar amanhã</text>
+<text x="964" y="1258" fill="#F4EFE5" font-size="17" font-weight="400">sobre a ideia?</text>
+<text x="1187" y="1275" fill="#B7C0B8" font-size="11" font-weight="400">10:12</text>
+<rect x="1004" y="1303" width="286" height="92" rx="18" fill="#304B3A"/>
+<text x="1020" y="1334" fill="#F4EFE5" font-size="17" font-weight="400">Sim. Vou preparar alguns</text>
+<text x="1020" y="1360" fill="#F4EFE5" font-size="17" font-weight="400">pontos para discutirmos.</text>
+<text x="1158" y="1382" fill="#B7C0B8" font-size="12" font-weight="400">10:14 · Enviada</text>
+<rect x="948" y="1422" width="294" height="74" rx="18" fill="#1F2923"/>
+<text x="966" y="1451" fill="#F4EFE5" font-size="16" font-weight="550">Documento de exemplo.pdf</text>
+<text x="966" y="1477" fill="#B7C0B8" font-size="14" font-weight="400">248 KB · Toque para abrir</text>
+<rect x="948" y="1572" width="342" height="62" rx="16" fill="#1F2923" stroke="#77897C"/>
+<text x="965" y="1609" fill="#BDD4B7" font-size="23" font-weight="600">+</text>
+<text x="997" y="1609" fill="#B7C0B8" font-size="17" font-weight="400">Mensagem</text>
+<text x="1231" y="1609" fill="#BDD4B7" font-size="24" font-weight="650">↑</text>
+<rect x="1063" y="1664" width="112" height="4" rx="2" fill="#F4EFE5"/>
+<text x="924" y="1717" fill="#252924" font-size="17" font-weight="600">Conversa</text>
+<text x="54" y="1782" fill="#5E625B" font-size="15" font-weight="400">Referência original Taverna · CC BY 4.0 · símbolo provisório · escala de composição 390 pt</text>
+</svg>

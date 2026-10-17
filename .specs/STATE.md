@@ -6,10 +6,9 @@ As decisões canônicas ficam em [docs/taverna/decisions](../docs/taverna/decisi
 
 ## Handoff
 
-- Feature: invitation-only; spec aprovada no PR #11, issue #7. A prova AP-01..07 entrou pelo PR #14 em da9136c541dd4ca06da0269dfd12355a360e0d3b; issue #12 encerrada. Os 34 requisitos do produto seguem Pending.
-- Método: TLC Spec Driven; retomada para desenho da integração, com spec/contexto preservados. O proprietário pediu continuar e preferiu solução simples. A rota A foi aprovada somente para o experimento; o novo desenho não inventa aprovação de arquitetura de produção.
-- Estado: entry-design.md propõe adaptador SOCKS nativo sobre a ponte, admissão pequena com estado transacional e entrada visual depois do DESIGN.md. Código e fontes oficiais fundamentam a proposta; viabilidade do adaptador iOS/extensões permanece NOT RUN.
-- Próximo passo: verificar e publicar este desenho documental; confirmar A1 e a interação administrativa proposta antes das tarefas formais/implementação. Primeiro gate técnico será transporte nativo real, incluindo falhas/fallback e os três targets; não reutilizar receipt offline do primeiro build como prova de rede.
-- Ownership: Codex, harness e integrador; branch codex/invitation-entry-plan; worktree irmão taverna-app-worktrees/invitation-entry-plan. Escopo: entry-design.md, README, roadmap e este handoff. Verifier só escreve relatório independente.
-- Recursos: somente pesquisa read-only e snapshots públicos em .build/invitation-entry, ignorados; nenhum estado de simulator, container ou provider alterado. Preservar worktrees/evidências e o preview existentes.
-- Limites: não implementar telas antes do DESIGN.md aprovado; produção, DNS, ambientes administrativos externos, credenciais, app, CI, locks e licenças preservados. Nenhum token, chave ou URL de convite completa no Git.
+- Feature: invitation-only, BRAND-01, proposta documental de identidade solicitada pelo proprietário. TLC Spec Driven preserva contrato e critérios aprovados; skill design auxilia o briefing, anti-ai-slop auxilia a escrita.
+- Branch: codex/identity-design-draft; base c25dc4eb0. Codex autor/harness/integrador. Worktree exclusivo identity-design-draft; responsabilidade: DESIGN.md, docs/taverna/design, README, checker/fixture Foundation necessários à nova raiz documental e este handoff.
+- Scope: Draft 0.1.0, proposta de marca/cores/tipos/componentes/estados e três telas em claro/escuro. Referências originais documentais; nenhum asset de distribuição aprovado. Não altera interface, assinatura, protocolos ou operação.
+- Checks: executar os 78 testes Foundation, checker, compileall, contraste e whitespace; revisão independente documental antes de publicar. Os dois testes novos verificam links e material privado no DESIGN.md; as 76 asserções/suítes anteriores permanecem.
+- Next: submeter a direção/símbolo/navegação ao proprietário. BRAND-02/03 e demais requisitos continuam Pending até suas provas. Nenhuma aprovação artística foi inferida do pedido de preparar o documento.
+- Native transport: continua no worktree próprio; esta branch não altera ou integra o transporte. Publicação exige pacote classificado/digest exato e integração exige CI e Verifier.

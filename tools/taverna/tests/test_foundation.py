@@ -18,7 +18,7 @@ class FoundationTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        for name in ['README.md', 'README.upstream.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'LICENSE']:
+        for name in ['README.md', 'README.upstream.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'DESIGN.md', 'LICENSE']:
             shutil.copy(ROOT / name, self.root / name)
         for name in ['docs/taverna', '.agents/skills', '.specs', '.github/workflows']:
             shutil.copytree(ROOT / name, self.root / name)
@@ -83,6 +83,14 @@ class FoundationTests(unittest.TestCase):
     def test_broken_link(self):
         with (self.root / 'README.md').open('a') as f: f.write('\n[broken](missing.md)\n')
         self.assertIn('README.md: broken link missing.md', foundation.check(self.root))
+
+    def test_design_broken_link(self):
+        with (self.root / 'DESIGN.md').open('a') as f: f.write('\n[broken](missing-design.md)\n')
+        self.assertIn('DESIGN.md: broken link missing-design.md', foundation.check(self.root))
+
+    def test_design_private_material(self):
+        with (self.root / 'DESIGN.md').open('a') as f: f.write('\n/Users/example/private\n')
+        self.assertIn('DESIGN.md: private access material', foundation.check(self.root))
 
     def test_local_path_blocked(self):
         with (self.root / 'README.md').open('a') as f: f.write('\n/Users/example/private\n')
