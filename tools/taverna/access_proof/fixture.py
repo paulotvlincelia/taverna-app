@@ -43,7 +43,7 @@ def fingerprint(who):
     return hashlib.sha256(ssl.PEM_cert_to_DER_cert(cert)).hexdigest()
 
 
-def make_credentials():
+def make_credentials(native=False):
     directory = RUN / 'gateway'
     directory.mkdir(exist_ok=True)
     for who in ('alice','bob','unknown'):
@@ -58,6 +58,11 @@ def make_credentials():
         (RUN/who/(name+'.ext')).write_text(ext+'\n')
         commands += [f'openssl req -newkey ed25519 -nodes -keyout {base}/{name}.key -out {base}/{name}.csr -subj /CN={cn}',
                      f'openssl x509 -req -in {base}/{name}.csr -CA /work/run-a/gateway/ca.crt -CAkey /work/run-a/gateway/ca.key -CAcreateserial -out {base}/{name}.crt -days 2 -extfile {base}/{name}.ext']
+    if native:
+        commands = [command.replace('-newkey ed25519', '-newkey ec -pkeyopt ec_paramgen_curve:P-256') for command in commands]
+        commands += ['openssl x509 -in /work/run-a/gateway/ca.crt -outform DER -out /work/run-a/gateway/ca.der']
+        for who in ('alice','bob','unknown'):
+            commands += [f'openssl pkcs12 -export -in /work/run-a/{who}/device.crt -inkey /work/run-a/{who}/device.key -certfile /work/run-a/gateway/ca.crt -out /work/run-a/{who}/device.p12 -passout pass:fixture-only']
     result=docker('run','--rm','--network','none','--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--user',f'{os.getuid()}:{os.getgid()}',
                   '--mount',f'type=bind,src={WORK},dst=/work',IMAGE,'sh','-c','; '.join(c.replace('/work/run-a/','/work/'+RUN.name+'/') for c in commands))
     (RUN/'cert-generation.log').write_text(result.stdout+result.stderr)
@@ -92,12 +97,16 @@ def initialize():
     print('Qualified binaries initialized in a new exclusive run.')
 
 
-def start():
+def start(native=False):
     for name in NAMES:
         if docker('container','inspect',name,check=False).returncode==0: raise RuntimeError('Existing fixture: preserve and inspect '+name)
     for net in ('inner','outer'):
         docker('network','create','--internal',PREFIX+'-'+net)
-    make_credentials()
+    if native:
+        # Docker does not publish ports on an internal-only network. This
+        # dedicated host-facing bridge contains only the gateway, never relays.
+        docker('network','create',PREFIX+'-native-host')
+    make_credentials(native=native)
     smp=RUN/'smp-config/smp-server.ini'
     smp.write_text(smp.read_text().replace('port = 5223,443','port = 5223'))
     xftp=RUN/'xftp-config/file-server.ini'
@@ -105,7 +114,12 @@ def start():
     args=base_run('relay','inner',[(WORK,'/work',False)])
     for key,value in {'SMP_SERVER_CFG_PATH':'/work/run-a/smp-config','SMP_SERVER_LOG_PATH':'/work/run-a/smp-log','XFTP_SERVER_CFG_PATH':'/work/run-a/xftp-config','XFTP_SERVER_LOG_PATH':'/work/run-a/xftp-log'}.items():args+=['-e',key+'='+value.replace('/work/run-a/','/work/'+RUN.name+'/')]
     docker(*args,IMAGE,'sh','-c',f'/work/bin/smp-server-ubuntu-24_04-aarch64 start > /work/{RUN.name}/smp.log 2>&1 & /work/bin/xftp-server-ubuntu-24_04-aarch64 start > /work/{RUN.name}/xftp.log 2>&1 & wait')
-    docker(*base_run('gateway','inner',[(RUN/'gateway','/gateway',True),(SOURCE,'/source',True)]),IMAGE,'python3','/source/gateway.py','/gateway')
+    gateway_args=base_run('gateway','native-host' if native else 'inner',[(RUN/'gateway','/gateway',True),(SOURCE,'/source',True)])
+    if native:
+        gateway_args += ['-p','127.0.0.1::15223','-p','127.0.0.1::15443']
+    docker(*gateway_args,IMAGE,'python3','/source/gateway.py','/gateway',*(['--audit'] if native else []))
+    if native:
+        docker('network','connect',PREFIX+'-inner',PREFIX+'-gateway')
     docker('network','connect','--alias','gateway',PREFIX+'-outer',PREFIX+'-gateway')
     for who in ('alice','bob','unknown'):
         docker(*base_run(who,'outer',[(RUN/who,'/client',False),(WORK/'bin','/bin-proof',True),(SOURCE,'/source',True)]),IMAGE,'sleep','3600')
@@ -113,7 +127,7 @@ def start():
     for who in ('alice','bob'):
         execute(who,'sh','-c','python3 /source/client.py bridge > /client/bridge.log 2>&1 &')
     time.sleep(.5)
-    print('Fixture started: private inner/outer networks; zero published ports.')
+    print('Fixture started: private inner/outer networks; '+('native gateway on loopback only.' if native else 'zero published ports.'))
 
 
 def api(who,cmd):
@@ -149,7 +163,7 @@ def stop():
         if docker('container','inspect',name,check=False).returncode==0:
             docker('stop','--time','3',name)
             docker('rm',name)
-    for net in ('outer','inner'):
+    for net in ('outer','inner','native-host'):
         if docker('network','inspect',PREFIX+'-'+net,check=False).returncode==0:
             docker('network','rm',PREFIX+'-'+net)
     print('Only named fixture containers/networks removed; files preserved.')

@@ -20,6 +20,12 @@ Seen once or not yet corroborated. Tracked, not trusted.
 - evidence: .specs/features/invitation-only/access-proof-validation.md#ciclo-1 (tools/taverna/access_proof)
 - last seen: 2026-10-16T23:24:16Z
 
+### L-002 - Record sanitized authorization decisions and backend-open failures before treating a TLS EOF as causal evidence
+- signal: `gate_fail` · recurrence: 1 feature(s) · scope: `tools/taverna/native_access_tests` · harmful: 0
+- features: invitation-only
+- evidence: .specs/features/invitation-only/native-review.md#t2-fail-no-gate-causa-inconclusive (tools/taverna/native_access_tests)
+- last seen: 2026-10-17T00:00:37Z
+
 ## Quarantined (failed when applied - ignore)
 
 A confirmed lesson that recurred alongside failure. Kept for the maintainer to review.

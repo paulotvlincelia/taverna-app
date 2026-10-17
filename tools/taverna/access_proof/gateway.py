@@ -4,6 +4,7 @@ from __future__ import annotations
 import asyncio
 import contextlib
 import hashlib
+import itertools
 import json
 from pathlib import Path
 import ssl
@@ -12,6 +13,7 @@ import sys
 # Administrative constants. No client-supplied destination or CONNECT API.
 ROUTES = ((15223, 'relay', 5223), (15443, 'relay', 8443))
 POLL_SECONDS = 0.2
+AUDIT_IDS = itertools.count(1)
 
 
 def permitted(policy: Path, certificate: bytes) -> bool:
@@ -33,7 +35,12 @@ async def pump(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         await writer.drain()
 
 
-async def connect(reader, writer, *, policy, backend):
+async def connect(reader, writer, *, policy, backend, audit=False):
+    connection_id=next(AUDIT_IDS) if audit else None
+    def record(event):
+        if audit:
+            # Fixture diagnostics: no peer, certificate, key, payload or address.
+            print(json.dumps({'event':event,'connection':connection_id,'protocol':'smp' if backend[1]==5223 else 'xftp'}),flush=True)
     certificate = writer.get_extra_info('peercert', default=None)
     tls = writer.get_extra_info('ssl_object')
     der = tls.getpeercert(binary_form=True) if tls and certificate else b''
@@ -41,20 +48,27 @@ async def connect(reader, writer, *, policy, backend):
     tasks = []
     try:
         if not der or not permitted(policy, der):
+            record('denied_before_backend')
             return
+        record('authorized_before_backend')
         upstream, remote = await asyncio.wait_for(asyncio.open_connection(*backend), 3)
         # Recheck after opening the backend: revocation can race the connect.
         if not permitted(policy, der):
+            record('denied_after_backend')
             return
+        record('authorized_after_backend')
 
         async def watch():
             while permitted(policy, der):
                 await asyncio.sleep(POLL_SECONDS)
+            record('association_no_longer_active')
 
         tasks = [asyncio.create_task(pump(reader, remote)), asyncio.create_task(pump(upstream, writer)), asyncio.create_task(watch())]
-        await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+        done,_ = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+        for task,event in zip(tasks,('client_stream_ended','backend_stream_ended','authorization_ended')):
+            if task in done:record(event)
     except (OSError, asyncio.TimeoutError, ssl.SSLError):
-        pass
+        record('transport_error')
     finally:
         for task in tasks:
             task.cancel()
@@ -66,7 +80,7 @@ async def connect(reader, writer, *, policy, backend):
                     await stream.wait_closed()
 
 
-async def main(directory):
+async def main(directory, audit=False):
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.minimum_version = ssl.TLSVersion.TLSv1_3
     context.verify_mode = ssl.CERT_REQUIRED
@@ -75,11 +89,11 @@ async def main(directory):
     servers = []
     for port, host, target in ROUTES:
         async def accept(reader, writer, target=target, host=host):
-            await connect(reader, writer, policy=directory / 'policy.json', backend=(host, target))
+            await connect(reader, writer, policy=directory / 'policy.json', backend=(host, target), audit=audit)
         servers.append(await asyncio.start_server(accept, '0.0.0.0', port, ssl=context, ssl_handshake_timeout=3))
     print('READY: experimental boundary; two fixed backends; no enrollment', flush=True)
     await asyncio.gather(*(server.serve_forever() for server in servers))
 
 
 if __name__ == '__main__':
-    asyncio.run(main(Path(sys.argv[1])))
+    asyncio.run(main(Path(sys.argv[1]),audit=sys.argv[2:]==['--audit']))

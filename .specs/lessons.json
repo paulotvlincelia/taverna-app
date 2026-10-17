@@ -3,7 +3,7 @@
   "promote_threshold": 2,
   "window_days": 45,
   "quarantine_threshold": 2,
-  "next_id": 2,
+  "next_id": 3,
   "lessons": [
     {
       "id": "L-001",
@@ -22,6 +22,24 @@
       ],
       "created": "2026-10-16T23:24:16Z",
       "last_seen": "2026-10-16T23:24:16Z"
+    },
+    {
+      "id": "L-002",
+      "key": "gate_fail::record sanitized authorization decisions and backend open failures before treating a tls eof as causal evidence",
+      "text": "Record sanitized authorization decisions and backend-open failures before treating a TLS EOF as causal evidence",
+      "signal": "gate_fail",
+      "scope": "tools/taverna/native_access_tests",
+      "status": "candidate",
+      "features": [
+        "invitation-only"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        ".specs/features/invitation-only/native-review.md#t2-fail-no-gate-causa-inconclusive (tools/taverna/native_access_tests)"
+      ],
+      "created": "2026-10-17T00:00:37Z",
+      "last_seen": "2026-10-17T00:00:37Z"
     }
   ]
 }

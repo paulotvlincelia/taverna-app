@@ -57,8 +57,8 @@ T1 → T2 → T3 → T4 → T5 → T6
 **Depends on**: T1
 **Reuses**: Codec, Network.framework, ponte/inputs oficiais do experimento anterior.
 **Done when**:
-- [ ] Ativo preserva TLS interno, credencial/rota/TLS inválidos negam; segredo de processo, timeout, cancelamento e limite são comprovados.
-- [ ] Keychain pessoal e política/containers de outras rodadas permanecem intactos; Full passa.
+- [x] Componente isolado em macOS: ativo preserva TLS interno, credencial/rota/TLS inválidos negam; segredo de processo, timeout, cancelamento e limite são comprovados em dez testes. Ainda não é execução do app.
+- [x] Keychain pessoal e política/containers de outras rodadas permanecem intactos; Full passa, com artefatos arm64 iOS Simulator compilados e regressões preservadas. Evidências em native-execution.md.
 **Tests**: integration
 **Gate**: Full
 
