@@ -10,3 +10,11 @@ Atualizações upstream entram por PR, registrando SHA anterior/novo, mudanças 
 
 
 O primeiro build iOS acrescenta ferramentas locais de preparo/sessão/prova, manifesto fixado e teste do onboarding. A única correção de compatibilidade no código do app é um alias do tipo SwiftUI.State em ChatView, preservando a composição State<ObservedObject<Chat>> diante do macro do SDK 27.1. Os testes herdados continuam disponíveis; o perfil first-build aprovado não expande a matriz integral e executa todos os quatro métodos/asserts. Não há alteração de protocolo, criptografia, locks ou fluxo de mensagens. O [guia](ios-build.md) registra os comandos, e a [execução](../../.specs/features/ios-first-build/execution.md) identifica provas e limites. Os artefatos permanecem locais; essa prova não autoriza distribuir os assets herdados.
+
+## Referências após a reconciliação documental
+
+Em 2026-10-16, o histórico próprio posterior à base upstream foi reconciliado para generalizar a documentação. A base upstream mantém o mesmo SHA. Todos os blobs não documentais de cada commit mapeado foram preservados; a reescrita muda SHAs e invalida assinaturas dos commits afetados.
+
+A implementação que as duas reproduções iOS aprovaram originalmente em `6ea482bd4a1912d8eef52904d930c7f6c57bf746` corresponde agora ao commit `65dd2bc8afe0eedc58d99c779bd831c5b880065a` no histórico limpo. Esse é o ponto correspondente para consultar ou reproduzir o código técnico daquela prova. Os relatórios anteriores conservam o SHA original como proveniência. A comparação dos blobs comprova preservação do fonte; nenhuma nova execução iOS é alegada pela reconciliação.
+
+Use uma base remota atualizada para novas entregas. Preserve seu delta local e reconcilie-o em um worktree novo antes de publicar; mesclar uma base anterior pode reintroduzir o histórico substituído.

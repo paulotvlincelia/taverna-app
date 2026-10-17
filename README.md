@@ -29,7 +29,7 @@ python3.12 -m unittest discover -s tools/taverna/tests -v
 python3.12 tools/taverna/check_foundation.py
 ```
 
-Siga o [guia de build iOS](docs/taverna/ios-build.md) e as regras de [ambientes isolados](docs/taverna/environments.md). Os [registros da primeira prova](.specs/features/ios-first-build/execution.md) distinguem tentativas interrompidas, prova local e gates finais. As duas reproduções, a CI e o Verifier independente aprovaram o commit `6ea482bd4`; o [relatório](.specs/features/ios-first-build/validation.md) cobre os 20 critérios e seis falhas injetadas detectadas. O estado está nas [tarefas](.specs/features/ios-first-build/tasks.md). Os comandos upstream em [apps/ios/README.md](apps/ios/README.md) são referências técnicas; use o procedimento isolado versionado, com entradas fixadas.
+Siga o [guia de build iOS](docs/taverna/ios-build.md) e as regras de [ambientes isolados](docs/taverna/environments.md). Os [registros da primeira prova](.specs/features/ios-first-build/execution.md) distinguem tentativas interrompidas, prova local e gates finais. As duas reproduções, a CI e o Verifier independente aprovaram o commit `6ea482bd4`; o [relatório](.specs/features/ios-first-build/validation.md) cobre os 20 critérios e seis falhas injetadas detectadas. O estado está nas [tarefas](.specs/features/ios-first-build/tasks.md). Após a reconciliação documental do histórico, o código correspondente à prova está em `65dd2bc8afe0eedc58d99c779bd831c5b880065a`; [proveniência](docs/taverna/provenance.md#referências-após-a-reconciliação-documental) explica a correspondência e os limites. Os comandos upstream em [apps/ios/README.md](apps/ios/README.md) são referências técnicas; use o procedimento isolado versionado, com entradas fixadas.
 
 ## Próximas entregas
 
