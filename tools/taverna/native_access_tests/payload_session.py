@@ -87,7 +87,7 @@ class PayloadSession:
         self.owned = json.loads((ROOT/'.build/ios-session.json').read_text())
         session.validate_sdk_indexes(self.owned)
         session.validate_session(ROOT, self.owned, self.owned['udid'])
-        guards = json.loads((ROOT/'.build/attempts/guard/guard-manifest.json').read_text())
+        guards = json.loads((session.inside(ROOT, Path(os.environ.get('TAVERNA_NATIVE_GUARD', '.build/attempts/guard/guard-manifest.json')))).read_text())
         session.validate_guard(ROOT, guards)
         components = {Path(p).name:p for p in guards}
         self.app_path = ROOT/'.build/DerivedData/Build/Products/Debug-iphonesimulator/SimpleX.app'

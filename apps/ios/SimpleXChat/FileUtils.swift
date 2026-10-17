@@ -72,7 +72,16 @@ func getLegacyDatabasePath() -> URL {
 
 // Spec: spec/database.md#getAppDatabasePath
 public func getAppDatabasePath() -> URL {
-    dbContainerGroupDefault.get() == .group
+    #if DEBUG && targetEnvironment(simulator)
+    if let path = ProcessInfo.processInfo.environment["TAVERNA_SHARE_PROBE"] {
+        let config = URL(fileURLWithPath: path).resolvingSymlinksInPath()
+        let checkout = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+        precondition(config.path.hasPrefix(checkout.appendingPathComponent(".build/access-qualification/run-").path)
+                     && config.lastPathComponent == "config.json" && config.deletingLastPathComponent().lastPathComponent == "ios")
+        return config.deletingLastPathComponent().appendingPathComponent("share-core")
+    }
+    #endif
+    return dbContainerGroupDefault.get() == .group
     ? getGroupContainerDirectory().appendingPathComponent(DB_FILE_PREFIX, isDirectory: false)
     : getLegacyDatabasePath()
 }

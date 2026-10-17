@@ -22,6 +22,7 @@ func apiGetActiveUser() throws -> User? {
 }
 
 func apiStartChat() throws -> Bool {
+    try apiSetNetworkConfig(getNetCfg())
     let r: APIResult<SEChatResponse> = sendSimpleXCmd(SEChatCommand.startChat(mainApp: false, enableSndFiles: true))
     switch r {
     case .result(.chatStarted): return true
@@ -31,7 +32,7 @@ func apiStartChat() throws -> Bool {
 }
 
 func apiSetNetworkConfig(_ cfg: NetCfg) throws {
-    let r: APIResult<SEChatResponse> = sendSimpleXCmd(SEChatCommand.apiSetNetworkConfig(networkConfig: cfg))
+    let r: APIResult<SEChatResponse> = sendSimpleXCmd(SEChatCommand.apiSetNetworkConfig(networkConfig: try TavernaCoreTransport.networkConfig(cfg)))
     if case .result(.cmdOk) = r { return }
     throw r.unexpected
 }
@@ -85,7 +86,9 @@ func apiSendMessages(
 }
 
 func apiActivateChat() throws {
+    let managed = try TavernaCoreTransport.networkConfig(getNetCfg())
     chatReopenStore()
+    try apiSetNetworkConfig(managed)
     let r: APIResult<SEChatResponse> = sendSimpleXCmd(SEChatCommand.apiActivateChat(restoreChat: false))
     if case .result(.cmdOk) = r { return }
     throw r.unexpected

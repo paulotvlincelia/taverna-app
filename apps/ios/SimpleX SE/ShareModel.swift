@@ -171,8 +171,10 @@ class ShareModel: ObservableObject {
         }
     }
 
-    private func initChat(with dbKey: String? = nil) -> ErrorAlert? {
+    func initChat(with dbKey: String? = nil) -> ErrorAlert? {
         do {
+            // Reject unavailable transport before opening a database or starting the core.
+            _ = try TavernaCoreTransport.networkConfig(getNetCfg())
             if hasChatCtrl() && dbKey == nil {
                 try apiActivateChat()
             } else {
@@ -189,7 +191,6 @@ class ShareModel: ObservableObject {
                 let isRunning = try apiStartChat()
                 logger.log(level: .debug, "chat started, running: \(isRunning)")
             }
-            try apiSetNetworkConfig(getNetCfg())
             try apiSetEncryptLocalFiles(privacyEncryptLocalFilesGroupDefault.get())
         } catch { return ErrorAlert(error) }
         return nil

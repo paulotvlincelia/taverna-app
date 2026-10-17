@@ -1,13 +1,14 @@
 import Foundation
 import SimpleXChat
 import Security
+import SwiftUI
 
 // Simulator-only qualification. No enrollment, production credential loading or
-// UI. Release/device builds cannot select this path using environment variables.
+// product UI. Release/device builds cannot select this path using environment variables.
 enum TavernaNativeProbe {
     static var active: Bool {
         #if DEBUG && targetEnvironment(simulator)
-        return ProcessInfo.processInfo.environment["TAVERNA_NATIVE_PROBE"] != nil
+        return ProcessInfo.processInfo.environment["TAVERNA_NATIVE_PROBE"] != nil || TavernaShareHost.active
         #else
         return false
         #endif
@@ -15,7 +16,7 @@ enum TavernaNativeProbe {
 
     static func startIfRequested() {
         #if DEBUG && targetEnvironment(simulator)
-        guard active else { return }
+        guard ProcessInfo.processInfo.environment["TAVERNA_NATIVE_PROBE"] != nil else { return }
         DispatchQueue.global().async { run() }
         #endif
     }
@@ -242,3 +243,29 @@ enum TavernaNativeProbe {
     }
     #endif
 }
+
+// UIKit is the actual extension host; this surface only exists in DEBUG Simulator.
+enum TavernaShareHost {
+    static var active: Bool {
+        #if DEBUG && targetEnvironment(simulator)
+        ProcessInfo.processInfo.environment["TAVERNA_SHARE_HOST"] == "1"
+        #else
+        false
+        #endif
+    }
+}
+#if DEBUG && targetEnvironment(simulator)
+struct TavernaShareHostView: View {
+    @State private var showing = false
+    var body: some View {
+        Button("Share qualification") { showing = true }
+            .sheet(isPresented: $showing) { TavernaShareSheet() }
+    }
+}
+private struct TavernaShareSheet: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: ["Taverna fictitious sharing qualification"], applicationActivities: nil)
+    }
+    func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
+}
+#endif

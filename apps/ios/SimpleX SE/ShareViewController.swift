@@ -27,6 +27,11 @@ class ShareViewController: UIHostingController<ShareView> {
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
     override func viewDidLoad() {
+        #if DEBUG && targetEnvironment(simulator)
+        if ShareProbe.startIfRequested(completion: { [weak self] in
+            self?.extensionContext?.completeRequest(returningItems: nil)
+        }) { return }
+        #endif
         ShareModel.CompletionHandler.isEventLoopEnabled = false
         model.setup(context: extensionContext!)
     }

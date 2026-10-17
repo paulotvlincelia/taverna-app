@@ -1,6 +1,6 @@
 # Execução: transporte nativo
 
-Estado atual: T1/T2 passaram como componentes. O gate nominal de T3 teve um mutante sobrevivente; a correção passou 15 checkpoints, incluindo os dois protocolos pelo core iOS real, na base reconciliada. Reprodução limpa e nova revisão independente precedem publicação. As seções abaixo preservam as tentativas anteriores. T4–T6 e todos os critérios completos permanecem pendentes.
+Estado atual: T1–T3/T5 passaram no recorte anterior e permanecem registrados abaixo. Em 2026-10-17, o recorte Share de T4 passou em desenvolvimento; repetição limpa e revisão independente ainda precedem sua publicação. T4 inteira exige NSE efetiva, T6 depende dela, e os oito critérios agregados permanecem Pending. As tentativas abaixo são históricas, com os respectivos limites.
 
 ## T1: codec SOCKS
 
@@ -211,3 +211,18 @@ A branch `codex/15-native-access-qualified` preserva os fontes e testes byte a b
 No HEAD limpo `8d3d9a7ba3ad4225801e2d0565b2d0f74404e81c`, o build `payload-public-clean-a` passou com quatro produtos e fonte limpa. O autor repetiu os cinco casos em 149,742 s; o Verifier, em 147,802 s, e repetiu o startup padrão com 15 checkpoints em 23,421 s. Zero falhas/skips. Rodadas próprias e receipts novos preservam origem e isolamento. No autor, os cortes ocorreram em 0,1606 s e 0,1491 s; no Verifier, em 0,3059 s e 0,1685 s, dentro do limite de 60 s.
 
 O sensor 6/6 anterior é histórico, não foi reexecutado. O Verifier confirmou sua aplicabilidade por equivalência byte a byte e pela nova execução clean. Este fechamento acrescenta somente documentação, sem alterar código ou alegar novo build para seu commit. T4/T6 continuam NOT RUN; oito NP e 34 requisitos do produto continuam Pending. Revisão do pacote exato e CI ainda precedem a publicação do PR em rascunho; integração da feature continua impedida pelos gates ausentes.
+
+
+## T4: recorte Share em desenvolvimento — 2026-10-17
+
+A ordem de startup foi corrigida na ShareAPI e no ShareModel. O modelo valida disponibilidade antes de abrir/criar controlador; start aplica a configuração gerenciada antes do comando do núcleo; activate valida antes de reabrir o store e reaplica antes de reativar. Nenhuma credencial é persistida por esse caminho. O carregamento de credencial de admissão continua fora desta entrega: sem transporte configurado, o processo falha fechado.
+
+A prova aciona a extensão instalada pela folha UIKit do sistema, no processo SimpleX SE. O modo DEBUG Simulator cria banco/CA/identidade fictícios no worktree e não é compilado em device/release. O driver exige hashes dos quatro produtos e proveniência; não aceita a construção do controlador no processo do app como prova da extensão.
+
+**Desenvolvimento PASS**, sem alegar commit limpo: build share-socket-d, rodada run-share-cb087563, vinte checkpoints; XCTest 1 aprovado, zero falhas/skips. SMP e XFTP reais passaram no processo da extensão. Uma sentinela loopback alcançável no controle positivo não recebeu conexão das duas tentativas proibidas. Suspensão com configuração anterior insegura, retomada pelo modelo e indisponibilidade após stop foram verificadas. Recibo local em .build/access-qualification/run-share-cb087563/ios/share-driver-receipt.json.
+
+A [qualificação da contenção](share-containment.md) preserva tentativas falhas e limitações: o trampoline do sandbox do kernel invalidou o serviço UIKit. A alternativa da fixture é explicitamente test_socket_interposition, com quatro chamadas instrumentadas e controle anterior ao main; não é isolamento pelo kernel ou de toda a sessão, nem autorização para dados reais. O app principal mantém seu guard do kernel. A revisão independente precisa avaliar esse limite antes de aprovar o recorte.
+
+Regressões atuais: 76 Foundation, 29 asserts codec, dez testes de transporte, quinze checkpoints de startup do app e cinco casos de mensagens/arquivos/revogação/sentinela passaram. Nenhuma asserção existente foi removida ou reduzida. Compilação C com DEBUG=0 produziu objeto sem símbolos globais; isso só verifica exclusão dessa instrumentação, não qualifica um build em aparelho. Checker, compileall e whitespace passam.
+
+Próximo gate: commit atômico, build novo limpo, repetição Share e regressões aplicáveis e Verifier independente com sensor de autorização. T4 permanece aberta por NSE; T6, NP-01..08 e os 34 critérios de produto não são concluídos por este recorte. A proposta visual fica em PR separado e aguarda aprovação do proprietário.

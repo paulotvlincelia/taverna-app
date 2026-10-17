@@ -40,7 +40,15 @@ struct SimpleXApp: App {
         WindowGroup {
             // contentAccessAuthenticationExtended has to be passed to ContentView on view initialization,
             // so that it's computed by the time view renders, and not on event after rendering
-            ContentView(contentAccessAuthenticationExtended: !authenticationExpired())
+            Group {
+                #if DEBUG && targetEnvironment(simulator)
+                if TavernaShareHost.active { TavernaShareHostView() } else {
+                    ContentView(contentAccessAuthenticationExtended: !authenticationExpired())
+                }
+                #else
+                ContentView(contentAccessAuthenticationExtended: !authenticationExpired())
+                #endif
+            }
                 .environmentObject(chatModel)
                 .environmentObject(AppTheme.shared)
                 .onOpenURL { url in
