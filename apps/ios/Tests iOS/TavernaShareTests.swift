@@ -22,16 +22,12 @@ final class TavernaShareTests: XCTestCase {
             hierarchy.name = "System activities after More"
             hierarchy.lifetime = .keepAlways
             add(hierarchy)
-            // The More sheet exposes activity rows as buttons, while the
-            // original carousel cells remain in the hierarchy behind it.
-            let row = app.buttons["SimpleX"].firstMatch
-            if row.waitForExistence(timeout: 5) && row.isHittable {
-                row.tap()
-            } else {
-                share = app.cells.matching(NSPredicate(format: "label == %@", "SimpleX")).allElementsBoundByIndex.first(where: { $0.isHittable }) ?? share
-                XCTAssertTrue(share.exists && share.isHittable, app.debugDescription)
-                share.tap()
-            }
+            // The More sheet uses unlabeled table cells; select the visible
+            // activityTitleLabel rather than the carousel behind the sheet.
+            let row = app.staticTexts.matching(identifier: "activityTitleLabel").matching(NSPredicate(format: "label == %@", "SimpleX")).firstMatch
+            XCTAssertTrue(row.waitForExistence(timeout: 10), app.debugDescription)
+            XCTAssertTrue(row.isHittable, app.debugDescription)
+            row.tap()
         } else {
             share.tap()
         }

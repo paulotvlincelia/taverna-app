@@ -35,7 +35,7 @@ O build de quatro produtos, as regressões e a repetição limpa são gates adic
 Após build limpo com o guard-manifest qualificado, informar seus caminhos relativos ao worktree:
 
 ```sh
-TAVERNA_SHARE_SOCKET_TEST=1 TAVERNA_NATIVE_GUARD=.build/attempts/guard-share-b/guard-manifest.json TAVERNA_NATIVE_BUILD=.build/attempts/share-isolated-clean/receipt.json python3.12 tools/taverna/native_access_tests/test_share.py
+TAVERNA_SHARE_SOCKET_TEST=1 TAVERNA_NATIVE_GUARD=.build/attempts/guard-share-b/guard-manifest.json TAVERNA_NATIVE_BUILD=.build/attempts/share-final-clean/receipt.json python3.12 tools/taverna/native_access_tests/test_share.py
 ```
 
 O driver usa fixture nova, compara hashes dos quatro produtos, SHA/estado do checkout e vinte e dois checkpoints, confere os logs autorizados dos dois protocolos e a sentinela. Os recibos e xcresult ficam em .build/access-qualification/run-share-*/ios. O encerramento remove somente o pedido da própria rodada, seu processo de extensão e os containers/redes nomeados; preserva os arquivos de evidência. Um build com allow-dirty serve somente ao desenvolvimento e não comprova o gate final limpo.
