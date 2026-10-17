@@ -97,7 +97,7 @@ def initialize():
     print('Qualified binaries initialized in a new exclusive run.')
 
 
-def start(native=False):
+def start(native=False, transfer_delay=0):
     for name in NAMES:
         if docker('container','inspect',name,check=False).returncode==0: raise RuntimeError('Existing fixture: preserve and inspect '+name)
     for net in ('inner','outer'):
@@ -117,36 +117,50 @@ def start(native=False):
     gateway_args=base_run('gateway','native-host' if native else 'inner',[(RUN/'gateway','/gateway',True),(SOURCE,'/source',True)])
     if native:
         gateway_args += ['-p','127.0.0.1::15223','-p','127.0.0.1::15443']
-    docker(*gateway_args,IMAGE,'python3','/source/gateway.py','/gateway',*(['--audit'] if native else []))
+    docker(*gateway_args,IMAGE,'python3','/source/gateway.py','/gateway',*(['--audit', '--transfer-delay', str(transfer_delay)] if native else []))
     if native:
         docker('network','connect',PREFIX+'-inner',PREFIX+'-gateway')
     docker('network','connect','--alias','gateway',PREFIX+'-outer',PREFIX+'-gateway')
     for who in ('alice','bob','unknown'):
-        docker(*base_run(who,'outer',[(RUN/who,'/client',False),(WORK/'bin','/bin-proof',True),(SOURCE,'/source',True)]),IMAGE,'sleep','3600')
+        docker(*base_run(who,'outer',[(RUN/who,'/client',False),(WORK/'bin','/bin-proof',True),(SOURCE,'/source',True)]),*(['--add-host','relay.test:127.0.0.1'] if native else []),IMAGE,'sleep','3600')
     time.sleep(1)
     for who in ('alice','bob'):
-        execute(who,'sh','-c','python3 /source/client.py bridge > /client/bridge.log 2>&1 &')
+        execute(who,'sh','-c','python3 /source/client.py bridge '+('--native ' if native else '')+'> /client/bridge.log 2>&1 &')
     time.sleep(.5)
     print('Fixture started: private inner/outer networks; '+('native gateway on loopback only.' if native else 'zero published ports.'))
 
 
 def api(who,cmd):
     value=execute(who,'python3','/source/client.py','api','5225',cmd)
-    return json.loads(value.stdout)
+    response=json.loads(value.stdout)
+    if cmd.startswith('/connect ') and response.get('type') == 'sentConfirmation':
+        # sentConfirmation acknowledges an asynchronous command, not an active
+        # mutual contact. Fixture callers need the actual peer state before send.
+        deadline=time.monotonic()+15
+        while True:
+            ready=[]
+            for peer in ('alice','bob'):
+                result=execute(peer,'python3','/source/client.py','api','5225','/contacts')
+                contacts=json.loads(result.stdout).get('contacts',[])
+                ready.append(any(c.get('activeConn',{}).get('connStatus') == {'type':'ready'} for c in contacts))
+            if all(ready): break
+            if time.monotonic() >= deadline: raise RuntimeError('fixture mutual contact did not become ready')
+            time.sleep(.1)
+    return response
 
 
-def clients():
+def clients(native=False, people=('alice','bob')):
     smp=(RUN/'smp-config/fingerprint').read_text().strip()
     xftp=(RUN/'xftp-config/fingerprint').read_text().strip()
-    for who in ('alice','bob'):
+    for who in people:
         args=['/bin-proof/simplex-chat-ubuntu-24_04-aarch64','-d','/client/chat','-k','fixture-only-passphrase','-y','--disable-backup',
-              '--user-display-name','Proof-'+who,'-p','5225','-s',f'smp://{smp}@localhost:15223','--xftp-server',f'xftp://{xftp}@localhost:18443',
+              '--user-display-name','Proof-'+who,'-p','5225','-s',f'smp://{smp}@'+('relay.test:5223' if native else 'localhost:15223'),'--xftp-server',f'xftp://{xftp}@'+('relay.test:8443' if native else 'localhost:18443'),
               '--smp-proxy','never','--smp-proxy-fallback','no','--smp-web-port-servers','off','--temp-folder','/client/tmp','--files-folder','/client/files']
         # sh only redirects fixed filenames; native command arguments are constant fixture values.
         import shlex
         execute(who,'sh','-c',shlex.join(args)+' > /client/chat.log 2>&1 &')
     deadline=time.monotonic()+30
-    for who in ('alice','bob'):
+    for who in people:
         while True:
             try:
                 response=api(who,'/u')
@@ -155,7 +169,7 @@ def clients():
             except (AssertionError,ValueError,subprocess.CalledProcessError):
                 if time.monotonic()>deadline: raise
                 time.sleep(.3)
-    print('Two official CLI fixture clients ready; default public routing disabled.')
+    print('Official CLI fixture clients ready; default public routing disabled.')
 
 
 def stop():

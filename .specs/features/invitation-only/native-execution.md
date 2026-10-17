@@ -120,3 +120,74 @@ Gate de desenvolvimento corrigido: build `startup-hardened-build-a`, quatro prod
 | NP-08, cobertura exigida | test_startup.py:22–24 e assertEqual(value.get('checks'), CHECKS) | Os 15 checkpoints são obrigatórios; ausência/falha impede PASS |
 
 Todos os asserts anteriores permanecem. A comparação de configuração completa segue como controle complementar, enquanto o valor crítico tem assert independente. O relatório histórico continua identificando o baseline que falhou, sem alegação de que o mutante antigo foi aprovado.
+
+## T5: implementação em andamento
+
+Premissas: um processo iOS com núcleo fixado e um cliente CLI oficial independente podem comprovar payloads do recorte; não equivalem a dois aparelhos nem às extensões. Estado e credenciais fictícios novos por rodada. O controle de fluxo da fixture permite observar um arquivo incompleto antes de mudar a autorização.
+
+Arquivos: tools/taverna/native_access_tests/test_payload.py e payload_session.py; tools/taverna/access_proof/{client,fixture,gateway}.py; apps/ios/Shared/TavernaNativeProbe.swift; testes Foundation necessários à integridade do driver; artefatos native-* e handoff. Nenhuma biblioteca ou protocolo de produto será alterado.
+
+Sucesso: mensagens exatas nos dois sentidos, arquivos com bytes exatos nos dois sentidos, controle positivo da sentinela seguido de zero acessos indevidos, bloqueio de novas conexões e encerramento dos fluxos em até 60 segundos após revogação ou ausência de política, incluindo arquivo comprovadamente em andamento. Build e regressões preservados; execução incompleta mantém T5 aberta.
+
+### T5: resultado parcial em desenvolvimento
+
+**T5 aberta.** O gate integral ainda não passou. As rodadas abaixo usam fonte modificada, build payload-dev-d e commit-base 9d7c61402; não substituem reprodução limpa, sensor, CI ou Verifier no commit final.
+
+| Prova | Resultado / evidência local ignorada |
+| --- | --- |
+| Mensagens SMP nos dois sentidos | PASS local; run-payload-42858ecc/ios/payload-receipt.json, texto aleatório recebido exatamente igual. |
+| Revogação com upload incompleto | PASS local; run-payload-67ac592a, progresso 4194304 de 34603008 bytes de transferência, fluxos fechados em 0,2982 s; novas tentativas reais SMP/XFTP negadas. |
+| Política ausente com upload incompleto | PASS local; run-payload-345910fa, mesmo tamanho de progresso observado, corte em 0,1516 s; novas tentativas reais SMP/XFTP negadas. |
+| Sentinela alcançável | PASS local; run-payload-b428c52b, controle positivo e nenhuma conexão adicional do app após destino proibido. |
+| Integridade XFTP nos dois sentidos | PENDING. O primeiro upload real terminou, mas test_payload.py:51 exige indevidamente um único URI; o núcleo retornou quatro. O plano não fixa essa quantidade. A correção do teste aguarda confirmação conforme a regra TLC; nenhuma asserção foi alterada ou removida. O download e a comparação dos bytes ainda não contam como executados. |
+
+As quatro provas selecionadas passaram em uma execução de 116,504 s. O quinto caso continua conhecido como não aprovado; não houve uso de skip/disable para obter um gate integral verde. Os receipts dizem CHECK_PASS e development, com hashes de fontes/build/produto, processo/PID e guard antes do main. O driver confere que fontes, HEAD, estado Git e produtos permanecem iguais durante a prova. Fixtures e produtos pertencem ao checkout; arquivos e logs permanecem preservados em .build.
+
+**Regressões:** 29 asserts do codec, dez testes Network.framework (28,445 s), 76 Foundation, checker, compileall, startup com 15 checkpoints (23,810 s) e doze testes CLI anteriores passaram. As primeiras duas rodadas CLI falharam em envio imediatamente após sentConfirmation; os diagnósticos não reproduziram o erro. A fixture passou a aguardar connStatus ready dos dois contatos, com limite de 15 s e falha se não houver confirmação. A rodada completa seguinte passou em 12,755 s. As asserções existentes de test_boundary.py permanecem intactas; o erro original sem payload capturado não recebe causa conclusiva.
+
+A ordem de configuração foi corrigida após a resposta real chatNotStarted: o transporte continua obrigatório antes do start; servidores exclusivos são configurados e lidos de volta depois do start, antes de convite/contato ou arquivo. O caminho de mailbox e eventos é exclusivo de DEBUG Simulator. Nenhuma nova interface de produto foi criada.
+
+### Adequação parcial T5
+
+| Critério | Asserção localizada | Outcome da spec | Estado |
+| --- | --- | --- | --- |
+| NP-05, mensagem SMP | test_payload.py:36, assertIn(expected, s.contents(receiver(...))) em dois sentidos | Texto recebido igual ao enviado | Coberto localmente |
+| NP-05, arquivo | test_payload.py:58, assertEqual(received.read_bytes(), payload) | Bytes recebidos iguais aos enviados | Ainda não alcançada |
+| NP-06, arquivo em andamento | test_payload.py:79/80, assertGreater(sentSize, 0) e assertLess(sentSize, totalSize) | Transferência incompleta antes da alteração | Coberto localmente |
+| NP-06, corte e novas tentativas | test_payload.py:85/87/91/92, closed_by_authorization, elapsed <= 60, failed is True e ausência de conclusão | Fechar fluxos e negar novas conexões, sem concluir o arquivo | Coberto localmente; open XFTP no app, open SMP preserva sua prova de componente T2 |
+| NP-02/04, sentinela | test_payload.py:104/106/108, count == 1, failed is True, count == 1 | Alcançável no controle e sem saída direta na negativa | Coberto localmente |
+
+Mapeamento inverso: handshake/contato e tipo de resposta em test_payload.py:22/24/30 sustentam o controle positivo NP-05; arquivo:48/51/54/57/58 sustenta NP-05, mas a cardinalidade em :51 não tem requisito e aguarda correção autorizada; :75/79/80/82/85/87/91/92/94 sustenta NP-06; :104/106/108 sustenta NP-02/04. A revisão de adequação permanece incompleta por NP-05/arquivo. T4 e T6 continuam abertos, e todos os requisitos NP/produto continuam Pending.
+
+### T5: retomada autorizada em 17/out/2026
+
+O proprietário autorizou corrigir a asserção de cardinalidade do teste. test_payload.py passa a exigir uma lista não vazia de links simplex:/file com descrição presente. A recepção real pelo outro núcleo e a comparação integral dos bytes permanecem obrigatórias nos dois sentidos. Nenhum caso foi removido ou desabilitado. Demais arquivos e critérios de T5 permanecem conforme o escopo já registrado; o gate Full e a revisão independente continuam exigidos.
+
+### T5: gate Full local aprovado
+
+**PASS no recorte de desenvolvimento T5.** Os cinco casos passaram juntos em 150,949 s, sem falhas ou skips, após a correção da asserção autorizada. Comando: `TAVERNA_NATIVE_BUILD=.build/attempts/payload-dev-d/receipt.json TAVERNA_NATIVE_ALLOW_DIRTY=1 python3.12 tools/taverna/native_access_tests/test_payload.py`. O conjunto exige estado novo em cada caso. A reprodução limpa e o Verifier no commit atômico continuam pendentes antes de publicar ou integrar; T4 e T6 permanecem abertos.
+
+| Caso | Receipt local em .build/access-qualification | Resultado |
+| --- | --- | --- |
+| Mensagens bilaterais | run-payload-c0979f87/ios/payload-receipt.json | Texto aleatório recebido exatamente igual nos dois sentidos. |
+| Arquivos bilaterais | run-payload-d66829e8/ios/payload-receipt.json | 2097289 bytes comparados integralmente por sentido, arquivos aleatórios distintos e diretórios de clientes distintos. |
+| Revogação em upload | run-payload-2234d308/ios/payload-receipt.json | Progresso 4194304 de 34603008; fechamento em 0,2853 s; novas conexões SMP/XFTP negadas. |
+| Autorização ausente em upload | run-payload-0c4d02bf/ios/payload-receipt.json | Progresso incompleto; fechamento em 0,1619 s; novas conexões SMP/XFTP negadas. |
+| Sentinela | run-payload-4f4c2c59/ios/payload-receipt.json | Uma conexão de controle e nenhuma conexão adicional do app ao destino proibido. |
+
+Quick e regressões mantidos: 29 asserts codec, 76 Foundation, dez testes de transporte, doze CLI, 15 checkpoints de startup; checker, compileall, spec/tasks validators e whitespace aprovados. Nenhuma asserção de regressão foi alterada. A única correção de teste foi a cardinalidade de links, aprovada pelo proprietário em 17/out/2026. As tentativas anteriores continuam registradas acima como históricas.
+
+#### Adequação pós-gate T5
+
+| Critério | Asserção exata | Outcome e cobertura |
+| --- | --- | --- |
+| NP-05, texto bilateral | test_payload.py:35 `assertIn(expected, s.contents(receiver('/tail @'+source+' 20')))` | Conteúdo recebido tem texto aleatório idêntico ao do outro cliente; os dois sentidos executados. |
+| NP-05, arquivo bilateral | test_payload.py:63 `assertEqual(received.read_bytes(), payload)` | Igualdade de todos os bytes do arquivo enviado; os dois sentidos executados. |
+| NP-05, link utilizável | test_payload.py:51/52/55/56 `assertIsInstance(links, list)`, `assertGreater(len(links), 0)`, `assertEqual((parsed.scheme, parsed.path), ('simplex', '/file'))`, descrição presente | Lista não vazia com formato de link válido; recepção e bytes exatos comprovam uso pelo outro núcleo. Sem cardinalidade arbitrária. |
+| NP-06, arquivo em andamento | test_payload.py:84/85/87 `assertGreater(progress['sentSize'], 0)`, `assertLess(progress['sentSize'], progress['totalSize'])`, fluxo XFTP ativo | Transferência incompleta antes da alteração da autorização. |
+| NP-06, corte temporal | test_payload.py:90/92 `s.wait(lambda: s.closed_by_authorization(active), 60, ...)`, `assertLessEqual(elapsed, 60)` | A fixture registra autorização encerrada e ambos os streams fechados; limite observado menor que 60 s. |
+| NP-06, negar novas conexões e não concluir | test_payload.py:96/97/99 `assertIs(tested['failed'], True)`, `assertFalse(any(...sndStandaloneFileComplete...))`, denied_before_backend presente | Novos testes reais SMP/XFTP falham; arquivo interrompido não conclui. Prova de SMP aberto permanece na integração do componente T2; upload aberto pertence ao app. |
+| NP-02/04, saída proibida | test_payload.py:109/111/113 `assertEqual(sentinel.count, 1)`, `assertIs(tested['failed'], True)`, `assertEqual(sentinel.count, 1, ...)` | Controle positivo alcança sentinela; tentativa proibida pelo core não a alcança. |
+| NP-08, origem/isolamento | payload_session.py:76/78/79/130/235 e validação de produtos | Commit, fonte limpa exigida no modo final, PID no guard antes do main, produtos e fontes sem alteração durante o caso. Rodadas atuais explicitamente development. |
+
+Mapeamento inverso: `test_01` e asserts de conexão/recepção sustentam NP-05/SMP; `test_02` e tipo de resposta, links, arquivo existente e igualdade de bytes sustentam NP-05/XFTP; `test_03/test_04` e todas as asserções de progresso, fluxo, tempo, negação e conclusão sustentam NP-06; `test_05` sustenta NP-02/04; os asserts comuns de bootstrap/proveniência sustentam NP-07 no app e NP-08. Não há testes fora do recorte. Diretrizes seguidas: AGENTS.md, CONTRIBUTING.md e native-tasks.md; fixtures seguem o padrão existente test_boundary.py e test_transport.py. Adequação local A–D aprovada, sem mocks, comparações tautológicas ou inferência de integridade a partir de handshake.

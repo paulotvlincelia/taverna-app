@@ -93,7 +93,7 @@ T3 → T5 → T6
 **Depends on**: T3
 **Reuses**: Ferramentas de isolamento e fixture real fixada, sem reaproveitar dados/receipts.
 **Done when**:
-- [ ] NP-05/06 passam em estado novo, com payload exato e corte de arquivo em andamento; nenhuma saída pública alternativa; Full passa.
+- [x] NP-05/06 no recorte app + cliente oficial passaram em cinco casos novos, com bytes exatos bilaterais, arquivo interrompido, novas conexões negadas e sentinela; Full local e regressões passaram. Reprodução limpa e Verifier precedem publicação. Evidências em native-execution.md.
 **Tests**: integration
 **Gate**: Full
 

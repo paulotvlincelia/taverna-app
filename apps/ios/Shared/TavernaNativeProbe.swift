@@ -29,6 +29,7 @@ enum TavernaNativeProbe {
         let xftpPort: UInt16
         let smpServer: String
         let xftpServer: String
+        let mode: String?
     }
     private static func run() {
         var checks: [String] = []
@@ -95,15 +96,29 @@ enum TavernaNativeProbe {
             let defaults = [UserDefaults.standard.dictionaryRepresentation(), groupDefaults.dictionaryRepresentation()]
             let persisted = try defaults.map { try PropertyListSerialization.data(fromPropertyList: $0, format: .xml, options: 0) }
             try require(persisted.allSatisfy { !String(decoding: $0, as: UTF8.self).contains(proxy) }, "capability_not_persisted")
+            if cfg.mode == "payload" {
+                for name in ["files", "tmp", "assets"] {
+                    try FileManager.default.createDirectory(at: directory.appendingPathComponent(name), withIntermediateDirectories: false)
+                }
+                try apiSetAppFilePaths(filesFolder: directory.appendingPathComponent("files").path,
+                                       tempFolder: directory.appendingPathComponent("tmp").path,
+                                       assetsFolder: directory.appendingPathComponent("assets").path, ctrl: ctrl)
+            }
             try require(try apiStartChat(ctrl: ctrl), "core_started")
             let running: ChatResponse0 = try chatSendCmdSync(.checkChatRunning, bgTask: false, ctrl: ctrl, log: false)
             if case .chatRunning = running { checks.append("core_running") } else { throw Failure.assertion("core_running") }
+            if cfg.mode == "payload" {
+                try configureServers(cfg, userId: user.userId, ctrl: ctrl, directory: directory)
+            }
             for (server, name) in [(cfg.smpServer, "core_smp_protocol"), (cfg.xftpServer, "core_xftp_protocol")] {
                 let tested: ChatResponse0 = try chatSendCmdSync(.apiTestProtoServer(userId: user.userId, server: server), bgTask: false, ctrl: ctrl, log: false)
                 guard case let .serverTestResult(_, address, nil) = tested, address == server else { throw Failure.assertion(name) }
                 checks.append(name)
             }
             try apiActivateChatChecked(ctrl: ctrl); checks.append("resume_configured")
+            if cfg.mode == "payload" {
+                try payloadLoop(cfg, ctrl: ctrl, directory: directory)
+            }
             let stop: ChatResponse0 = try chatSendCmdSync(.apiStopChat, bgTask: false, ctrl: ctrl, log: false)
             guard case .chatStopped = stop else { throw Failure.assertion("stop") }
             try require(try stopped(), "core_stopped")
@@ -120,6 +135,110 @@ enum TavernaNativeProbe {
             if case let Failure.assertion(name) = error { record("FAIL", name) }
             else { record("FAIL", "configuration_or_core_error") }
         }
+    }
+
+    private static func configureServers(_ cfg: Configuration, userId: Int64, ctrl: chat_ctrl, directory: URL) throws {
+        func command<R: ChatAPIResult>(_ cmd: ChatCommand, _ label: String) throws -> R {
+            guard let data = sendSimpleXCmdStr(cmd.cmdString, ctrl, retryNum: 0) else { throw Failure.assertion(label) }
+            // Fixture-only server configuration responses do not contain NetCfg.
+            try data.write(to: directory.appendingPathComponent(label + ".json"), options: .atomic)
+            let result: APIResult<R> = decodeAPIResult(data)
+            do { return try apiResult(result) } catch { throw Failure.assertion(label) }
+        }
+        let existing: ChatResponse0 = try command(.apiGetUserServers(userId: userId), "server_read")
+        guard case let .userServers(_, groups) = existing else { throw Failure.assertion("server_read") }
+        var disabled = groups.map { group in
+            var g = group
+            g.smpServers = g.smpServers.map { var s = $0; s.enabled = false; return s }
+            g.xftpServers = g.xftpServers.map { var s = $0; s.enabled = false; return s }
+            return g
+        }
+        disabled.append(UserOperatorServers(operator: nil,
+            smpServers: [UserServer(server: cfg.smpServer, preset: false, enabled: true, deleted: false)],
+            xftpServers: [UserServer(server: cfg.xftpServer, preset: false, enabled: true, deleted: false)], chatRelays: []))
+        let set: ChatResponse2 = try command(.apiSetUserServers(userId: userId, userServers: disabled), "server_set")
+        guard case .cmdOk = set else { throw Failure.assertion("server_set") }
+        let read: ChatResponse0 = try command(.apiGetUserServers(userId: userId), "server_readback")
+        guard case let .userServers(_, actual) = read,
+              actual.flatMap({ $0.smpServers }).filter({ $0.enabled }).map({ $0.server }) == [cfg.smpServer],
+              actual.flatMap({ $0.xftpServers }).filter({ $0.enabled }).map({ $0.server }) == [cfg.xftpServer]
+        else { throw Failure.assertion("exclusive_servers") }
+    }
+
+    // A bounded local fixture mailbox, compiled only for DEBUG Simulator. It
+    // cannot configure transport, issue arbitrary core commands or select UI.
+    private static func payloadLoop(_ cfg: Configuration, ctrl: chat_ctrl, directory: URL) throws {
+        func write(_ value: [String: Any], _ name: String) throws {
+            try JSONSerialization.data(withJSONObject: value, options: [.sortedKeys]).write(to: directory.appendingPathComponent(name), options: .atomic)
+        }
+        try write(["ready": true, "pid": ProcessInfo.processInfo.processIdentifier,
+                   "process": ProcessInfo.processInfo.processName, "exclusive_servers": true], "payload-ready.json")
+        let events = directory.appendingPathComponent("events.jsonl")
+        FileManager.default.createFile(atPath: events.path, contents: nil)
+        let stream = try FileHandle(forWritingTo: events)
+        defer { try? stream.close() }
+        let deadline = Date().addingTimeInterval(600)
+        var sequence = 1
+        while Date() < deadline {
+            let request = directory.appendingPathComponent("request-\(sequence).json")
+            if FileManager.default.fileExists(atPath: request.path) {
+                let value = try JSONSerialization.jsonObject(with: Data(contentsOf: request)) as? [String: String]
+                guard let command = value?["command"] else { throw Failure.configuration }
+                if command == "stop" { return }
+                var result: [String: Any]
+                if command.hasPrefix("test:") || command.hasPrefix("sentinel:") {
+                    let server: String
+                    if command == "test:smp" { server = cfg.smpServer }
+                    else if command == "test:xftp" { server = cfg.xftpServer }
+                    else if command.hasPrefix("sentinel:"), let port = UInt16(command.dropFirst(9)), port > 0 {
+                        server = cfg.smpServer.replacingOccurrences(of: "relay.test:5223", with: "127.0.0.1:\(port)")
+                    } else { throw Failure.configuration }
+                    let tested: ChatResponse0 = try chatSendCmdSync(.apiTestProtoServer(userId: 1, server: server), bgTask: false, ctrl: ctrl, log: false)
+                    guard case let .serverTestResult(_, address, failure) = tested, address == server else { throw Failure.assertion("protocol_result") }
+                    result = ["type": "protocolTest", "failed": failure != nil]
+                } else {
+                    let files = directory.appendingPathComponent("files").path + "/"
+                    let parts = command.split(separator: " ", omittingEmptySubsequences: true)
+                    let fileCommand = (parts.count == 3 && parts[0] == "/_upload" && parts[1] == "1") ||
+                                      (parts.count == 4 && parts[0] == "/_download" && parts[1] == "1" && parts[2].hasPrefix("simplex:/file#"))
+                    let fileAllowed = fileCommand && parts.last.map { path in
+                        let resolved = URL(fileURLWithPath: String(path)).resolvingSymlinksInPath().path
+                        return resolved.hasPrefix(files) && !String(path).contains("..")
+                    } == true
+                    guard command == "/_connect 1" || command == "/contacts" || command == "/tail @Proof-bob 20" ||
+                          (command.hasPrefix("@Proof-bob ") && command.count < 512 && !command.contains("\n")) || fileAllowed
+                    else { throw Failure.configuration }
+                    guard let data = sendSimpleXCmdStr(command, ctrl, retryNum: 0),
+                          let decoded = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+                    else { throw Failure.assertion("command_result") }
+                    result = decoded
+                }
+                try write(result, "response-\(sequence).json")
+                sequence += 1
+            }
+            let event: APIResult<ChatEvent>? = recvSimpleXMsg(ctrl, messageTimeout: 50_000)
+            var projected: [String: Any]?
+            if case let .result(value) = event {
+                switch value {
+                case let .sndStandaloneFileComplete(_, meta, uris):
+                    projected = ["type": "sndStandaloneFileComplete", "fileId": meta.fileId, "rcvURIs": uris]
+                case let .rcvStandaloneFileComplete(_, path, transfer):
+                    projected = ["type": "rcvStandaloneFileComplete", "fileId": transfer.fileId, "targetPath": path]
+                case let .sndFileProgressXFTP(_, _, meta, sent, total):
+                    projected = ["type": "sndFileProgressXFTP", "fileId": meta.fileId, "sentSize": sent, "totalSize": total]
+                case let .sndFileError(_, _, meta, _):
+                    projected = ["type": "sndFileError", "fileId": meta.fileId]
+                case let .rcvFileError(_, _, _, transfer):
+                    projected = ["type": "rcvFileError", "fileId": transfer.fileId]
+                default: break
+                }
+            }
+            if let projected {
+                var data = try JSONSerialization.data(withJSONObject: projected, options: [.sortedKeys]); data.append(10)
+                try stream.write(contentsOf: data)
+            }
+        }
+        throw Failure.assertion("payload_deadline")
     }
     #endif
 }

@@ -35,7 +35,7 @@ async def pump(reader: asyncio.StreamReader, writer: asyncio.StreamWriter):
         await writer.drain()
 
 
-async def connect(reader, writer, *, policy, backend, audit=False):
+async def connect(reader, writer, *, policy, backend, audit=False, transfer_delay=0):
     connection_id=next(AUDIT_IDS) if audit else None
     def record(event):
         if audit:
@@ -63,7 +63,14 @@ async def connect(reader, writer, *, policy, backend, audit=False):
                 await asyncio.sleep(POLL_SECONDS)
             record('association_no_longer_active')
 
-        tasks = [asyncio.create_task(pump(reader, remote)), asyncio.create_task(pump(upstream, writer)), asyncio.create_task(watch())]
+        async def upload():
+            while block := await reader.read(16384 if transfer_delay else 65536):
+                if transfer_delay and backend[1] == 8443:
+                    await asyncio.sleep(transfer_delay)
+                remote.write(block)
+                await remote.drain()
+
+        tasks = [asyncio.create_task(upload()), asyncio.create_task(pump(upstream, writer)), asyncio.create_task(watch())]
         done,_ = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
         for task,event in zip(tasks,('client_stream_ended','backend_stream_ended','authorization_ended')):
             if task in done:record(event)
@@ -78,9 +85,10 @@ async def connect(reader, writer, *, policy, backend, audit=False):
                 stream.close()
                 with contextlib.suppress(OSError, ssl.SSLError, asyncio.CancelledError):
                     await stream.wait_closed()
+        record('streams_closed')
 
 
-async def main(directory, audit=False):
+async def main(directory, audit=False, transfer_delay=0):
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.minimum_version = ssl.TLSVersion.TLSv1_3
     context.verify_mode = ssl.CERT_REQUIRED
@@ -89,11 +97,18 @@ async def main(directory, audit=False):
     servers = []
     for port, host, target in ROUTES:
         async def accept(reader, writer, target=target, host=host):
-            await connect(reader, writer, policy=directory / 'policy.json', backend=(host, target), audit=audit)
+            await connect(reader, writer, policy=directory / 'policy.json', backend=(host, target), audit=audit, transfer_delay=transfer_delay)
         servers.append(await asyncio.start_server(accept, '0.0.0.0', port, ssl=context, ssl_handshake_timeout=3))
     print('READY: experimental boundary; two fixed backends; no enrollment', flush=True)
     await asyncio.gather(*(server.serve_forever() for server in servers))
 
 
 if __name__ == '__main__':
-    asyncio.run(main(Path(sys.argv[1]),audit=sys.argv[2:]==['--audit']))
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('directory', type=Path)
+    parser.add_argument('--audit', action='store_true')
+    parser.add_argument('--transfer-delay', type=float, default=0)
+    args = parser.parse_args()
+    if not 0 <= args.transfer_delay <= .1: parser.error('fixture delay outside bound')
+    asyncio.run(main(args.directory, audit=args.audit, transfer_delay=args.transfer_delay))
