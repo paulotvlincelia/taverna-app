@@ -329,6 +329,7 @@ func apiDeleteUser(_ userId: Int64, _ delSMPQueues: Bool, viewPwd: String?) asyn
 }
 
 func apiStartChat(ctrl: chat_ctrl? = nil) throws -> Bool {
+    try setNetworkConfig(getNetCfg(), ctrl: ctrl)
     let r: ChatResponse0 = try chatSendCmdSync(.startChat(mainApp: true, enableSndFiles: true), ctrl: ctrl)
     switch r {
     case .chatStarted: return true
@@ -358,10 +359,18 @@ func apiStopChat() async throws {
 func apiActivateChat() {
     chatReopenStore()
     do {
-        try sendCommandOkRespSync(.apiActivateChat(restoreChat: true))
+        try apiActivateChatChecked()
     } catch {
         logger.error("apiActivateChat error: \(responseError(error))")
     }
+}
+
+// The checked path is also used by the isolated native startup qualification.
+func apiActivateChatChecked(ctrl: chat_ctrl? = nil) throws {
+    try setNetworkConfig(getNetCfg(), ctrl: ctrl)
+    let r: ChatResponse2 = try chatSendCmdSync(.apiActivateChat(restoreChat: true), ctrl: ctrl)
+    if case .cmdOk = r { return }
+    throw r.unexpected
 }
 
 // Spec: spec/architecture.md#apiSuspendChat
@@ -877,13 +886,14 @@ func setChatTTL(chatType: ChatType, id: Int64, _ chatItemTTL: ChatTTL) async thr
 }
 
 func getNetworkConfig() async throws -> NetCfg? {
-    let r: ChatResponse0 = try await chatSendCmd(.apiGetNetworkConfig)
+    let r: ChatResponse0 = try await chatSendCmd(.apiGetNetworkConfig, log: false)
     if case let .networkConfig(cfg) = r { return cfg }
     throw r.unexpected
 }
 
 func setNetworkConfig(_ cfg: NetCfg, ctrl: chat_ctrl? = nil) throws {
-    let r: ChatResponse2 = try chatSendCmdSync(.apiSetNetworkConfig(networkConfig: cfg), ctrl: ctrl)
+    let managed = try TavernaCoreTransport.networkConfig(cfg)
+    let r: ChatResponse2 = try chatSendCmdSync(.apiSetNetworkConfig(networkConfig: managed), ctrl: ctrl, log: false)
     if case .cmdOk = r { return }
     throw r.unexpected
 }
@@ -2294,8 +2304,8 @@ func startChat(refreshInvitations: Bool = true, onboarding: Bool = false) throws
 
 func startChatWithTemporaryDatabase(ctrl: chat_ctrl) throws -> User? {
     logger.debug("startChatWithTemporaryDatabase")
-    let migrationActiveUser = try? apiGetActiveUser(ctrl: ctrl) ?? apiCreateActiveUser(Profile(displayName: "Temp", fullName: ""), ctrl: ctrl)
     try setNetworkConfig(getNetCfg(), ctrl: ctrl)
+    let migrationActiveUser = try? apiGetActiveUser(ctrl: ctrl) ?? apiCreateActiveUser(Profile(displayName: "Temp", fullName: ""), ctrl: ctrl)
     try apiSetAppFilePaths(filesFolder: getMigrationTempFilesDirectory().path, tempFolder: getMigrationTempFilesDirectory().path, assetsFolder: getWallpaperDirectory().deletingLastPathComponent().path, ctrl: ctrl)
     _ = try apiStartChat(ctrl: ctrl)
     return migrationActiveUser

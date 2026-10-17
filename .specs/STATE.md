@@ -6,10 +6,11 @@ As decisões canônicas ficam em [docs/taverna/decisions](../docs/taverna/decisi
 
 ## Handoff
 
-- Feature: invitation-only; spec aprovada no PR #11, issue #7. A prova AP-01..07 entrou pelo PR #14 em da9136c541dd4ca06da0269dfd12355a360e0d3b; issue #12 encerrada. Os 34 requisitos do produto seguem Pending.
-- Método: TLC Spec Driven; retomada para desenho da integração, com spec/contexto preservados. O proprietário pediu continuar e preferiu solução simples. A rota A foi aprovada somente para o experimento; o novo desenho não inventa aprovação de arquitetura de produção.
-- Estado: entry-design.md propõe adaptador SOCKS nativo sobre a ponte, admissão pequena com estado transacional e entrada visual depois do DESIGN.md. Código e fontes oficiais fundamentam a proposta; viabilidade do adaptador iOS/extensões permanece NOT RUN.
-- Próximo passo: verificar e publicar este desenho documental; confirmar A1 e a interação administrativa proposta antes das tarefas formais/implementação. Primeiro gate técnico será transporte nativo real, incluindo falhas/fallback e os três targets; não reutilizar receipt offline do primeiro build como prova de rede.
-- Ownership: Codex, harness e integrador; branch codex/invitation-entry-plan; worktree irmão taverna-app-worktrees/invitation-entry-plan. Escopo: entry-design.md, README, roadmap e este handoff. Verifier só escreve relatório independente.
-- Recursos: somente pesquisa read-only e snapshots públicos em .build/invitation-entry, ignorados; nenhum estado de simulator, container ou provider alterado. Preservar worktrees/evidências e o preview existentes.
-- Limites: não implementar telas antes do DESIGN.md aprovado; produção, DNS, ambientes administrativos externos, credenciais, app, CI, locks e licenças preservados. Nenhum token, chave ou URL de convite completa no Git.
+- Feature: invitation-only, issue #15. TLC Spec Driven; A1 técnica aprovada. Oito critérios NP e 34 requisitos do produto continuam Pending até a qualificação integral.
+- Branch: codex/15-native-access-qualified, base c25dc4eb0d963afa916ac7605c5f2665e66318ba. T5 transposta em 7d248badce6c4882c8ac879619d65bb782059141; fontes/testes idênticos ao baseline. Nova prova clean no HEAD 8d3d9a7ba3ad4225801e2d0565b2d0f74404e81c.
+- Completed: T1–T3 e T5 no recorte. Novo build clean de quatro produtos, cinco casos do autor e cinco do Verifier, sem falhas/skips; startup padrão 15 checkpoints. Sensor anterior 6/6 preservado como histórico, validado por equivalência de fontes/produtos; não reexecutado.
+- Gates: 29 codec, 10 transporte, 76 Foundation e 12 CLI nas rodadas registradas. Checker/compileall/spec/tasks/whitespace aprovados. native-publication-revalidation.md distingue origem histórica e nova prova; native-execution.md conserva tentativas e limites. Este commit documental não afirma novo build.
+- Next: publicar pacote revisado e PR em rascunho; conferir CI. T4 exige lifecycle efetivo Share/NSE, com ambiente de notificações pendente. T6 depende de T4 e T5. Não integrar a feature nem avançar para admissão/UI por inferência de PASS parcial.
+- Ownership: Codex autor/harness/integrador; transporte, startup, Xcode, drivers e artefatos native-*.md. Ambientes e simulador exclusivos em .build; Verifier escreve somente seu relatório.
+- Limites: app + CLI em fixture, sem provar aparelhos, extensões, APNs ou operação. DESIGN.md aprovado precede UI. Publicação exige classificação e digest exato; branches anteriores locais não devem ser enviadas. Nenhuma credencial/dado real pertence ao público.
+- Uncommitted: nenhum esperado após este fechamento documental; reconciliar git status antes de retomar.
