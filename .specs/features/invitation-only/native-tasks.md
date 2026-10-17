@@ -2,7 +2,7 @@
 
 ## Execution Protocol
 
-Usar tlc-spec-driven efetivamente carregada. Desenho A1 e implementação autorizados pelo proprietário em 2026-10-16. Esta decomposição executa o desenho aprovado, sem novo escopo. Ferramentas: Git, Python 3.12, Swift/Xcode/SDK instalados e Docker já qualificado. Não requer novo provider ou gerenciador de agentes. Autor Codex; Verifier independente ao fim. Seis tarefas sequenciais; sem delegação de implementação.
+Usar tlc-spec-driven efetivamente carregada. Desenho A1 e implementação autorizados pelo proprietário em 2026-10-16. Esta decomposição executa o desenho aprovado, sem novo escopo. Ferramentas: Git, Python 3.12, Swift/Xcode/SDK instalados e Docker já qualificado. Não requer novo provider ou gerenciador de agentes. Autor Codex; Verifier independente ao fim. Seis tarefas; implementação pelo autor. T4 e T5 partem de T3, e T6 exige ambas. A prova de payload do app pode continuar enquanto se qualifica o ambiente de execução das extensões.
 
 **Design**: entry-design.md. **Spec**: native-proof.md. **Status**: In Progress.
 
@@ -33,7 +33,9 @@ Os comandos novos do driver serão definidos e entregues com cada tarefa; não s
 ### Phase 1: Native qualification
 
 ```text
-T1 → T2 → T3 → T4 → T5 → T6
+T1 → T2 → T3
+T3 → T4 → T6
+T3 → T5 → T6
 ```
 
 ## Task Breakdown
@@ -69,7 +71,7 @@ T1 → T2 → T3 → T4 → T5 → T6
 **Depends on**: T2
 **Reuses**: NetCfg, framework e controlador existente.
 **Done when**:
-- [ ] Build real com bibliotecas qualificadas e teste de precedência/negativa passam; nenhum caminho de rede inicia sem associação/configuração na qualificação.
+- [x] Gate local corrigido passou 15 checkpoints: valor always independente, core parado sem transporte, precedência, não persistência e apiTestProtoServer real SMP/XFTP. Build dos quatro targets e regressões passaram na base reconciliada; reprodução limpa e re-verificação independente precedem publicação. Evidências em native-execution.md.
 **Tests**: integration
 **Gate**: Full
 
@@ -88,7 +90,7 @@ T1 → T2 → T3 → T4 → T5 → T6
 
 **What**: Entregar driver reproduzível de mensagens/arquivos, revogação, falha de autorização e sentinela com núcleo real.
 **Where**: `tools/taverna/native_access_tests`
-**Depends on**: T4
+**Depends on**: T3
 **Reuses**: Ferramentas de isolamento e fixture real fixada, sem reaproveitar dados/receipts.
 **Done when**:
 - [ ] NP-05/06 passam em estado novo, com payload exato e corte de arquivo em andamento; nenhuma saída pública alternativa; Full passa.
@@ -99,7 +101,7 @@ T1 → T2 → T3 → T4 → T5 → T6
 
 **What**: Registrar provas por critério/processo e estado correto, sem liberar admissão ou piloto com gate ausente.
 **Where**: `.specs/features/invitation-only/native-execution.md`
-**Depends on**: T5
+**Depends on**: T4, T5
 **Reuses**: Comandos/receipts da rodada e obrigações NP-01..08.
 **Done when**:
 - [ ] NP-08 tem comandos/SHA/limites; relatório independente e sensor verificam o último commit antes de integração.
@@ -114,8 +116,8 @@ T1 → T2 → T3 → T4 → T5 → T6
 | T2 | T1 | T1 → T2 | Match |
 | T3 | T2 | T2 → T3 | Match |
 | T4 | T3 | T3 → T4 | Match |
-| T5 | T4 | T4 → T5 | Match |
-| T6 | T5 | T5 → T6 | Match |
+| T5 | T3 | T3 → T5 | Match |
+| T6 | T4, T5 | T4 → T6; T5 → T6 | Match |
 
 ## Test Co-location Validation
 
@@ -129,3 +131,7 @@ T1 → T2 → T3 → T4 → T5 → T6
 | T6 | Documentação | none | none | Match |
 
 Granularidade: T1/T2 são componentes; T3 é um ponto compartilhado de startup; T4 é a integração da mesma política nas extensões; T5 é o driver; T6 é o relatório. Testes e estado são incluídos no commit da própria tarefa. Gates sem prova mantêm a tarefa aberta; eventual bloqueio é documentado no handoff sem marcar dependentes como concluídas.
+
+## Sequência reconciliada
+
+A execução efetiva da NSE é um gate próprio de T4. A documentação Apple distingue sua ativação por push remoto de notificações simuladas com simctl. O ambiente/caminho ainda precisa ser qualificado; compilação permanece evidência limitada. T5 depende do transporte e startup do app (T3), por isso pode comprovar payloads e revogação enquanto T4 está pendente. T6 exige T4 e T5 aprovados. Todas as obrigações NP e os critérios de integração permanecem exigidos.

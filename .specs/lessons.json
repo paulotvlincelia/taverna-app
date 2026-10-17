@@ -3,7 +3,7 @@
   "promote_threshold": 2,
   "window_days": 45,
   "quarantine_threshold": 2,
-  "next_id": 3,
+  "next_id": 4,
   "lessons": [
     {
       "id": "L-001",
@@ -40,6 +40,24 @@
       ],
       "created": "2026-10-17T00:00:37Z",
       "last_seen": "2026-10-17T00:00:37Z"
+    },
+    {
+      "id": "L-003",
+      "key": "surviving_mutant::assert every fail closed configuration field against an independent literal or contract never against a second call to its producer",
+      "text": "Assert every fail-closed configuration field against an independent literal or contract, never against a second call to its producer",
+      "signal": "surviving_mutant",
+      "scope": "apps/ios/SimpleXChat/Taverna",
+      "status": "candidate",
+      "features": [
+        "invitation-only"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        ".specs/features/invitation-only/native-startup-review.md:M6 (apps/ios/SimpleXChat/Taverna)"
+      ],
+      "created": "2026-10-17T00:26:03Z",
+      "last_seen": "2026-10-17T00:26:03Z"
     }
   ]
 }

@@ -266,6 +266,10 @@
 		E5DDBE702DC4217900A0EFF0 /* NSEAPITypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DDBE6F2DC4217900A0EFF0 /* NSEAPITypes.swift */; };
 		E5E418012F83D2CA00252B9E /* OnboardingCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E418002F83D2CA00252B9E /* OnboardingCards.swift */; };
 		E5E418022F83D2CA00252B9E /* ChannelWebAccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E418032F83D2CA00252B9E /* ChannelWebAccessView.swift */; };
+		A71E00000000000000000001 /* SocksCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71E00000000000000000101 /* SocksCodec.swift */; };
+		A71E00000000000000000002 /* RelayTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71E00000000000000000102 /* RelayTransport.swift */; };
+		A71E00000000000000000003 /* CoreTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71E00000000000000000103 /* CoreTransport.swift */; };
+		A71E00000000000000000004 /* TavernaNativeProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71E00000000000000000104 /* TavernaNativeProbe.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -692,6 +696,10 @@
 		E5DDBE6F2DC4217900A0EFF0 /* NSEAPITypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSEAPITypes.swift; sourceTree = "<group>"; };
 		E5E418002F83D2CA00252B9E /* OnboardingCards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCards.swift; sourceTree = "<group>"; };
 		E5E418032F83D2CA00252B9E /* ChannelWebAccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelWebAccessView.swift; sourceTree = "<group>"; };
+		A71E00000000000000000101 /* SocksCodec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Taverna/SocksCodec.swift; sourceTree = "<group>"; };
+		A71E00000000000000000102 /* RelayTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Taverna/RelayTransport.swift; sourceTree = "<group>"; };
+		A71E00000000000000000103 /* CoreTransport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Taverna/CoreTransport.swift; sourceTree = "<group>"; };
+		A71E00000000000000000104 /* TavernaNativeProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TavernaNativeProbe.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -914,6 +922,7 @@
 		5CA059C2279559F40002BEB4 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				A71E00000000000000000104 /* TavernaNativeProbe.swift */,
 				8C74C3E92C1B909200039E77 /* Theme */,
 				5CA059C3279559F40002BEB4 /* SimpleXApp.swift */,
 				5C36027227F47AD5009F19D9 /* AppDelegate.swift */,
@@ -1061,6 +1070,9 @@
 		5CE2BA692845308900EC33A6 /* SimpleXChat */ = {
 			isa = PBXGroup;
 			children = (
+				A71E00000000000000000103 /* CoreTransport.swift */,
+				A71E00000000000000000102 /* RelayTransport.swift */,
+				A71E00000000000000000101 /* SocksCodec.swift */,
 				8C86EBE32C0DAE3700E12243 /* Theme */,
 				5CDCAD5228186F9500503DA2 /* AppGroup.swift */,
 				5CDCAD7228188CFF00503DA2 /* ChatTypes.swift */,
@@ -1640,6 +1652,7 @@
 				8CAD466F2D15A8100078D18F /* ChatScrollHelpers.swift in Sources */,
 				644EFFDE292BCD9D00525D5B /* ComposeVoiceView.swift in Sources */,
 				5CA059EB279559F40002BEB4 /* SimpleXApp.swift in Sources */,
+				A71E00000000000000000004 /* TavernaNativeProbe.swift in Sources */,
 				64D0C2C029F9688300B38D5F /* UserAddressView.swift in Sources */,
 				6448BBB628FA9D56000D2AB9 /* GroupLinkView.swift in Sources */,
 				E5DDBE6E2DC4106800A0EFF0 /* AppAPITypes.swift in Sources */,
@@ -1756,6 +1769,9 @@
 				8C74C3E82C1B905B00039E77 /* ChatWallpaperTypes.swift in Sources */,
 				CE2AD9CE2C452A4D00E844E3 /* ChatUtils.swift in Sources */,
 				5CE2BA8E284533A300EC33A6 /* API.swift in Sources */,
+				A71E00000000000000000003 /* CoreTransport.swift in Sources */,
+				A71E00000000000000000002 /* RelayTransport.swift in Sources */,
+				A71E00000000000000000001 /* SocksCodec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

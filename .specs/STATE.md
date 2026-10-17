@@ -6,10 +6,10 @@ As decisões canônicas ficam em [docs/taverna/decisions](../docs/taverna/decisi
 
 ## Handoff
 
-- Feature: invitation-only; spec aprovada no PR #11, issue #7. A prova AP-01..07 entrou pelo PR #14 em da9136c541dd4ca06da0269dfd12355a360e0d3b; issue #12 encerrada. Os 34 requisitos do produto seguem Pending.
-- Método: TLC Spec Driven; retomada para desenho da integração, com spec/contexto preservados. O proprietário pediu continuar e preferiu solução simples. A rota A foi aprovada somente para o experimento; o novo desenho não inventa aprovação de arquitetura de produção.
-- Estado: entry-design.md propõe adaptador SOCKS nativo sobre a ponte, admissão pequena com estado transacional e entrada visual depois do DESIGN.md. Código e fontes oficiais fundamentam a proposta; viabilidade do adaptador iOS/extensões permanece NOT RUN.
-- Próximo passo: verificar e publicar este desenho documental; confirmar A1 e a interação administrativa proposta antes das tarefas formais/implementação. Primeiro gate técnico será transporte nativo real, incluindo falhas/fallback e os três targets; não reutilizar receipt offline do primeiro build como prova de rede.
-- Ownership: Codex, harness e integrador; branch codex/invitation-entry-plan; worktree irmão taverna-app-worktrees/invitation-entry-plan. Escopo: entry-design.md, README, roadmap e este handoff. Verifier só escreve relatório independente.
-- Recursos: somente pesquisa read-only e snapshots públicos em .build/invitation-entry, ignorados; nenhum estado de simulator, container ou provider alterado. Preservar worktrees/evidências e o preview existentes.
-- Limites: não implementar telas antes do DESIGN.md aprovado; produção, DNS, ambientes administrativos externos, credenciais, app, CI, locks e licenças preservados. Nenhum token, chave ou URL de convite completa no Git.
+- Feature: invitation-only, issue #15. TLC Spec Driven; A1 e CLI administrativa inicial aprovados. Oito critérios NP e 34 requisitos do produto continuam Pending.
+- Reconciliação: novo worktree irmão taverna-app-worktrees/native-access-reconciled e branch codex/15-native-access-reconciled, base c25dc4eb0d963afa916ac7605c5f2665e66318ba. Delta transposto sem unir ancestrais substituídos; checkout anterior e evidências preservados.
+- T1/T2: fontes transpostas; codec 29 asserts, transporte 10 testes novos sem falha, Foundation 76 testes. Compilação iOS e startup precisam de nova prova própria deste checkout.
+- T3: gate anterior FAIL por M6. Correção passou 15 checkpoints no processo SimpleX, com valor always literal e controles reais SMP/XFTP. Próximo passo imediato: reprodução limpa no novo commit e re-verificação independente. T4/T5/T6 continuam abertos.
+- Ownership: Codex, autor/harness/integrador. Escopo: transporte, hooks de startup, projeto Xcode, drivers e artefatos native-*.md. Verifier só escreve relatório. Ambientes, caches, dados e simulador exclusivos em .build.
+- Próximo passo: fechar re-verificação T3; T5 pode testar payload/revogação após T3 enquanto T4 qualifica extensões. T6 exige ambas. Publicação somente pelo fluxo validado, com classificação e digest exato. Nenhum PASS nominal substitui sensor ou prova ausente.
+- Limites do recorte: convites/admissão, UI, APNs e distribuição não estão implementados ou liberados. DESIGN.md aprovado precede telas. Provas ausentes permanecem NOT RUN; dados/credenciais reais não pertencem ao público.
