@@ -71,7 +71,7 @@ T3 → T5 → T6
 **Depends on**: T2
 **Reuses**: NetCfg, framework e controlador existente.
 **Done when**:
-- [x] Gate local corrigido passou 15 checkpoints: valor always independente, core parado sem transporte, precedência, não persistência e apiTestProtoServer real SMP/XFTP. Build dos quatro targets e regressões passaram na base reconciliada; reprodução limpa e re-verificação independente precedem publicação. Evidências em native-execution.md.
+- [x] Gate local corrigido passou 15 checkpoints: valor always independente, core parado sem transporte, precedência, não persistência e apiTestProtoServer real SMP/XFTP. Build dos quatro targets e regressões passaram na base reconciliada; reprodução limpa e re-verificação independente PASS no commit 53b31fdfe8398d858395dc4b366f814c76ff3c51, seis mutantes detectados. Evidências em native-execution.md.
 **Tests**: integration
 **Gate**: Full
 
