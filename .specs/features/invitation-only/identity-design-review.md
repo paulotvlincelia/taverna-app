@@ -2,11 +2,11 @@
 
 **Veredito: PASS para a entrega documental no commit `462d7715343d429be2c70a5d43ac45fb240a7acb`.** O `DESIGN.md` está pronto para a revisão visual do proprietário e cobre as dez áreas do contrato. Este veredito não aprova a direção artística, não comprova interface implementada e não conclui a feature `invitation-only`.
 
-**Data:** 2026-10-17  
-**Base:** `c25dc4eb0d963afa916ac7605c5f2665e66318ba`  
-**Diff verificado:** `c25dc4eb0d963afa916ac7605c5f2665e66318ba..462d7715343d429be2c70a5d43ac45fb240a7acb`  
-**Autor do commit alvo:** Paulo Tavares, conforme metadado Git  
-**Verifier:** Codex em sessão independente de verificação, diferente do autor  
+**Data:** 2026-10-17
+**Base:** `c25dc4eb0d963afa916ac7605c5f2665e66318ba`
+**Diff verificado:** `c25dc4eb0d963afa916ac7605c5f2665e66318ba..462d7715343d429be2c70a5d43ac45fb240a7acb`
+**Autor do commit alvo:** Paulo Tavares, conforme metadado Git
+**Verifier:** Codex em sessão independente de verificação, diferente do autor
 **Método:** TLC Spec Driven, validação documental com evidência ou zero e sensor em cópias sob `.build`
 
 ## Resultado contra o pedido
