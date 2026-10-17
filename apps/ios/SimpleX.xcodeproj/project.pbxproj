@@ -273,6 +273,8 @@
 		A71E00000000000000000005 /* ShareProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71E00000000000000000105 /* ShareProbe.swift */; };
 		A71E00000000000000000006 /* ShareProbeGuard.c in Sources */ = {isa = PBXBuildFile; fileRef = A71E00000000000000000106 /* ShareProbeGuard.c */; };
 		A71E00000000000000000007 /* TavernaShareTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71E00000000000000000107 /* TavernaShareTests.swift */; };
+		A71E00000000000000000008 /* TavernaUITestSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71E00000000000000000108 /* TavernaUITestSession.swift */; };
+		A71E00000000000000000009 /* TavernaUITestSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71E00000000000000000108 /* TavernaUITestSession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -706,6 +708,8 @@
 		A71E00000000000000000105 /* ShareProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareProbe.swift; sourceTree = "<group>"; };
 		A71E00000000000000000106 /* ShareProbeGuard.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = ShareProbeGuard.c; sourceTree = "<group>"; };
 		A71E00000000000000000107 /* TavernaShareTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TavernaShareTests.swift; sourceTree = "<group>"; };
+		A71E00000000000000000108 /* TavernaUITestSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TavernaUITestSession.swift; sourceTree = "<group>"; };
+		A71E00000000000000000109 /* Taverna Share Qualification.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Taverna Share Qualification.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -765,6 +769,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A71E00000000000000000202 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -948,6 +953,7 @@
 			children = (
 				5CA059CA279559F40002BEB4 /* SimpleX.app */,
 				5CA059D7279559F40002BEB4 /* Tests iOS.xctest */,
+				A71E00000000000000000109 /* Taverna Share Qualification.xctest */,
 				5CDCAD452818589900503DA2 /* SimpleX NSE.appex */,
 				5CE2BA682845308900EC33A6 /* SimpleXChat.framework */,
 				CEE723A72C3BD3D70009AE93 /* SimpleX SE.appex */,
@@ -960,6 +966,7 @@
 			children = (
 				5CA059DB279559F40002BEB4 /* Tests_iOS.swift */,
 				A71E00000000000000000107 /* TavernaShareTests.swift */,
+				A71E00000000000000000108 /* TavernaUITestSession.swift */,
 				5CA059DD279559F40002BEB4 /* Tests_iOSLaunchTests.swift */,
 			);
 			path = "Tests iOS";
@@ -1386,6 +1393,24 @@
 			productReference = CEE723A72C3BD3D70009AE93 /* SimpleX SE.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		A71E00000000000000000200 /* Taverna Share Qualification */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A71E00000000000000000204 /* Build configuration list for PBXNativeTarget "Taverna Share Qualification" */;
+			buildPhases = (
+				A71E00000000000000000201 /* Sources */,
+				A71E00000000000000000202 /* Frameworks */,
+				A71E00000000000000000203 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5CA059D9279559F40002BEB4 /* PBXTargetDependency */,
+			);
+			name = "Taverna Share Qualification";
+			productName = "Taverna Share Qualification";
+			productReference = A71E00000000000000000109 /* Taverna Share Qualification.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -1397,6 +1422,10 @@
 				LastUpgradeCheck = 1340;
 				ORGANIZATIONNAME = "SimpleX Chat";
 				TargetAttributes = {
+					A71E00000000000000000200 = {
+						CreatedOnToolsVersion = 27.1;
+						TestTargetID = 5CA059C9279559F40002BEB4;
+					};
 					5CA059C9279559F40002BEB4 = {
 						CreatedOnToolsVersion = 13.2.1;
 						LastSwiftMigration = 1320;
@@ -1458,6 +1487,7 @@
 			targets = (
 				5CA059C9279559F40002BEB4 /* SimpleX (iOS) */,
 				5CA059D6279559F40002BEB4 /* Tests iOS */,
+				A71E00000000000000000200 /* Taverna Share Qualification */,
 				5CDCAD442818589900503DA2 /* SimpleX NSE */,
 				CEE723A62C3BD3D70009AE93 /* SimpleX SE */,
 				5CE2BA672845308900EC33A6 /* SimpleXChat */,
@@ -1511,6 +1541,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A71E00000000000000000203 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -1740,7 +1771,7 @@
 			files = (
 				5CA059DE279559F40002BEB4 /* Tests_iOSLaunchTests.swift in Sources */,
 				5CA059DC279559F40002BEB4 /* Tests_iOS.swift in Sources */,
-				A71E00000000000000000007 /* TavernaShareTests.swift in Sources */,
+				A71E00000000000000000008 /* TavernaUITestSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1796,6 +1827,15 @@
 				A71E00000000000000000006 /* ShareProbeGuard.c in Sources */,
 				A71E00000000000000000005 /* ShareProbe.swift in Sources */,
 				CEE723AA2C3BD3D70009AE93 /* ShareViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A71E00000000000000000201 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A71E00000000000000000007 /* TavernaShareTests.swift in Sources */,
+				A71E00000000000000000009 /* TavernaUITestSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2490,6 +2530,47 @@
 			};
 			name = Release;
 		};
+		A71E00000000000000000205 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 361;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 7.0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = "cc.quietmesh.taverna.ShareQualification";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "SimpleX (iOS)";
+			};
+			name = Debug;
+		};
+		A71E00000000000000000206 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 361;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 7.0.4;
+				PRODUCT_BUNDLE_IDENTIFIER = "cc.quietmesh.taverna.ShareQualification";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "SimpleX (iOS)";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -2543,6 +2624,15 @@
 			buildConfigurations = (
 				CEE723B22C3BD3D70009AE93 /* Debug */,
 				CEE723B32C3BD3D70009AE93 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A71E00000000000000000204 /* Build configuration list for PBXNativeTarget "Taverna Share Qualification" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A71E00000000000000000205 /* Debug */,
+				A71E00000000000000000206 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

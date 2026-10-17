@@ -20,9 +20,9 @@ import ios_session as session
 import ios_proof as proof
 
 CHECKS = ['no_controller_without_transport', 'missing_start_denied', 'missing_resume_denied',
-          'core_still_stopped', 'listener_ready', 'cold_model_started', 'managed_network',
+          'core_still_stopped', 'listener_ready', 'cold_model_started', 'cold_network_before_start', 'managed_network',
           'mandatory_socks_mode', 'capability_not_persisted', 'smp_protocol', 'xftp_protocol',
-          'smp_no_direct_fallback', 'xftp_no_direct_fallback', 'suspended', 'model_resumed', 'resumed_managed_network', 'core_stopped',
+          'smp_no_direct_fallback', 'xftp_no_direct_fallback', 'suspended', 'model_resumed', 'resume_network_before_activate', 'resumed_managed_network', 'core_stopped',
           'stopped_start_denied', 'stopped_resume_denied', 'core_remains_stopped']
 
 
@@ -95,14 +95,31 @@ class ShareStartup(unittest.TestCase):
                        xftpServer='xftp://'+(f.RUN/'xftp-config/fingerprint').read_text().strip()+'@relay.test:8443')
             config = directory/'config.json'; config.write_text(json.dumps(cfg))
             request.write_text(str(config)+'\n'+('discovery\n' if os.environ.get('TAVERNA_SHARE_DISCOVERY_ONLY')=='1' else 'socket-test\n' if os.environ.get('TAVERNA_SHARE_SOCKET_TEST')=='1' else ''))
+            # Build the separate qualification target using the already-qualified
+            # invocation and immutable native bindings. The first-build scheme is unchanged.
+            qualification = list(build['command'])
+            self.assertEqual(qualification[qualification.index('-scheme')+1], 'SimpleX (iOS)')
+            qualification[qualification.index('-scheme')+1] = 'Taverna Share Qualification'
+            qualification[qualification.index('-resultBundlePath')+1] = str(directory/'qualification-build.xcresult')
+            with (directory/'build.stdout.log').open('w') as stdout, (directory/'build.stderr.log').open('w') as stderr:
+                qualified = subprocess.run(qualification, cwd=ROOT, env=session.environment(ROOT), stdout=stdout, stderr=stderr, timeout=600)
+            (directory/'build-command.json').write_text(json.dumps(dict(command=qualification,exit_code=qualified.returncode)))
+            self.assertEqual(qualified.returncode, 0, 'separate Share target failed to build')
+            for product in build['products']: proof.artifact(ROOT, product)
             products = ROOT/'.build/DerivedData/Build/Products'
-            plans = list(products.glob('SimpleX (iOS)_iphonesimulator*-arm64.xctestrun'))
+            plans = list(products.glob('Taverna Share Qualification_iphonesimulator*-arm64.xctestrun'))
             self.assertEqual(len(plans), 1)
             plan = plistlib.loads(plans[0].read_bytes())
             self.assertEqual(plan['__xctestrun_metadata__']['FormatVersion'], 1)
-            target = plan['Tests iOS']
-            target['OnlyTestIdentifiers'] = ['TavernaShareTests/testSystemShareExtension']
-            target.pop('SkipTestIdentifiers', None)
+            self.assertEqual(set(plan), {'Taverna Share Qualification', '__xctestrun_metadata__'})
+            target = plan['Taverna Share Qualification']
+            self.assertFalse(target.get('OnlyTestIdentifiers'))
+            self.assertFalse(target.get('SkipTestIdentifiers'))
+            host = target['TestHostPath'].replace('__TESTROOT__', str(products))
+            test_bundle = Path(target['TestBundlePath'].replace('__TESTROOT__', str(products)).replace('__TESTHOST__', host))
+            test_info = plistlib.loads((test_bundle/'Info.plist').read_bytes())
+            test_binary = session.inside(ROOT, test_bundle/test_info['CFBundleExecutable'])
+            test_binary_hash = hashlib.sha256(test_binary.read_bytes()).hexdigest()
             target.setdefault('EnvironmentVariables', {}).update(TAVERNA_UI_ROOT=str(ROOT),
                 TAVERNA_GUARD_MANIFEST=str(manifest_path), TAVERNA_UI_ATTEMPT=str(directory),
                 TAVERNA_UI_PROFILE='first-build', TAVERNA_SHARE_CONFIG=str(config))
@@ -143,13 +160,15 @@ class ShareStartup(unittest.TestCase):
             for path in directory.glob('*.json*'):
                 if path.name not in ('config.json','share.xctestrun'):
                     self.assertNotRegex(path.read_text(errors='replace'), r'[0-9a-f]{64}:[0-9a-f]{64}@127\.0\.0\.1:')
+            self.assertEqual(hashlib.sha256(test_binary.read_bytes()).hexdigest(), test_binary_hash)
             self.assertEqual(subprocess.check_output(['git','status','--porcelain'],cwd=ROOT,text=True),state)
             self.assertEqual(subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),commit)
             value.update(commit=commit,source_state=state,qualification_mode='development' if state else 'clean',
+                         qualification_test_binary_sha256=test_binary_hash, qualification_build_command=qualification,
                          build_receipt_sha256=hashlib.sha256(build_path.read_bytes()).hexdigest(),
                          products=build['products'],udid=owned['udid'],ui_counts=counts,
                          source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in
-                             [ROOT/'apps/ios/SimpleX SE'/name for name in ('ShareAPI.swift','ShareModel.swift','ShareProbe.swift','ShareProbeGuard.c')]+[Path(__file__)]})
+                             [ROOT/'apps/ios/SimpleX SE'/name for name in ('ShareAPI.swift','ShareModel.swift','ShareProbe.swift','ShareProbeGuard.c')]+[ROOT/'apps/ios/Tests iOS/TavernaUITestSession.swift', ROOT/'apps/ios/Tests iOS/TavernaShareTests.swift', Path(__file__)]})
             (directory/'share-driver-receipt.json').write_text(json.dumps(value,indent=2))
         finally:
             if 'sentinel' in locals(): sentinel.close()

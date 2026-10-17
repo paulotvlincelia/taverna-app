@@ -11,15 +11,30 @@ final class TavernaShareTests: XCTestCase {
         let button = app.buttons["Share qualification"]
         XCTAssertTrue(button.waitForExistence(timeout: 15))
         button.tap()
-        var share = app.cells.matching(identifier: "shareCell").matching(NSPredicate(format: "label == %@", "SimpleX")).firstMatch
-        if !share.waitForExistence(timeout: 5) {
-            let more = app.cells.matching(identifier: "shareCell").matching(NSPredicate(format: "label IN %@", ["More", "Mais"])).firstMatch
+        let apps = app.cells.matching(identifier: "shareCell")
+        var share = apps.matching(NSPredicate(format: "label == %@", "SimpleX")).firstMatch
+        if !share.waitForExistence(timeout: 5) || !share.isHittable {
+            let more = apps.matching(NSPredicate(format: "label IN %@", ["More", "Mais"])).firstMatch
             XCTAssertTrue(more.waitForExistence(timeout: 5), app.debugDescription)
+            XCTAssertTrue(more.isHittable, app.debugDescription)
             more.tap()
-            share = app.cells.matching(identifier: "shareCell").matching(NSPredicate(format: "label == %@", "SimpleX")).firstMatch
+            let hierarchy = XCTAttachment(string: app.debugDescription)
+            hierarchy.name = "System activities after More"
+            hierarchy.lifetime = .keepAlways
+            add(hierarchy)
+            // The More sheet exposes activity rows as buttons, while the
+            // original carousel cells remain in the hierarchy behind it.
+            let row = app.buttons["SimpleX"].firstMatch
+            if row.waitForExistence(timeout: 5) && row.isHittable {
+                row.tap()
+            } else {
+                share = app.cells.matching(NSPredicate(format: "label == %@", "SimpleX")).allElementsBoundByIndex.first(where: { $0.isHittable }) ?? share
+                XCTAssertTrue(share.exists && share.isHittable, app.debugDescription)
+                share.tap()
+            }
+        } else {
+            share.tap()
         }
-        XCTAssertTrue(share.waitForExistence(timeout: 10), app.debugDescription)
-        share.tap()
         let path = try XCTUnwrap(ProcessInfo.processInfo.environment["TAVERNA_SHARE_CONFIG"])
         let receipt = URL(fileURLWithPath: path).deletingLastPathComponent().appendingPathComponent("share-result.json")
         let deadline = Date().addingTimeInterval(90)

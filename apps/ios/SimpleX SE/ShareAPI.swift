@@ -118,6 +118,14 @@ func apiSuspendChat(expired: Bool) {
     SEChatState.shared.set(.inactive)
 }
 
+#if DEBUG && targetEnvironment(simulator)
+// Reads real core state as the generic dispatcher serializes a Share command.
+// Never changes the command or supplies an API response.
+enum TavernaShareCommandProbe {
+    static var beforeSend: ((SEChatCommand) -> Void)?
+}
+#endif
+
 enum SEChatCommand: ChatCmdProtocol {
     case showActiveUser
     case startChat(mainApp: Bool, enableSndFiles: Bool)
@@ -131,6 +139,9 @@ enum SEChatCommand: ChatCmdProtocol {
     case apiSendMessages(type: ChatType, id: Int64, scope: GroupChatScope?, sendAsGroup: Bool, live: Bool, ttl: Int?, composedMessages: [ComposedMessage])
     
     var cmdString: String {
+        #if DEBUG && targetEnvironment(simulator)
+        TavernaShareCommandProbe.beforeSend?(self)
+        #endif
         switch self {
         case .showActiveUser: return "/u"
         case let .startChat(mainApp, enableSndFiles): return "/_start main=\(onOff(mainApp)) snd_files=\(onOff(enableSndFiles))"

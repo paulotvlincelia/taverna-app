@@ -14,6 +14,12 @@ A instrumentação cobre essas chamadas nos binários fixados; não impede sysca
 
 A sentinela usa um endereço loopback fora das duas rotas autorizadas. O controle positivo a alcança. Como o filtro permite loopback, ele não esconde um fallback direto para esse destino: as tentativas SMP/XFTP pelo núcleo devem falhar e o contador deve permanecer em uma conexão. As provas de componente e do app preservam ainda autenticação por processo, TLS, revogação e indisponibilidade da autoridade.
 
+## Suítes independentes e ordem observável
+
+A qualificação usa o target/scheme Taverna Share Qualification, sem OnlyTestIdentifiers ou SkipTestIdentifiers. O target Tests iOS e seu scheme mantêm os quatro métodos originais; TavernaUITestSession é um único helper compartilhado, extraído sem mudar suas asserções. O driver compila o scheme de qualificação com o comando e bindings do build de base, exige os quatro produtos inalterados e registra também o hash do binário do teste. Não filtra a suíte first-build para obter um PASS Share.
+
+O observer DEBUG Simulator no encoder SEChatCommand.cmdString lê a resposta bruta de /network enquanto o dispatcher real serializa start/activate, antes da chamada C. Não altera comandos nem fornece respostas falsas. A prova exige política gerenciada e socksMode=always bruto nas duas fronteiras, além do readback posterior. Isso detecta configuração aplicada depois do início ou reativação; um readback posterior sozinho não comprovaria a ordem.
+
 ## Ordem comprovada pela prova
 
 1. Sem transporte, o modelo não cria controlador; start/activate são recusados e o núcleo permanece parado.
@@ -29,7 +35,7 @@ O build de quatro produtos, as regressões e a repetição limpa são gates adic
 Após build limpo com o guard-manifest qualificado, informar seus caminhos relativos ao worktree:
 
 ```sh
-TAVERNA_SHARE_SOCKET_TEST=1 TAVERNA_NATIVE_GUARD=.build/attempts/guard-share-b/guard-manifest.json TAVERNA_NATIVE_BUILD=.build/attempts/share-clean/receipt.json python3.12 tools/taverna/native_access_tests/test_share.py
+TAVERNA_SHARE_SOCKET_TEST=1 TAVERNA_NATIVE_GUARD=.build/attempts/guard-share-b/guard-manifest.json TAVERNA_NATIVE_BUILD=.build/attempts/share-isolated-clean/receipt.json python3.12 tools/taverna/native_access_tests/test_share.py
 ```
 
-O driver usa fixture nova, compara hashes dos quatro produtos, SHA/estado do checkout e vinte checkpoints, confere os logs autorizados dos dois protocolos e a sentinela. Os recibos e xcresult ficam em .build/access-qualification/run-share-*/ios. O encerramento remove somente o pedido da própria rodada, seu processo de extensão e os containers/redes nomeados; preserva os arquivos de evidência. Um build com allow-dirty serve somente ao desenvolvimento e não comprova o gate final limpo.
+O driver usa fixture nova, compara hashes dos quatro produtos, SHA/estado do checkout e vinte e dois checkpoints, confere os logs autorizados dos dois protocolos e a sentinela. Os recibos e xcresult ficam em .build/access-qualification/run-share-*/ios. O encerramento remove somente o pedido da própria rodada, seu processo de extensão e os containers/redes nomeados; preserva os arquivos de evidência. Um build com allow-dirty serve somente ao desenvolvimento e não comprova o gate final limpo.

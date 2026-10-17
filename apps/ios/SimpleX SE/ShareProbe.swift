@@ -32,6 +32,14 @@ enum ShareProbe {
                   let result = value["result"] as? [String: Any] else { throw Failure.assertion("core_response") }
             return result
         }
+        func networkBody() throws -> [String: Any] {
+            guard let body = try raw("/network")["networkConfig"] as? [String: Any],
+                  let network = body["networkConfig"] as? [String: Any] else { throw Failure.assertion("network_readback") }
+            return network
+        }
+        func actual() throws -> NetCfg {
+            try JSONDecoder().decode(NetCfg.self, from: JSONSerialization.data(withJSONObject: networkBody()))
+        }
         func stopped() throws -> Bool { try raw("/_check running")["chatStopped"] != nil }
         func record(_ status: String, _ failure: String? = nil) {
             var value: [String: Any] = ["status": status, "checks": checks,
@@ -84,13 +92,25 @@ enum ShareProbe {
                 anchor: anchor, identity: value as! SecIdentity) { configured = $0; ready.signal() }
             guard ready.wait(timeout: .now()+10) == .success, let configured else { throw Failure.assertion("listener") }
             try configured.get(); checks.append("listener_ready")
-            try require(model.initChat(with: "fixture-only-passphrase") == nil, "cold_model_started")
-            func actual() throws -> NetCfg {
-                guard let body = try raw("/network")["networkConfig"] as? [String: Any],
-                      let network = body["networkConfig"] else { throw Failure.assertion("network_readback") }
-                return try JSONDecoder().decode(NetCfg.self, from: JSONSerialization.data(withJSONObject: network))
-            }
             let expected = try TavernaCoreTransport.networkConfig(getNetCfg())
+            var boundaries: [String: Bool] = [:]
+            TavernaShareCommandProbe.beforeSend = { command in
+                let boundary: String
+                switch command {
+                case .startChat: boundary = "cold"
+                case .apiActivateChat: boundary = "resume"
+                default: return
+                }
+                // Read /network synchronously as the dispatcher serializes the actual
+                // start/activate command. The observer never returns a mocked response.
+                guard let body = try? networkBody(),
+                      let observed = try? JSONDecoder().decode(NetCfg.self, from: JSONSerialization.data(withJSONObject: body))
+                else { boundaries[boundary] = false; return }
+                boundaries[boundary] = observed == expected && body["socksMode"] as? String == "always"
+            }
+            defer { TavernaShareCommandProbe.beforeSend = nil }
+            try require(model.initChat(with: "fixture-only-passphrase") == nil, "cold_model_started")
+            try require(boundaries["cold"] == true, "cold_network_before_start")
             let initial = try actual()
             try require(initial == expected && initial.socksProxy != nil && initial.smpProxyMode == .never &&
                         initial.smpProxyFallback == .prohibit && initial.smpWebPortServers == .off, "managed_network")
@@ -116,6 +136,7 @@ enum ShareProbe {
             try require(suspended["cmdOk"] != nil, "suspended")
             _ = try raw("/_network \(encodeJSON(NetCfg.defaults))")
             try require(model.initChat() == nil, "model_resumed")
+            try require(boundaries["resume"] == true, "resume_network_before_activate")
             try require(try actual() == expected, "resumed_managed_network")
             _ = try raw("/_stop")
             try require(try stopped(), "core_stopped")

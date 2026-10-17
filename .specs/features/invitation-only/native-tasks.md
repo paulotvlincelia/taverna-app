@@ -83,7 +83,7 @@ T3 → T5 → T6
 **Reuses**: Política compartilhada e lifecycle NSE/Share existentes.
 **Done when**:
 - [ ] Build dos dois targets e provas de ordem no processo efetivo passam; teste unitário de framework não substitui execução da extensão.
-Recorte Share em desenvolvimento: vinte checkpoints no processo efetivo, dois protocolos e sentinela passaram em 2026-10-17. Repetição limpa e revisão independente pendentes; ver native-execution.md e share-containment.md. NSE continua sem prova efetiva; a checkbox acima permanece aberta.
+Recorte Share corrigido em desenvolvimento: target/scheme próprios sem filtros; 22 checkpoints no processo efetivo, dois protocolos e sentinela passaram em 2026-10-17. Os quatro métodos first-build passaram sem filtros. Repetição limpa e re-verificação independente com sensor pendentes; ver native-execution.md e share-containment.md. NSE continua sem prova efetiva; a checkbox acima permanece aberta.
 
 **Tests**: integration
 **Gate**: Full
