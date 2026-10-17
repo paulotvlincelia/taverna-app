@@ -93,7 +93,7 @@ T3 → T5 → T6
 **Depends on**: T3
 **Reuses**: Ferramentas de isolamento e fixture real fixada, sem reaproveitar dados/receipts.
 **Done when**:
-- [x] NP-05/06 no recorte app + cliente oficial passaram em cinco casos novos, com bytes exatos bilaterais, arquivo interrompido, novas conexões negadas e sentinela; Full local e regressões passaram. Reprodução limpa e Verifier precedem publicação. Evidências em native-execution.md.
+- [x] NP-05/06 no recorte app + cliente oficial passaram em cinco casos novos, com bytes exatos bilaterais, arquivo interrompido, novas conexões negadas e sentinela. Build limpo e Full 5/5 no commit b48476b240a902ca46a6c4883cc6f07aa415bdef; Verifier independente repetiu 5/5 e detectou seis mutantes, sem gaps de T5. Evidências em native-execution.md e native-payload-review.md; T4/T6 continuam abertas.
 **Tests**: integration
 **Gate**: Full
 
