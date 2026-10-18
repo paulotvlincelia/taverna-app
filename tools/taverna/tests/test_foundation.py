@@ -18,9 +18,9 @@ class FoundationTests(unittest.TestCase):
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name)
-        for name in ['README.md', 'README.upstream.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'DESIGN.md', 'LICENSE']:
+        for name in ['README.md', 'README.upstream.md', 'AGENTS.md', 'CLAUDE.md', 'CONTRIBUTING.md', 'DESIGN.md', 'GOVERNANCE.md', 'LICENSE']:
             shutil.copy(ROOT / name, self.root / name)
-        for name in ['docs/taverna', '.agents/skills', '.specs', '.github/workflows']:
+        for name in ['docs/taverna', 'docs/innermesh', '.agents/skills', '.specs', '.github/workflows']:
             shutil.copytree(ROOT / name, self.root / name)
         (self.root / 'assets').mkdir()
         shutil.copy(ROOT / 'assets/ASSETS_LICENSE.md', self.root / 'assets/ASSETS_LICENSE.md')

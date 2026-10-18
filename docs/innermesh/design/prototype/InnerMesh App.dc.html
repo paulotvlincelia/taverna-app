@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="innermesh-symbol.js"></script>
+<style>
+body{margin:0;background:#E9E6DF;color:#14181F;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#1B2638}a:hover{color:#111A28}
+input,button{font-family:inherit}input::placeholder{color:var(--text2)}
+@keyframes im-spin{to{transform:rotate(360deg)}}
+@keyframes im-pulse{50%{opacity:.35}}
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-wrap:wrap;gap:48px;justify-content:center;align-items:flex-start;padding:48px 32px;box-sizing:border-box">
+
+<aside style="flex:1 1 300px;max-width:360px;display:flex;flex-direction:column;gap:28px;padding-top:12px">
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font:600 12px/1 system-ui;letter-spacing:.08em;text-transform:uppercase;color:#7E6128">InnerMesh · protótipo do DESIGN 0.5</div>
+    <h1 style="margin:0;font:600 34px/1.1 ui-serif,'New York',Georgia,serif;letter-spacing:-.01em;text-wrap:balance">O seu círculo, por convite.</h1>
+    <p style="margin:0;font:400 15px/1.5 system-ui;color:#565D68;text-wrap:pretty">Tinta, marfim e champanhe, símbolo <b>1a</b>. Três círculos de exemplo: em um você é membro, em outro é anfitriã e no terceiro o acesso foi retirado. Conteúdo fictício.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="font:600 12px/1 system-ui;letter-spacing:.08em;text-transform:uppercase;color:#565D68">Ir para</div>
+    <div style="display:flex;flex-direction:column;background:#FCFBF8;border-radius:14px;padding:6px;border:1px solid rgba(0,0,0,.06)">
+      <sc-for list="{{ jumps }}" as="j" hint-placeholder-count="11">
+        <button onClick="{{ j.go }}" style="all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;border-radius:9px;font:500 14px/1.2 system-ui;color:#14181F" style-hover="background:#F0EDE6">
+          <span>{{ j.label }}</span>
+          <sc-if value="{{ j.active }}" hint-placeholder-val="{{ false }}"><span style="width:8px;height:8px;border-radius:4px;background:#1B2638"></span></sc-if>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div style="font:600 12px/1 system-ui;letter-spacing:.08em;text-transform:uppercase;color:#565D68">Experimente</div>
+    <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font:400 14px/1.45 system-ui;color:#3A404A;text-wrap:pretty">
+      <li>Em Confirmar convite, toque em “Entrar no círculo” para ver a animação de entrada.</li>
+      <li>Troque de círculo pelo seletor no topo de Conversas.</li>
+      <li>Em Fundadores 2026, ajuste o limite em Gestão → Membros.</li>
+      <li>Envie uma mensagem em Mesa de ideias, ou grave um áudio.</li>
+    </ul>
+  </div>
+  <p style="margin:0;font:400 13px/1.5 system-ui;color:#565D68">Tema e modo sem conexão nos Tweaks. O tema também muda em Ajustes → Aparência.</p>
+</aside>
+
+<div style="flex:none;width:414px;padding:12px;border-radius:66px;background:#07090C;box-shadow:0 30px 80px rgba(10,13,18,.32),0 0 0 1px rgba(0,0,0,.5);box-sizing:border-box">
+<div ref="{{ phoneRef }}" data-screen-label="InnerMesh iPhone" style="position:relative;width:390px;height:844px;border-radius:54px;overflow:hidden;background:var(--canvas);color:var(--text)">
+
+  <div style="position:absolute;top:0;left:0;right:0;height:54px;display:flex;align-items:center;justify-content:space-between;padding:0 34px 0 44px;z-index:20;font:600 16px/1 -apple-system,system-ui;color:var(--text);pointer-events:none">
+    <span>9:41</span>
+    <div style="position:absolute;left:50%;top:11px;width:124px;height:36px;margin-left:-62px;border-radius:20px;background:#000"></div>
+    <span style="display:flex;gap:6px;align-items:center">
+      <svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"></rect><rect x="5" y="5.5" width="3" height="6.5" rx="1"></rect><rect x="10" y="3" width="3" height="9" rx="1"></rect><rect x="15" y="0" width="3" height="12" rx="1"></rect></svg>
+      <svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".45"></rect><rect x="2" y="2" width="17" height="8" rx="2" fill="currentColor"></rect><rect x="24" y="4" width="1.5" height="4" rx=".75" fill="currentColor" opacity=".45"></rect></svg>
+    </span>
+  </div>
+
+  <!-- ENTRADA SEM CONVITE -->
+  <sc-if value="{{ is.entrada }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Entrada" style="position:absolute;inset:0;display:flex;flex-direction:column;padding:54px 24px 40px;background:var(--canvas)">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;text-align:center">
+      {{ sym.entrada }}
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font:600 40px/46px ui-serif,'New York',Georgia,serif;letter-spacing:-.01em;color:var(--primary)">InnerMesh</div>
+        <div style="font:400 17px/24px system-ui;color:var(--text2)">O seu círculo, por convite.</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <button onClick="{{ toConvite }}" style="all:unset;cursor:pointer;height:54px;border-radius:12px;background:var(--primary);color:var(--onPrimary);font:600 17px/1 system-ui;display:flex;align-items:center;justify-content:center" style-active="background:var(--primaryPressed)">Abrir convite</button>
+      <p style="margin:0;text-align:center;font:400 15px/21px system-ui;color:var(--text2);text-wrap:pretty">A entrada é por convite. Peça um a quem já participa de um círculo.</p>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- CONVITE -->
+  <sc-if value="{{ is.convite }}" hint-placeholder-val="{{ true }}">
+  <div data-screen-label="Confirmar convite" style="position:absolute;inset:0;display:flex;flex-direction:column;padding-top:54px;background:var(--canvas)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 24px 0">
+      <div style="display:flex;align-items:center;gap:8px">{{ sym.lock }}<span style="font:600 18px/1 ui-serif,'New York',Georgia,serif;color:var(--primary)">InnerMesh</span></div>
+      <sc-if value="{{ hasCircles }}" hint-placeholder-val="{{ true }}"><button onClick="{{ closeInvite }}" aria-label="Fechar" style="all:unset;cursor:pointer;width:44px;height:44px;margin-right:-10px;display:flex;align-items:center;justify-content:center;color:var(--text2)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button></sc-if>
+    </div>
+    <div style="display:flex;justify-content:center;padding:14px 0 0">
+      <div style="width:224px;height:224px;border-radius:112px;background:var(--innerLight);display:flex;align-items:center;justify-content:center">{{ sym.hero }}</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:16px;padding:24px 24px 0">
+      <sc-if value="{{ inv.validating }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:20px;color:var(--text2);font:400 17px/24px system-ui">
+          <span style="width:22px;height:22px;border-radius:11px;border:2.5px solid var(--surfaceMuted);border-top-color:var(--primary);animation:im-spin .8s linear infinite"></span>
+          Verificando convite…
+        </div>
+      </sc-if>
+      <sc-if value="{{ inv.ready }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <h2 style="margin:0;font:600 28px/34px ui-serif,'New York',Georgia,serif;letter-spacing:-.01em">{{ inv.title }}</h2>
+          <p style="margin:0;font:400 17px/24px system-ui;color:var(--text2);text-wrap:pretty">{{ inv.body }}</p>
+        </div>
+        <sc-if value="{{ inv.showCard }}" hint-placeholder-val="{{ true }}">
+        <div style="background:var(--surface);border-radius:16px;padding:2px 16px">
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--separator);font:400 15px/21px system-ui"><span style="color:var(--text2)">Círculo</span><span style="font-weight:600">Mesa Faria Lima · 9 membros</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--separator);font:400 15px/21px system-ui"><span style="color:var(--text2)">Uso</span><span>Individual · uma vez</span></div>
+          <div style="display:flex;justify-content:space-between;gap:12px;padding:13px 0;font:400 15px/21px system-ui"><span style="color:var(--text2)">Validade</span><span style="color:var(--accent);font-weight:600">Mais 2 dias</span></div>
+        </div>
+        </sc-if>
+        <sc-if value="{{ inv.failed }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:10px;align-items:flex-start;color:var(--warning);font:500 15px/21px system-ui">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path></svg>
+            <span>Não foi possível confirmar a resposta. Seu convite continua válido.</span>
+          </div>
+        </sc-if>
+      </sc-if>
+    </div>
+    <sc-if value="{{ inv.ready }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:6px;padding:0 24px 34px">
+      <p style="margin:0 0 6px;font:400 13px/18px system-ui;color:var(--text2);text-align:center">{{ inv.footnote }}</p>
+      <button onClick="{{ inv.onPrimary }}" style="all:unset;cursor:pointer;height:54px;border-radius:12px;background:var(--primary);color:var(--onPrimary);font:600 17px/1 system-ui;display:flex;align-items:center;justify-content:center;gap:10px" style-active="background:var(--primaryPressed)">
+        <sc-if value="{{ inv.busy }}" hint-placeholder-val="{{ false }}"><span style="width:16px;height:16px;border-radius:9px;border:2px solid var(--onPrimary);border-top-color:transparent;animation:im-spin .8s linear infinite"></span></sc-if>
+        {{ inv.cta }}
+      </button>
+      <button onClick="{{ inv.onSecondary }}" style="all:unset;cursor:pointer;height:48px;display:flex;align-items:center;justify-content:center;font:500 17px/1 system-ui;color:var(--primary)">{{ inv.secondary }}</button>
+    </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <!-- INDISPONÍVEL -->
+  <sc-if value="{{ is.indisponivel }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Convite indisponível" style="position:absolute;inset:0;display:flex;flex-direction:column;padding:54px 24px 40px;background:var(--canvas)">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px">
+      {{ sym.fora }}
+      <h2 style="margin:0;font:600 28px/34px ui-serif,'New York',Georgia,serif">Este convite não está disponível.</h2>
+      <p style="margin:0;font:400 17px/24px system-ui;color:var(--text2);text-wrap:pretty">Ele pode ter expirado, sido cancelado ou já usado. Peça um novo a quem enviou o convite.</p>
+    </div>
+    <button onClick="{{ backHome }}" style="all:unset;cursor:pointer;height:54px;border-radius:12px;border:1px solid var(--border);color:var(--primary);font:600 17px/1 system-ui;display:flex;align-items:center;justify-content:center;box-sizing:border-box">Voltar</button>
+  </div>
+  </sc-if>
+
+  <!-- PERFIL -->
+  <sc-if value="{{ is.perfil }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Perfil local" style="position:absolute;inset:0;display:flex;flex-direction:column;padding:54px 24px 34px;background:var(--canvas)">
+    <div style="display:flex;align-items:center;gap:8px;padding-top:10px;color:var(--success);font:600 15px/21px system-ui">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      Você está em Mesa Faria Lima.
+    </div>
+    <h2 style="margin:18px 0 8px;font:600 30px/36px ui-serif,'New York',Georgia,serif;letter-spacing:-.01em">Como você quer aparecer?</h2>
+    <p style="margin:0;font:400 17px/24px system-ui;color:var(--text2);text-wrap:pretty">Seu nome aparece para os membros deste círculo. Não pedimos telefone nem e-mail.</p>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:30px 0 24px">
+      <div style="width:96px;height:96px;border-radius:48px;background:var(--outgoing);color:var(--primary);display:flex;align-items:center;justify-content:center;font:600 34px/1 system-ui">{{ profileInitials }}</div>
+      <button style="all:unset;cursor:pointer;min-height:44px;display:flex;align-items:center;font:500 15px/1 system-ui;color:var(--primary)">Adicionar foto (opcional)</button>
+    </div>
+    <label style="display:flex;flex-direction:column;gap:8px">
+      <span style="font:600 15px/21px system-ui">Nome de exibição neste círculo</span>
+      <input value="{{ nameValue }}" onChange="{{ onName }}" placeholder="Ex.: Marina Costa" style="height:52px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text);padding:0 16px;font-size:17px;outline:none" style-focus="border-color:var(--primary);box-shadow:0 0 0 2px var(--canvas),0 0 0 4px var(--focus)">
+      <span style="font:400 13px/18px system-ui;color:var(--text2)">{{ nameHelp }}</span>
+    </label>
+    <div style="flex:1"></div>
+    <button onClick="{{ finishProfile }}" style="all:unset;cursor:pointer;height:54px;border-radius:12px;background:{{ profileBtn.bg }};color:{{ profileBtn.fg }};font:600 17px/1 system-ui;display:flex;align-items:center;justify-content:center">Ir para as conversas</button>
+  </div>
+  </sc-if>
+
+  <!-- LISTA (ou acesso retirado do círculo atual) -->
+  <sc-if value="{{ is.lista }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Conversas" style="position:absolute;inset:0;display:flex;flex-direction:column;padding-top:54px;background:var(--canvas)">
+    <div style="flex:1;overflow:auto;padding:4px 20px 16px">
+      <button onClick="{{ openPicker }}" aria-label="{{ picker.a11y }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:44px">
+        <span style="width:24px;height:24px;border-radius:12px;box-shadow:inset 0 0 0 1.5px var(--primary);color:var(--primary);display:flex;align-items:center;justify-content:center;font:600 10px/1 ui-serif,'New York',Georgia,serif;flex:none">{{ cur.initials }}</span>
+        <span style="font:600 17px/22px system-ui">{{ cur.name }}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+        <sc-if value="{{ picker.otherActivity }}" hint-placeholder-val="{{ false }}"><span style="width:8px;height:8px;border-radius:4px;background:var(--primary)"></span></sc-if>
+      </button>
+
+      <sc-if value="{{ cur.active }}" hint-placeholder-val="{{ true }}">
+      <h1 style="margin:2px 0 14px;font:700 34px/41px system-ui;letter-spacing:-.01em">Conversas</h1>
+      <div style="display:flex;align-items:center;gap:8px;height:44px;padding:0 12px;border-radius:10px;background:var(--surfaceMuted);color:var(--text2)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5"></path></svg>
+        <input value="{{ searchValue }}" onChange="{{ onSearch }}" placeholder="Buscar neste círculo" aria-label="Buscar conversas neste círculo" style="flex:1;min-width:0;border:0;background:transparent;outline:none;font-size:17px;color:var(--text)">
+      </div>
+      <sc-if value="{{ offline }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--surface);color:var(--warning);font:500 15px/21px system-ui">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;margin-top:1px"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path></svg>
+          <span>Sem conexão com o círculo. As mensagens continuam pendentes.</span>
+        </div>
+      </sc-if>
+      <sc-if value="{{ showRequest }}" hint-placeholder-val="{{ true }}">
+        <div style="margin:22px 0 8px;font:600 13px/18px system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--text2)">Solicitações · 1</div>
+        <div style="background:var(--surface);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div style="width:44px;height:44px;border-radius:22px;background:var(--surfaceMuted);color:var(--primary);display:flex;align-items:center;justify-content:center;font:600 15px/1 system-ui;flex:none">AR</div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font:600 17px/22px system-ui">Ana quer conversar com você</span>
+              <span style="font:400 13px/18px system-ui;color:var(--text2)">Membro do seu círculo · nada é entregue antes do aceite</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button onClick="{{ acceptRequest }}" style="all:unset;cursor:pointer;flex:1;height:44px;border-radius:10px;background:var(--primary);color:var(--onPrimary);font:600 15px/1 system-ui;display:flex;align-items:center;justify-content:center">Aceitar</button>
+            <button onClick="{{ declineRequest }}" style="all:unset;cursor:pointer;flex:1;height:44px;border-radius:10px;border:1px solid var(--border);color:var(--text);font:600 15px/1 system-ui;display:flex;align-items:center;justify-content:center;box-sizing:border-box">Recusar</button>
+          </div>
+        </div>
+      </sc-if>
+      <div style="margin:24px 0 2px;font:600 13px/18px system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--text2)">Recentes</div>
+      <sc-if value="{{ listEmpty }}" hint-placeholder-val="{{ false }}">
+        <p style="margin:48px 0;text-align:center;font:400 17px/24px system-ui;color:var(--text2)">{{ emptyText }}</p>
+      </sc-if>
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="3">
+        <button onClick="{{ r.open }}" aria-label="{{ r.a11y }}" style="all:unset;cursor:pointer;display:flex;gap:12px;align-items:center;width:100%;box-sizing:border-box;padding:10px 0">
+          <sc-if value="{{ r.group }}" hint-placeholder-val="{{ true }}"><div style="width:52px;height:52px;border-radius:16px;background:var(--primary);color:var(--onPrimary);display:flex;align-items:center;justify-content:center;font:600 18px/1 ui-serif,'New York',Georgia,serif;flex:none">{{ r.initials }}</div></sc-if>
+          <sc-if value="{{ r.person }}" hint-placeholder-val="{{ false }}"><div style="width:52px;height:52px;border-radius:26px;background:var(--surfaceMuted);color:var(--primary);display:flex;align-items:center;justify-content:center;font:600 16px/1 system-ui;flex:none">{{ r.initials }}</div></sc-if>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;padding:6px 0 14px;border-bottom:1px solid var(--separator)">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+              <span style="font:600 17px/22px system-ui;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ r.name }}</span>
+              <span style="font:400 13px/18px system-ui;color:{{ r.timeColor }};flex:none;font-variant-numeric:tabular-nums">{{ r.time }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+              <span style="font:400 15px/21px system-ui;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                <sc-if value="{{ r.hasDraft }}" hint-placeholder-val="{{ false }}"><span style="color:var(--accent);font-weight:600">Rascunho: </span></sc-if>
+                <sc-if value="{{ r.pending }}" hint-placeholder-val="{{ false }}"><span style="color:var(--warning);font-weight:600">Pendente · </span></sc-if>
+                {{ r.preview }}
+              </span>
+              <sc-if value="{{ r.hasUnread }}" hint-placeholder-val="{{ false }}"><span style="flex:none;min-width:22px;height:22px;padding:0 7px;box-sizing:border-box;border-radius:11px;background:var(--primary);color:var(--onPrimary);font:600 13px/22px system-ui;text-align:center">{{ r.unread }}</span></sc-if>
+            </div>
+          </div>
+        </button>
+      </sc-for>
+      </sc-if>
+
+      <sc-if value="{{ cur.revoked }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Acesso retirado" style="display:flex;flex-direction:column;gap:18px;padding:40px 4px 0">
+          {{ sym.fora }}
+          <h2 style="margin:0;font:600 28px/34px ui-serif,'New York',Georgia,serif">Seu acesso ao círculo {{ cur.name }} foi retirado.</h2>
+          <p style="margin:0;font:400 17px/24px system-ui;color:var(--text2);text-wrap:pretty">{{ cur.host }} retirou seu acesso em {{ cur.revokedOn }}. Seus outros círculos continuam como estavam.</p>
+          <div style="background:var(--surface);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:12px;font:400 15px/21px system-ui">
+            <span style="font-weight:600">O que isso significa</span>
+            <span>Você não envia nem recebe novas mensagens neste círculo.</span>
+            <span>Mensagens já recebidas continuam neste aparelho e nos aparelhos das outras pessoas.</span>
+            <span>O convite usado não serve para voltar.</span>
+          </div>
+          <button onClick="{{ wipeCircle }}" style="all:unset;cursor:pointer;height:52px;border-radius:12px;border:1px solid var(--danger);color:var(--danger);font:600 17px/1 system-ui;display:flex;align-items:center;justify-content:center;box-sizing:border-box">Apagar dados deste aparelho</button>
+        </div>
+      </sc-if>
+    </div>
+    <div style="display:flex;border-top:1px solid var(--separator);background:var(--canvas);padding:6px 0 28px">
+      <button style="all:unset;cursor:pointer;flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--primary);font:700 12px/1 system-ui;min-height:44px;justify-content:center">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 5.5h16v10.5H9.5L4 20z"></path></svg>Conversas
+      </button>
+      <button onClick="{{ toAjustes }}" style="all:unset;cursor:pointer;flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text2);font:500 12px/1 system-ui;min-height:44px;justify-content:center">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h9M18 7h2M4 17h3M12 17h8"></path><circle cx="15.5" cy="7" r="2.3"></circle><circle cx="9.5" cy="17" r="2.3"></circle></svg>Ajustes
+      </button>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- CONVERSA -->
+  <sc-if value="{{ is.chat }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Conversa" style="position:absolute;inset:0;display:flex;flex-direction:column;padding-top:54px;background:var(--canvas)">
+    <div style="display:flex;align-items:center;gap:6px;padding:4px 10px 10px;border-bottom:1px solid var(--separator)">
+      <button onClick="{{ toLista }}" aria-label="Voltar para Conversas" style="all:unset;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--primary)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg></button>
+      <button onClick="{{ toInfo }}" style="all:unset;cursor:pointer;flex:1;min-width:0;display:flex;align-items:center;gap:10px">
+        <sc-if value="{{ chat.group }}" hint-placeholder-val="{{ true }}"><div style="width:38px;height:38px;border-radius:11px;background:var(--primary);color:var(--onPrimary);display:flex;align-items:center;justify-content:center;font:600 15px/1 ui-serif,'New York',Georgia,serif;flex:none">{{ chat.initials }}</div></sc-if>
+        <sc-if value="{{ chat.person }}" hint-placeholder-val="{{ false }}"><div style="width:38px;height:38px;border-radius:19px;background:var(--surfaceMuted);color:var(--primary);display:flex;align-items:center;justify-content:center;font:600 13px/1 system-ui;flex:none">{{ chat.initials }}</div></sc-if>
+        <div style="display:flex;flex-direction:column;min-width:0">
+          <span style="font:600 17px/22px system-ui;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ chat.name }}</span>
+          <span style="font:400 13px/18px system-ui;color:{{ chat.subColor }}">{{ chat.sub }}</span>
+        </div>
+      </button>
+      <button onClick="{{ toInfo }}" aria-label="Informações da conversa" style="all:unset;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--primary)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5.5M12 7.6v.4"></path></svg></button>
+    </div>
+    <div ref="{{ scrollRef }}" style="flex:1;overflow:auto;padding:14px 14px 10px;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;gap:6px;align-items:flex-start;justify-content:center;padding:4px 24px 8px;font:400 13px/18px system-ui;color:var(--text2);text-align:center;text-wrap:pretty">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="flex:none;margin-top:2px"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+        <span>Criptografia de ponta a ponta. Mensagens recebidas ficam nos aparelhos de quem participa.</span>
+      </div>
+      <div style="align-self:center;font:600 12px/1 system-ui;letter-spacing:.06em;color:var(--text2);padding:6px 10px">HOJE</div>
+      <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="4">
+        <sc-if value="{{ m.isSystem }}" hint-placeholder-val="{{ false }}">
+          <div style="align-self:center;max-width:80%;padding:8px 14px;border-radius:14px;background:var(--surfaceMuted);font:400 13px/18px system-ui;color:var(--text2);text-align:center">{{ m.text }}</div>
+        </sc-if>
+        <sc-if value="{{ m.isTheirs }}" hint-placeholder-val="{{ true }}">
+          <div style="align-self:flex-start;max-width:84%;display:flex;flex-direction:column;gap:4px;padding:10px 14px 8px;border-radius:18px 18px 18px 6px;background:var(--surface)">
+            <sc-if value="{{ m.showSender }}" hint-placeholder-val="{{ true }}"><span style="font:600 13px/18px system-ui;color:var(--text2)">{{ m.from }}</span></sc-if>
+            <sc-if value="{{ m.isText }}" hint-placeholder-val="{{ true }}"><span style="font:400 17px/23px system-ui;text-wrap:pretty;user-select:text">{{ m.text }}</span></sc-if>
+            <sc-if value="{{ m.isFile }}" hint-placeholder-val="{{ false }}">
+              <button style="all:unset;cursor:pointer;display:flex;gap:12px;align-items:center;padding:4px 0;min-width:220px">
+                <div style="width:44px;height:44px;border-radius:10px;background:var(--surfaceMuted);color:var(--primary);display:flex;align-items:center;justify-content:center;flex:none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"></path><path d="M14 3v5h5"></path></svg></div>
+                <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font:600 15px/21px system-ui">{{ m.name }}</span><span style="font:400 13px/18px system-ui;color:var(--text2)">{{ m.meta }}</span></div>
+              </button>
+            </sc-if>
+            <sc-if value="{{ m.isAudio }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;gap:10px;align-items:center;min-width:232px;padding:2px 0">
+                <button onClick="{{ m.onPlay }}" aria-label="{{ m.playLabel }}" style="all:unset;cursor:pointer;width:40px;height:40px;border-radius:20px;background:var(--primary);color:var(--onPrimary);display:flex;align-items:center;justify-content:center;flex:none">
+                  <sc-if value="{{ m.isPlaying }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg></sc-if>
+                  <sc-if value="{{ m.notPlaying }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"></path></svg></sc-if>
+                </button>
+                <div aria-hidden="true" style="flex:1;display:flex;align-items:center;gap:2px;height:28px">
+                  <sc-for list="{{ m.bars }}" as="b" hint-placeholder-count="24"><span style="flex:1;border-radius:2px;height:{{ b.h }};background:{{ b.c }}"></span></sc-for>
+                </div>
+                <span style="font:400 13px/1 system-ui;color:var(--text2);font-variant-numeric:tabular-nums">{{ m.dur }}</span>
+              </div>
+            </sc-if>
+            <span style="align-self:flex-end;font:400 12px/16px system-ui;color:var(--text2);font-variant-numeric:tabular-nums">{{ m.time }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ m.isMine }}" hint-placeholder-val="{{ false }}">
+          <div style="align-self:flex-end;max-width:84%;display:flex;flex-direction:column;gap:4px;padding:10px 14px 8px;border-radius:18px 18px 6px 18px;background:var(--outgoing)">
+            <sc-if value="{{ m.isText }}" hint-placeholder-val="{{ true }}"><span style="font:400 17px/23px system-ui;text-wrap:pretty;user-select:text">{{ m.text }}</span></sc-if>
+            <sc-if value="{{ m.isAudio }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;gap:10px;align-items:center;min-width:220px">
+                <button onClick="{{ m.onPlay }}" aria-label="{{ m.playLabel }}" style="all:unset;cursor:pointer;width:40px;height:40px;border-radius:20px;background:var(--primary);color:var(--onPrimary);display:flex;align-items:center;justify-content:center;flex:none">
+                  <sc-if value="{{ m.isPlaying }}" hint-placeholder-val="{{ false }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg></sc-if>
+                  <sc-if value="{{ m.notPlaying }}" hint-placeholder-val="{{ true }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"></path></svg></sc-if>
+                </button>
+                <div aria-hidden="true" style="flex:1;display:flex;align-items:center;gap:2px;height:28px">
+                  <sc-for list="{{ m.bars }}" as="b" hint-placeholder-count="24"><span style="flex:1;border-radius:2px;height:{{ b.h }};background:{{ b.c }}"></span></sc-for>
+                </div>
+                <span style="font:400 13px/1 system-ui;color:var(--text2);font-variant-numeric:tabular-nums">{{ m.dur }}</span>
+              </div>
+            </sc-if>
+            <span style="align-self:flex-end;display:flex;align-items:center;gap:4px;font:400 12px/16px system-ui;color:{{ m.statusColor }};font-variant-numeric:tabular-nums">
+              {{ m.time }} · {{ m.statusLabel }}
+              <sc-if value="{{ m.isPending }}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2"></path></svg></sc-if>
+              <sc-if value="{{ m.isSent }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if>
+              <sc-if value="{{ m.isDelivered }}" hint-placeholder-val="{{ true }}"><svg width="17" height="14" viewBox="0 0 26 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12.5l4.5 4.5L16.5 7.5M12 16.5l.5.5L22 7.5"></path></svg></sc-if>
+            </span>
+          </div>
+        </sc-if>
+      </sc-for>
+      <sc-if value="{{ typing }}" hint-placeholder-val="{{ false }}">
+        <div style="align-self:flex-start;padding:12px 16px;border-radius:18px 18px 18px 6px;background:var(--surface);font:400 13px/1 system-ui;color:var(--text2);animation:im-pulse 1.2s ease-in-out infinite">Ana está escrevendo…</div>
+      </sc-if>
+    </div>
+    <sc-if value="{{ offline }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;gap:8px;align-items:center;justify-content:center;padding:8px 16px;background:var(--surface);color:var(--warning);font:500 13px/18px system-ui"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path></svg>Sem conexão. Novas mensagens ficam pendentes.</div>
+    </sc-if>
+    <sc-if value="{{ notRecording }}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;align-items:flex-end;gap:8px;padding:8px 10px 30px;border-top:1px solid var(--separator);background:var(--canvas)">
+      <button aria-label="Anexar arquivo" style="all:unset;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--primary);flex:none"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+      <div style="flex:1;min-width:0;min-height:44px;display:flex;align-items:center;border-radius:20px;border:1px solid var(--border);background:var(--surface);padding:0 16px;box-sizing:border-box">
+        <input value="{{ draftValue }}" onChange="{{ onDraft }}" onKeyDown="{{ onDraftKey }}" placeholder="Mensagem" aria-label="Mensagem" style="flex:1;min-width:0;border:0;background:transparent;outline:none;font-size:17px;color:var(--text)">
+      </div>
+      <sc-if value="{{ hasDraft }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ send }}" aria-label="Enviar mensagem" style="all:unset;cursor:pointer;width:44px;height:44px;border-radius:22px;background:var(--primary);color:var(--onPrimary);display:flex;align-items:center;justify-content:center;flex:none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"></path></svg></button>
+      </sc-if>
+      <sc-if value="{{ noDraft }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ startRec }}" aria-label="Gravar áudio" style="all:unset;cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--primary);flex:none"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"></path></svg></button>
+      </sc-if>
+    </div>
+    </sc-if>
+    <sc-if value="{{ recording }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 14px 30px;border-top:1px solid var(--separator);background:var(--canvas)">
+      <span style="width:10px;height:10px;border-radius:5px;background:var(--danger);animation:im-pulse 1.2s ease-in-out infinite"></span>
+      <span style="flex:1;font:500 17px/1 system-ui;font-variant-numeric:tabular-nums">Gravando · {{ recLabel }}</span>
+      <button onClick="{{ cancelRec }}" style="all:unset;cursor:pointer;height:44px;padding:0 10px;display:flex;align-items:center;font:500 17px/1 system-ui;color:var(--danger)">Cancelar</button>
+      <button onClick="{{ sendRec }}" style="all:unset;cursor:pointer;height:44px;padding:0 18px;border-radius:22px;background:var(--primary);color:var(--onPrimary);display:flex;align-items:center;font:600 15px/1 system-ui">Enviar</button>
+    </div>
+    </sc-if>
+  </div>
+  </sc-if>
+
+  <!-- INFORMAÇÕES -->
+  <sc-if value="{{ is.info }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Informações" style="position:absolute;inset:0;display:flex;flex-direction:column;padding-top:54px;background:var(--canvas)">
+    <div style="display:flex;align-items:center;padding:4px 10px">
+      <button onClick="{{ toChat }}" style="all:unset;cursor:pointer;height:44px;display:flex;align-items:center;gap:2px;color:var(--primary);font:400 17px/1 system-ui"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>Conversa</button>
+    </div>
+    <div style="flex:1;overflow:auto;padding:8px 20px 30px;display:flex;flex-direction:column;gap:22px">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+        <sc-if value="{{ chat.group }}" hint-placeholder-val="{{ true }}"><div style="width:84px;height:84px;border-radius:25px;background:var(--primary);color:var(--onPrimary);display:flex;align-items:center;justify-content:center;font:600 30px/1 ui-serif,'New York',Georgia,serif">{{ chat.initials }}</div></sc-if>
+        <sc-if value="{{ chat.person }}" hint-placeholder-val="{{ false }}"><div style="width:84px;height:84px;border-radius:42px;background:var(--surfaceMuted);color:var(--primary);display:flex;align-items:center;justify-content:center;font:600 28px/1 system-ui">{{ chat.initials }}</div></sc-if>
+        <h2 style="margin:6px 0 0;font:600 22px/28px system-ui">{{ chat.name }}</h2>
+        <span style="font:400 15px/21px system-ui;color:var(--text2)">{{ chat.kindLabel }}</span>
+        <sc-if value="{{ chat.hasDesc }}" hint-placeholder-val="{{ true }}"><p style="margin:4px 0 0;font:400 17px/24px system-ui;text-wrap:pretty">{{ chat.desc }}</p></sc-if>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font:600 13px/18px system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);padding-left:4px">Membros · {{ chat.memberCount }}</div>
+        <div style="background:var(--surface);border-radius:16px;padding:0 16px">
+          <sc-for list="{{ infoMembers }}" as="p" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--separator)">
+              <div style="width:40px;height:40px;border-radius:20px;background:var(--surfaceMuted);color:var(--primary);display:flex;align-items:center;justify-content:center;font:600 14px/1 system-ui;flex:none">{{ p.initials }}</div>
+              <span style="flex:1;font:400 17px/22px system-ui">{{ p.name }}</span>
+              <sc-if value="{{ p.admin }}" hint-placeholder-val="{{ false }}"><span style="font:500 13px/18px system-ui;color:var(--accent)">Administrador</span></sc-if>
+            </div>
+          </sc-for>
+          <sc-if value="{{ ownerGroup }}" hint-placeholder-val="{{ false }}">
+            <button style="all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;min-height:52px;width:100%;color:var(--primary);font:500 17px/1 system-ui">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"></circle><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6M18 8v6M15 11h6"></path></svg>Escolher membros
+            </button>
+          </sc-if>
+        </div>
+        <sc-if value="{{ guestGroup }}" hint-placeholder-val="{{ false }}"><p style="margin:4px 4px 0;font:400 13px/18px system-ui;color:var(--text2)">Só o anfitrião do círculo adiciona ou retira membros.</p></sc-if>
+      </div>
+      <sc-if value="{{ chat.group }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ leaveGroup }}" style="all:unset;cursor:pointer;min-height:52px;border-radius:12px;background:var(--surface);color:var(--danger);font:500 17px/1 system-ui;display:flex;align-items:center;justify-content:center">Sair do grupo</button>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- AJUSTES -->
+  <sc-if value="{{ is.ajustes }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Ajustes" style="position:absolute;inset:0;display:flex;flex-direction:column;padding-top:54px;background:var(--canvas)">
+    <div style="flex:1;overflow:auto;padding:6px 20px 20px;display:flex;flex-direction:column;gap:22px">
+      <h1 style="margin:4px 0 0;font:700 34px/41px system-ui;letter-spacing:-.01em">Ajustes</h1>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font:600 13px/18px system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);padding-left:4px">Este círculo · {{ cur.name }}</div>
+        <div style="background:var(--surface);border-radius:16px;padding:0 16px">
+          <div style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--separator)">
+            <div style="width:48px;height:48px;border-radius:24px;background:var(--outgoing);color:var(--primary);display:flex;align-items:center;justify-content:center;font:600 17px/1 system-ui;flex:none">{{ cur.myInitials }}</div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font:600 17px/22px system-ui">{{ cur.myName }}</span><span style="font:400 13px/18px system-ui;color:var(--text2)">{{ cur.roleLabel }}</span></div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"></path></svg>
+          </div>
+          <sc-if value="{{ cur.isHost }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ toGestao }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;padding:12px 0;width:100%">
+              <div style="width:32px;height:32px;border-radius:9px;background:var(--surfaceMuted);display:flex;align-items:center;justify-content:center;flex:none">{{ sym.row }}</div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font:400 17px/22px system-ui">Gestão do círculo</span><span style="font:400 13px/18px system-ui;color:var(--text2)">{{ gestaoSummary }}</span></div>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"></path></svg>
+            </button>
+          </sc-if>
+          <sc-if value="{{ cur.isMember }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ leaveCircle }}" style="all:unset;cursor:pointer;display:flex;align-items:center;min-height:48px;width:100%;font:400 17px/22px system-ui;color:var(--danger)">Sair do círculo</button>
+          </sc-if>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font:600 13px/18px system-ui;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);padding-left:4px">App</div>
+        <div style="display:flex;gap:4px;padding:4px;border-radius:12px;background:var(--surfaceMuted)" role="radiogroup" aria-label="Aparência">
+          <sc-for list="{{ themeSeg }}" as="s" hint-placeholder-count="3">
+            <button onClick="{{ s.pick }}" role="radio" aria-checked="{{ s.on }}" style="all:unset;cursor:pointer;flex:1;height:38px;border-radius:9px;background:{{ s.bg }};color:var(--text);font:{{ s.w }} 15px/38px system-ui;text-align:center">{{ s.label }}</button>
+          </sc-for>
+        </div>
+        <div style="background:var(--surface);border-radius:16px;padding:0 16px">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--separator)">
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font:400 17px/22px system-ui">Prévia das notificações</span><span style="font:400 13px/18px system-ui;color:var(--text2)">Mostra só “Nova atividade no InnerMesh”</span></div>
+            <span style="font:400 15px/1 system-ui;color:var(--text2)">Discreta</span>
+          </div>
+          <button onClick="{{ toggleCover }}" role="switch" aria-checked="{{ coverOn }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;padding:12px 0;width:100%;border-bottom:1px solid var(--separator)">
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font:400 17px/22px system-ui">Cobrir ao trocar de app</span><span style="font:400 13px/18px system-ui;color:var(--text2)">Esconde as conversas na troca de apps</span></div>
+            <span style="width:51px;height:31px;border-radius:16px;background:{{ sw.bg }};position:relative;flex:none;transition:background .15s"><span style="position:absolute;top:2px;left:{{ sw.left }};width:27px;height:27px;border-radius:14px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s"></span></span>
+          </button>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 0">
+            <span style="flex:1;font:400 17px/22px system-ui">Armazenamento</span>
+            <span style="font:400 15px/1 system-ui;color:var(--text2)">212 MB em 3 círculos</span>
+          </div>
+        </div>
+      </div>
+      <p style="margin:0;text-align:center;font:400 13px/18px system-ui;color:var(--text2)">InnerMesh 0.5 · O seu círculo, por convite.</p>
+    </div>
+    <div style="display:flex;border-top:1px solid var(--separator);background:var(--canvas);padding:6px 0 28px">
+      <button onClick="{{ toLista }}" style="all:unset;cursor:pointer;flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text2);font:500 12px/1 system-ui;min-height:44px;justify-content:center">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5.5h16v10.5H9.5L4 20z"></path></svg>Conversas
+      </button>
+      <button style="all:unset;cursor:pointer;flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--primary);font:700 12px/1 system-ui;min-height:44px;justify-content:center">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 7h9M18 7h2M4 17h3M12 17h8"></path><circle cx="15.5" cy="7" r="2.3"></circle><circle cx="9.5" cy="17" r="2.3"></circle></svg>Ajustes
+      </button>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- GESTÃO -->
+  <sc-if value="{{ is.gestao }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Gestão do círculo" style="position:absolute;inset:0;display:flex;flex-direction:column;padding-top:54px;background:var(--canvas)">
+    <div style="display:flex;align-items:center;padding:4px 10px">
+      <button onClick="{{ toAjustes }}" style="all:unset;cursor:pointer;height:44px;display:flex;align-items:center;gap:2px;color:var(--primary);font:400 17px/1 system-ui"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>Ajustes</button>
+    </div>
+    <div style="flex:1;overflow:auto;padding:0 20px 30px;display:flex;flex-direction:column;gap:16px">
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <h1 style="margin:0;font:700 34px/41px system-ui;letter-spacing:-.01em">Gestão</h1>
+        <span style="font:400 15px/21px system-ui;color:var(--text2)">{{ cur.name }}</span>
+      </div>
+      <div style="display:flex;gap:4px;padding:4px;border-radius:12px;background:var(--surfaceMuted)">
+        <sc-for list="{{ mgmtSeg }}" as="s" hint-placeholder-count="3">
+          <button onClick="{{ s.pick }}" style="all:unset;cursor:pointer;flex:1;height:38px;border-radius:9px;background:{{ s.bg }};color:var(--text);font:{{ s.w }} 15px/38px system-ui;text-align:center">{{ s.label }}</button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ mt.convites }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ createInvite }}" style="all:unset;cursor:pointer;height:52px;border-radius:12px;background:{{ inviteBtn.bg }};color:{{ inviteBtn.fg }};font:600 17px/1 system-ui;display:flex;align-items:center;justify-content:center;gap:8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Criar convite</button>
+        <p style="margin:0;font:400 13px/18px system-ui;color:var(--text2);text-wrap:pretty">{{ inviteHelp }}</p>
+        <div style="background:var(--surface);border-radius:16px;padding:0 16px">
+          <sc-for list="{{ inviteRows }}" as="iv" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--separator)">
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font:400 17px/22px system-ui">{{ iv.label }}</span><span style="font:400 13px/18px system-ui;color:var(--text2)">{{ iv.meta }}</span></div>
+              <span style="font:600 13px/18px system-ui;color:{{ iv.color }}">{{ iv.state }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ mt.membros }}" hint-placeholder-val="{{ false }}">
+        <div style="background:var(--surface);border-radius:16px;padding:0 16px">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--separator)">
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px">
+              <span style="font:400 17px/22px system-ui">Limite de membros</span>
+              <span style="font:400 13px/18px system-ui;color:var(--text2)">{{ limitHelp }}</span>
+            </div>
+            <div style="display:flex;align-items:center;border-radius:9px;background:var(--surfaceMuted);flex:none">
+              <button onClick="{{ limitDown }}" aria-label="Diminuir limite" style="all:unset;cursor:pointer;width:44px;height:36px;display:flex;align-items:center;justify-content:center;color:{{ limitDownColor }}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"></path></svg></button>
+              <span style="min-width:30px;text-align:center;font:600 17px/1 system-ui;font-variant-numeric:tabular-nums">{{ limit }}</span>
+              <button onClick="{{ limitUp }}" aria-label="Aumentar limite" style="all:unset;cursor:pointer;width:44px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--primary)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+            </div>
+          </div>
+          <sc-for list="{{ memberRows }}" as="mb" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--separator)">
+              <div style="width:40px;height:40px;border-radius:20px;background:var(--surfaceMuted);color:var(--primary);display:flex;align-items:center;justify-content:center;font:600 14px/1 system-ui;flex:none">{{ mb.initials }}</div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font:400 17px/22px system-ui">{{ mb.name }}</span><span style="font:400 13px/18px system-ui;color:var(--text2)">{{ mb.meta }}</span></div>
+              <sc-if value="{{ mb.canRevoke }}" hint-placeholder-val="{{ false }}"><button onClick="{{ mb.revoke }}" style="all:unset;cursor:pointer;min-height:44px;padding:0 4px;display:flex;align-items:center;font:500 15px/1 system-ui;color:var(--danger)">Retirar</button></sc-if>
+              <sc-if value="{{ mb.revoked }}" hint-placeholder-val="{{ false }}"><span style="font:500 13px/18px system-ui;color:var(--text2)">Acesso retirado</span></sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <p style="margin:0 4px;font:400 13px/18px system-ui;color:var(--text2)">{{ countLabel }}</p>
+      </sc-if>
+
+      <sc-if value="{{ mt.grupos }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ createGroup }}" style="all:unset;cursor:pointer;height:52px;border-radius:12px;border:1px solid var(--border);color:var(--primary);font:600 17px/1 system-ui;display:flex;align-items:center;justify-content:center;gap:8px;box-sizing:border-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Criar grupo</button>
+        <div style="background:var(--surface);border-radius:16px;padding:0 16px">
+          <sc-for list="{{ groupRows }}" as="g" hint-placeholder-count="2">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--separator)">
+              <div style="width:40px;height:40px;border-radius:12px;background:var(--primary);color:var(--onPrimary);display:flex;align-items:center;justify-content:center;font:600 15px/1 ui-serif,'New York',Georgia,serif;flex:none">{{ g.initials }}</div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font:400 17px/22px system-ui">{{ g.name }}</span><span style="font:400 13px/18px system-ui;color:var(--text2)">{{ g.meta }}</span></div>
+              <span style="font:500 15px/1 system-ui;color:var(--primary)">Escolher membros</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- SELETOR DE CÍRCULO -->
+  <sc-if value="{{ pickerOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:35;display:flex;flex-direction:column;justify-content:flex-end">
+      <div onClick="{{ closePicker }}" style="position:absolute;inset:0;background:var(--scrim)"></div>
+      <div role="dialog" aria-label="Seus círculos" style="position:relative;background:var(--surface);border-radius:20px 20px 0 0;padding:8px 20px 34px;display:flex;flex-direction:column">
+        <div style="align-self:center;width:36px;height:5px;border-radius:3px;background:var(--surfaceMuted);margin-bottom:12px"></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:8px">
+          <span style="font:600 17px/22px system-ui">Seus círculos</span>
+          <button onClick="{{ closePicker }}" style="all:unset;cursor:pointer;min-height:44px;display:flex;align-items:center;font:500 17px/1 system-ui;color:var(--primary)">OK</button>
+        </div>
+        <sc-for list="{{ circleRows }}" as="c" hint-placeholder-count="3">
+          <button onClick="{{ c.pick }}" aria-label="{{ c.a11y }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--separator)">
+            <span style="width:40px;height:40px;border-radius:20px;box-shadow:inset 0 0 0 1.5px {{ c.ring }};color:{{ c.ring }};display:flex;align-items:center;justify-content:center;font:600 15px/1 ui-serif,'New York',Georgia,serif;flex:none">{{ c.initials }}</span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+              <span style="font:{{ c.weight }} 17px/22px system-ui">{{ c.name }}</span>
+              <span style="font:400 13px/18px system-ui;color:var(--text2)">{{ c.meta }}</span>
+            </div>
+            <sc-if value="{{ c.current }}" hint-placeholder-val="{{ false }}"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></sc-if>
+          </button>
+        </sc-for>
+        <button onClick="{{ toConvite }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;min-height:56px;color:var(--primary);font:500 17px/1 system-ui">
+          <span style="width:40px;height:40px;border-radius:20px;border:1.5px dashed var(--border);box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></span>
+          Abrir outro convite
+        </button>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position:absolute;left:16px;right:16px;top:60px;z-index:30;padding:12px 16px;border-radius:12px;background:var(--text);color:var(--canvas);font:500 15px/21px system-ui;box-shadow:0 8px 24px rgba(0,0,0,.2)">{{ toast }}</div>
+  </sc-if>
+
+  <sc-if value="{{ hasAlert }}" hint-placeholder-val="{{ false }}">
+    <div style="position:absolute;inset:0;z-index:40;background:var(--scrim);display:flex;align-items:center;justify-content:center;padding:0 40px">
+      <div role="alertdialog" style="width:100%;background:var(--surface);border-radius:16px;overflow:hidden">
+        <div style="padding:20px 20px 16px;display:flex;flex-direction:column;gap:6px;text-align:center">
+          <span style="font:600 17px/22px system-ui">{{ alert.title }}</span>
+          <span style="font:400 15px/21px system-ui;color:var(--text2);text-wrap:pretty">{{ alert.body }}</span>
+        </div>
+        <button onClick="{{ alertConfirm }}" style="all:unset;cursor:pointer;display:flex;width:100%;height:50px;align-items:center;justify-content:center;border-top:1px solid var(--separator);font:600 17px/1 system-ui;color:{{ alert.color }}">{{ alert.confirm }}</button>
+        <button onClick="{{ alertCancel }}" style="all:unset;cursor:pointer;display:flex;width:100%;height:50px;align-items:center;justify-content:center;border-top:1px solid var(--separator);font:400 17px/1 system-ui;color:var(--primary)">Cancelar</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="position:absolute;left:50%;bottom:8px;width:134px;height:5px;margin-left:-67px;border-radius:3px;background:var(--text);z-index:45;pointer-events:none"></div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;tema&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;sistema&quot;,&quot;claro&quot;,&quot;escuro&quot;],&quot;default&quot;:&quot;sistema&quot;,&quot;tsType&quot;:&quot;'sistema'|'claro'|'escuro'&quot;,&quot;section&quot;:&quot;Protótipo&quot;},&quot;offline&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Protótipo&quot;}}">
+const TOK = {
+  claro: { canvas:'#F5F3EE', surface:'#FCFBF8', surfaceMuted:'#EAE7E0', separator:'#DFDBD3', text:'#14181F', text2:'#565D68', border:'#767D88', primary:'#1B2638', primaryPressed:'#111A28', onPrimary:'#FCFBF8', accent:'#7E6128', innerLight:'#EFE6D2', outgoing:'#E4E8EF', danger:'#A3262A', success:'#256445', warning:'#835600', focus:'#7E6128', disabledText:'#8A9099', scrim:'rgba(10,13,18,.45)' },
+  escuro: { canvas:'#0D1015', surface:'#161A21', surfaceMuted:'#20262F', separator:'#252B35', text:'#F1EDE4', text2:'#A7AEB9', border:'#5F6876', primary:'#E6DCC6', primaryPressed:'#D6C9AE', onPrimary:'#10141A', accent:'#C9A86A', innerLight:'#262117', outgoing:'#243041', danger:'#FF9D95', success:'#8DD3A7', warning:'#E6C072', focus:'#D8B878', disabledText:'#6E7683', scrim:'rgba(0,0,0,.6)' }
+};
+const BARS = [6,10,16,12,20,24,14,9,18,26,22,12,8,14,20,16,10,6,12,18,14,8,10,6];
+const now = () => new Date().toTimeString().slice(0,5);
+const ini = n => n.split(' ').filter(w => w && !/^(de|da|do|das|dos|e)$/i.test(w)).slice(0,2).map(w => w[0]).join('').toUpperCase();
+const ME = 'Marina Costa';
+
+function seed(){
+  return {
+    order:['conselho','fundadores','investidores'],
+    circles:{
+      conselho:{ name:'Conselho', role:'membro', host:'Rafael Prado', status:'ativo', myName:ME, request:true,
+        chats:[
+          { id:'mesa', name:'Mesa de ideias', group:true, unread:2, desc:'Ideias em teste antes de virarem projeto.', members:['Ana Ribeiro','Bruno Lima'] },
+          { id:'clara', name:'Clara Souza', group:false, unread:0, members:['Clara Souza'] },
+          { id:'caminhos', name:'Novos caminhos', group:true, unread:0, desc:'Carreira, transições e conversas difíceis.', members:['Clara Souza','Bruno Lima','Ana Ribeiro'] }
+        ] },
+      fundadores:{ name:'Fundadores 2026', role:'anfitriao', status:'ativo', myName:ME, request:false, limit:12,
+        chats:[
+          { id:'operacao', name:'Operação', group:true, unread:3, desc:'Rotina de quem está construindo empresa.', members:['Lia Martins','Diego Alves'] },
+          { id:'lia', name:'Lia Martins', group:false, unread:0, members:['Lia Martins'] }
+        ],
+        members:[ { name:'Lia Martins', meta:'Membro desde 2 out', revoked:false }, { name:'Diego Alves', meta:'Membro desde 5 out', revoked:false }, { name:'Sofia Reis', meta:'Membro desde 9 out', revoked:false }, { name:'Tomás Prado', meta:'Membro desde 11 out', revoked:false } ],
+        invites:[ { label:'Convite para André', meta:'Criado hoje · expira em 2 dias', state:'Pendente' }, { label:'Convite para Sofia', meta:'Usado em 9 out', state:'Usado' }, { label:'Convite sem nome', meta:'Expirou em 4 out', state:'Expirado' } ] },
+      investidores:{ name:'Investidores', role:'membro', host:'Paulo Mendes', status:'retirado', revokedOn:'14 de outubro', myName:ME, chats:[] }
+    },
+    threads:{
+      'conselho:mesa':[
+        { id:1, from:'Ana Ribeiro', kind:'text', text:'Podemos conversar amanhã sobre a proposta?', time:'10:12' },
+        { id:2, from:'me', kind:'text', text:'Sim. Vou preparar alguns pontos para discutirmos.', time:'10:14', status:'entregue' },
+        { id:3, from:'Bruno Lima', kind:'file', name:'Proposta revisada.pdf', meta:'248 KB · PDF · Toque para abrir', time:'10:20' },
+        { id:4, from:'Bruno Lima', kind:'audio', dur:'0:42', time:'10:21' },
+        { id:5, from:'Ana Ribeiro', kind:'text', text:'Ouvi o áudio. A segunda parte resolve a dúvida que eu tinha.', time:'10:22' }
+      ],
+      'conselho:clara':[ { id:1, from:'me', kind:'text', text:'Mandei o contrato revisado.', time:'Ontem', status:'entregue' }, { id:2, from:'Clara Souza', kind:'text', text:'Recebi o arquivo. Obrigada!', time:'Ontem' } ],
+      'conselho:caminhos':[ { id:1, from:'Bruno Lima', kind:'text', text:'A proposta ficou pronta. Revisem quando puderem.', time:'Ontem' } ],
+      'fundadores:operacao':[ { id:1, from:'Lia Martins', kind:'text', text:'Alguém já trocou de contador este ano?', time:'09:40' }, { id:2, from:'Diego Alves', kind:'text', text:'Troquei em março. Te passo o contato.', time:'09:44' }, { id:3, from:'Lia Martins', kind:'text', text:'Perfeito, obrigada.', time:'09:45' } ],
+      'fundadores:lia':[ { id:1, from:'Lia Martins', kind:'text', text:'Quinta às 8h no lugar de sempre?', time:'Seg' } ]
+    },
+    groupsExtra:[]
+  };
+}
+
+class Component extends DCLogic {
+  state = { screen:'convite', inv:'validando', animP:0, themeOverride:null, current:'conselho', chatId:'mesa', search:'', drafts:{ 'conselho:clara':'Vou revisar a cláusula 4 e te' },
+    pickerOpen:false, alert:null, toast:null, playing:null, progress:0, recording:false, recSec:0, typing:false, replied:false, cover:true, manageTab:'convites', name:ME, ...seed() };
+  phoneRef = React.createRef(); scrollRef = React.createRef(); timers = [];
+
+  componentDidMount(){
+    this.applyTheme(); this.validate();
+    if (!window.IMSymbol) this.symT = setInterval(() => { if (window.IMSymbol) { clearInterval(this.symT); this.forceUpdate(); } }, 50);
+    this.mq = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
+    this.mqH = () => this.forceUpdate(); this.mq && this.mq.addEventListener && this.mq.addEventListener('change', this.mqH);
+  }
+  componentWillUnmount(){ this.timers.forEach(clearTimeout); clearInterval(this.playInt); clearInterval(this.recInt); clearInterval(this.symT); cancelAnimationFrame(this.raf); this.mq && this.mq.removeEventListener && this.mq.removeEventListener('change', this.mqH); }
+  componentDidUpdate(pp, ps){
+    if (pp.tema !== this.props.tema && this.state.themeOverride) this.setState({ themeOverride:null });
+    this.applyTheme();
+    const s = this.scrollRef.current;
+    if (s && (ps.screen !== this.state.screen || ps.threads !== this.state.threads || ps.typing !== this.state.typing)) s.scrollTop = s.scrollHeight;
+    if (pp.offline && !this.props.offline) this.flushPending();
+  }
+  later(fn, ms){ this.timers.push(setTimeout(fn, ms)); }
+  themePref(){ return this.state.themeOverride || this.props.tema || 'sistema'; }
+  themeName(){ const p = this.themePref(); return p === 'sistema' ? (this.mq && this.mq.matches ? 'escuro' : 'claro') : p; }
+  applyTheme(){ const el = this.phoneRef.current; if (!el) return; const t = TOK[this.themeName()]; for (const k in t) el.style.setProperty('--'+k, t[k]); }
+  offline(){ return !!this.props.offline; }
+  toastMsg(t){ this.setState({ toast:t }); this.later(() => this.setState({ toast:null }), 2600); }
+  key(chatId){ return this.state.current+':'+(chatId || this.state.chatId); }
+
+  validate(){ this.setState({ inv:'validando', animP:0 }); this.later(() => this.setState({ inv:'valido' }), 900); }
+  go(screen, extra){
+    this.setState({ screen, alert:null, pickerOpen:false, ...(extra||{}) });
+    if (screen === 'convite') this.validate();
+    if (screen === 'chat' || screen === 'info') this.markRead((extra && extra.chatId) || this.state.chatId, (extra && extra.current) || this.state.current);
+  }
+  markRead(id, cid){ this.setState(s => { const c = s.circles[cid]; if (!c) return null; return { circles:{ ...s.circles, [cid]:{ ...c, chats:c.chats.map(x => x.id === id ? { ...x, unread:0 } : x) } } }; }); }
+  updCircle(cid, fn){ this.setState(s => ({ circles:{ ...s.circles, [cid]:fn(s.circles[cid]) } })); }
+
+  confirmInvite(){
+    const st = this.state.inv;
+    if (st === 'entrando' || st === 'anim') return;
+    if (st === 'confirmado') return this.go('perfil');
+    this.setState({ inv:'entrando' });
+    this.later(() => {
+      if (this.offline()) return this.setState({ inv:'falhou' });
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return this.setState({ inv:'confirmado', animP:1 });
+      this.setState({ inv:'anim', animP:0 });
+      const t0 = performance.now();
+      const step = t => { const p = Math.min(1, (t - t0) / 600); this.setState({ animP:p }); if (p < 1) this.raf = requestAnimationFrame(step); else this.setState({ inv:'confirmado' }); };
+      this.raf = requestAnimationFrame(step);
+    }, 1100);
+  }
+  finishProfile(){
+    const name = this.state.name.trim(); if (!name) return;
+    this.setState(s => ({
+      order: s.order.includes('faria') ? s.order : ['faria', ...s.order],
+      circles:{ ...s.circles, faria:{ name:'Mesa Faria Lima', role:'membro', host:'Helena Duarte', status:'ativo', myName:name, request:false, chats:[] } },
+      current:'faria'
+    }));
+    this.go('lista', { search:'' });
+    this.toastMsg('Você entrou em Mesa Faria Lima.');
+  }
+
+  pushMsg(k, msg){ this.setState(s => ({ threads:{ ...s.threads, [k]:[...(s.threads[k]||[]), msg] } })); }
+  setStatus(k, id, status){ this.setState(s => ({ threads:{ ...s.threads, [k]:(s.threads[k]||[]).map(m => m.id === id ? { ...m, status } : m) } })); }
+  deliver(k, id){ if (this.offline()) return; this.later(() => !this.offline() && this.setStatus(k, id, 'enviada'), 700); this.later(() => !this.offline() && this.setStatus(k, id, 'entregue'), 1700); }
+  flushPending(){ const th = this.state.threads; Object.keys(th).forEach(k => th[k].forEach(m => { if (m.from === 'me' && m.status === 'pendente') this.deliver(k, m.id); })); }
+  send(){
+    const k = this.key(), text = (this.state.drafts[k] || '').trim(); if (!text) return;
+    const id = Date.now();
+    this.pushMsg(k, { id, from:'me', kind:'text', text, time:now(), status:'pendente' });
+    this.setState(s => ({ drafts:{ ...s.drafts, [k]:'' } }));
+    this.deliver(k, id);
+    if (k === 'conselho:mesa' && !this.state.replied && !this.offline()) {
+      this.setState({ replied:true });
+      this.later(() => this.setState({ typing:true }), 1800);
+      this.later(() => { this.setState({ typing:false }); this.pushMsg(k, { id:id+1, from:'Ana Ribeiro', kind:'text', text:'Perfeito. Amanhã às 10h, então.', time:now() }); }, 3600);
+    }
+  }
+  startRec(){ this.setState({ recording:true, recSec:0 }); this.recInt = setInterval(() => this.setState(s => ({ recSec:s.recSec+1 })), 1000); }
+  stopRec(){ clearInterval(this.recInt); this.setState({ recording:false }); }
+  sendRec(){ const sec = Math.max(1, this.state.recSec), k = this.key(), id = Date.now(); this.stopRec(); this.pushMsg(k, { id, from:'me', kind:'audio', dur:'0:'+String(sec).padStart(2,'0'), time:now(), status:'pendente' }); this.deliver(k, id); }
+  togglePlay(id){
+    clearInterval(this.playInt);
+    if (this.state.playing === id) return this.setState({ playing:null });
+    this.setState({ playing:id, progress:0 });
+    this.playInt = setInterval(() => { const p = this.state.progress + 0.0125; if (p >= 1) { clearInterval(this.playInt); this.setState({ playing:null, progress:0 }); } else this.setState({ progress:p }); }, 100);
+  }
+  ask(a){ this.setState({ alert:a }); }
+  removeCircle(cid, msg){
+    this.setState(s => { const order = s.order.filter(x => x !== cid); const circles = { ...s.circles }; delete circles[cid]; const next = order.find(x => circles[x].status === 'ativo') || order[0]; return { order, circles, current: next || null }; });
+    this.later(() => { if (!this.state.order.length) this.go('entrada'); else this.go('lista'); this.toastMsg(msg); }, 0);
+  }
+
+  renderVals(){
+    const s = this.state, off = this.offline(), theme = this.themeName(), S = window.IMSymbol, T = TOK[theme];
+    const sc = { ink:T.primary, accent:T.accent, muted:T.text2 };
+    const sym = !S ? {} : {
+      entrada: S({ opt:'a', size:96, ...sc }), lock: S({ opt:'a', size:22, ...sc }), row: S({ opt:'a', size:20, ...sc }),
+      fora: S({ opt:'a', size:84, state:'fora', ...sc }),
+      hero: S({ opt:'a', size:200, state: s.inv === 'anim' ? 'anim' : s.inv === 'confirmado' ? 'completo' : 'convite', p:s.animP, pad:true, ...sc })
+    };
+    const cid = s.current, C = s.circles[cid] || { name:'', chats:[], status:'ativo', myName:ME };
+    const isHost = C.role === 'anfitriao';
+    const chat = C.chats.find(c => c.id === s.chatId) || C.chats[0] || { id:'', name:'', members:[], group:false };
+    const tk = id => cid+':'+id;
+    const lastOf = id => { const t = s.threads[tk(id)] || []; return t[t.length-1]; };
+    const q = s.search.trim().toLowerCase();
+
+    const rows = C.chats.filter(c => !q || c.name.toLowerCase().includes(q)).map(c => {
+      const m = lastOf(c.id), draft = (s.drafts[tk(c.id)] || '').trim();
+      const body = !m ? 'Sem mensagens ainda' : m.kind === 'file' ? 'Arquivo · '+m.name : m.kind === 'audio' ? 'Mensagem de voz · '+m.dur : m.text;
+      const who = !m || m.kind === 'system' ? '' : m.from === 'me' ? 'Você: ' : c.group ? m.from.split(' ')[0]+': ' : '';
+      return { name:c.name, initials:ini(c.name), group:c.group, person:!c.group, time: m ? m.time : '',
+        preview: draft || who+body, hasDraft:!!draft, pending: !draft && m && m.from === 'me' && m.status === 'pendente',
+        hasUnread:c.unread > 0, unread:c.unread, timeColor: c.unread > 0 ? 'var(--primary)' : 'var(--text2)',
+        a11y: c.name + (c.unread ? ', '+c.unread+(c.unread > 1 ? ' mensagens não lidas' : ' mensagem não lida') : ''),
+        open: () => this.go('chat', { chatId:c.id }) };
+    });
+
+    const unreadIn = id => (s.circles[id].chats || []).filter(c => c.unread > 0).length;
+    const otherActivity = s.order.some(id => id !== cid && s.circles[id].status === 'ativo' && unreadIn(id) > 0);
+    const circleRows = s.order.map(id => {
+      const c = s.circles[id], n = unreadIn(id), rev = c.status === 'retirado';
+      const meta = rev ? 'Acesso retirado' : [c.role === 'anfitriao' ? 'Você é anfitriã' : 'Anfitrião: '+c.host, n ? n+(n > 1 ? ' conversas com novidade' : ' conversa com novidade') : ''].filter(Boolean).join(' · ');
+      return { name:c.name, initials:ini(c.name), meta, current:id === cid, weight: id === cid ? 600 : 400, ring: rev ? 'var(--text2)' : 'var(--primary)',
+        a11y: c.name+', '+meta+(id === cid ? ', círculo atual' : ''), pick: () => this.go('lista', { current:id, search:'', chatId:(c.chats[0]||{}).id }) };
+    });
+
+    const statusMap = { pendente: off ? 'Aguardando conexão' : 'Enviando', enviada:'Enviada', entregue:'Entregue' };
+    const raw = s.threads[tk(chat.id)] || [];
+    const msgs = raw.map((m, i) => {
+      const playing = s.playing === m.id, prev = raw[i-1];
+      return { ...m, isSystem:m.kind === 'system', isMine:m.from === 'me' && m.kind !== 'system', isTheirs:m.from !== 'me' && m.kind !== 'system',
+        isText:m.kind === 'text', isFile:m.kind === 'file', isAudio:m.kind === 'audio',
+        from: (m.from || '').split(' ')[0], showSender: chat.group && m.from !== 'me' && (!prev || prev.from !== m.from),
+        statusLabel:statusMap[m.status] || '', isPending:m.status === 'pendente', isSent:m.status === 'enviada', isDelivered:m.status === 'entregue',
+        statusColor: m.status === 'pendente' ? 'var(--warning)' : 'var(--text2)',
+        isPlaying:playing, notPlaying:!playing, playLabel: playing ? 'Pausar mensagem de voz' : 'Ouvir mensagem de voz, '+(m.dur||''),
+        onPlay: () => this.togglePlay(m.id),
+        bars: BARS.map((h, j) => ({ h:h+'px', c: playing && j/BARS.length < s.progress ? 'var(--primary)' : 'var(--border)' })) };
+    });
+    const typing = s.typing && tk(chat.id) === 'conselho:mesa';
+
+    const admin = isHost ? { name:C.myName+' (você)', initials:ini(C.myName), admin:true } : { name:C.host, initials:ini(C.host || 'A'), admin:true };
+    const infoMembers = [admin, ...chat.members.map(n => ({ name:n, initials:ini(n), admin:false })), ...(isHost ? [] : [{ name:C.myName+' (você)', initials:ini(C.myName), admin:false }])];
+
+    const members = C.members || [], invites = C.invites || [];
+    const activeMembers = members.filter(m => !m.revoked).length + 1;
+    const pendingInv = invites.filter(i => i.state === 'Pendente' || i.state === 'Novo').length;
+    const used = activeMembers + pendingInv, limit = C.limit || 0, full = isHost && used >= limit;
+    const segOn = 'var(--surface)', segOff = 'transparent';
+    const pref = this.themePref();
+    const inv = s.inv;
+    const jumpDefs = [
+      ['entrada','Entrada sem convite', () => this.go('entrada')],
+      ['convite','Confirmar convite', () => this.go('convite')],
+      ['indisponivel','Convite indisponível', () => this.go('indisponivel')],
+      ['perfil','Perfil no novo círculo', () => this.go('perfil')],
+      ['lista','Conversas · Conselho', () => this.go('lista', { current:'conselho', search:'' })],
+      ['picker','Seletor de círculo', () => { this.go('lista', { current: s.circles.conselho ? 'conselho' : s.order[0] }); this.setState({ pickerOpen:true }); }],
+      ['chat','Conversa em grupo', () => s.circles.conselho && this.go('chat', { current:'conselho', chatId:'mesa' })],
+      ['info','Informações do grupo', () => s.circles.conselho && this.go('info', { current:'conselho', chatId:'mesa' })],
+      ['ajustes','Ajustes', () => this.go('ajustes')],
+      ['gestao','Gestão · Fundadores 2026', () => s.circles.fundadores && this.go('gestao', { current:'fundadores' })],
+      ['retirado','Acesso retirado · Investidores', () => s.circles.investidores && this.go('lista', { current:'investidores' })]
+    ];
+    const activeJump = s.pickerOpen ? 'picker' : s.screen === 'lista' && C.status === 'retirado' ? 'retirado' : s.screen;
+
+    return {
+      phoneRef:this.phoneRef, scrollRef:this.scrollRef, offline:off, sym,
+      is: { entrada:s.screen==='entrada', convite:s.screen==='convite', indisponivel:s.screen==='indisponivel', perfil:s.screen==='perfil', lista:s.screen==='lista', chat:s.screen==='chat', info:s.screen==='info', ajustes:s.screen==='ajustes', gestao:s.screen==='gestao' },
+      jumps: jumpDefs.map(([k, label, go]) => ({ label, go, active: activeJump === k })),
+      hasCircles: s.order.length > 0,
+      closeInvite: () => this.go('lista'),
+      inv: {
+        validating: inv === 'validando', ready: inv !== 'validando', busy: inv === 'entrando', failed: inv === 'falhou',
+        showCard: inv !== 'confirmado' && inv !== 'anim',
+        title: inv === 'confirmado' ? 'Você está no círculo.' : inv === 'anim' ? 'Entrando no círculo…' : 'Você recebeu um convite.',
+        body: inv === 'confirmado' ? 'Agora você faz parte de Mesa Faria Lima. Falta só escolher como você aparece para os outros membros.' : 'Helena Duarte chamou você para o círculo Mesa Faria Lima.',
+        cta: { valido:'Entrar no círculo', entrando:'Entrando…', anim:'Entrando…', confirmado:'Continuar', falhou:'Tentar novamente' }[inv] || 'Entrar no círculo',
+        footnote: inv === 'confirmado' || inv === 'anim' ? 'Este aparelho agora faz parte do círculo.' : 'Ao confirmar, você entra no círculo com este aparelho.',
+        secondary: inv === 'confirmado' ? ' ' : 'Agora não',
+        onPrimary: () => this.confirmInvite(),
+        onSecondary: () => inv !== 'confirmado' && this.go(s.order.length ? 'lista' : 'entrada')
+      },
+      toConvite: () => this.go('convite'), backHome: () => this.go(s.order.length ? 'lista' : 'entrada'),
+      nameValue:s.name, onName: e => this.setState({ name:e.target.value }), profileInitials: ini(s.name || '?') || '?',
+      nameHelp: 'Preenchido com o nome que você usa em outro círculo. Ele não fica ligado entre círculos.',
+      profileBtn: s.name.trim() ? { bg:'var(--primary)', fg:'var(--onPrimary)' } : { bg:'var(--surfaceMuted)', fg:'var(--disabledText)' },
+      finishProfile: () => this.finishProfile(),
+      cur: { name:C.name, initials:ini(C.name), active:C.status === 'ativo', revoked:C.status === 'retirado', host:C.host, revokedOn:C.revokedOn,
+        myName:C.myName, myInitials:ini(C.myName), isHost, isMember:!isHost && C.status === 'ativo', roleLabel: isHost ? 'Anfitriã deste círculo' : 'Membro · anfitrião: '+C.host },
+      openPicker: () => this.setState({ pickerOpen:true }), closePicker: () => this.setState({ pickerOpen:false }), pickerOpen:s.pickerOpen, circleRows,
+      picker: { otherActivity, a11y:'Círculo atual: '+C.name+'. Trocar de círculo'+(otherActivity ? '. Há novidades em outros círculos' : '') },
+      searchValue:s.search, onSearch: e => this.setState({ search:e.target.value }),
+      showRequest: !!C.request && !q, rows, listEmpty: rows.length === 0,
+      emptyText: q ? 'Nenhuma conversa com “'+s.search.trim()+'”.' : 'Suas conversas vão aparecer aqui.',
+      acceptRequest: () => {
+        this.updCircle(cid, c => ({ ...c, request:false, chats:[{ id:'ana', name:'Ana Ribeiro', group:false, unread:0, members:['Ana Ribeiro'] }, ...c.chats] }));
+        this.setState(st => ({ threads:{ ...st.threads, [cid+':ana']:[{ id:1, kind:'system', from:'', text:'Você aceitou a conversa com Ana. Agora vocês podem trocar mensagens.', time:now() }] } }));
+        this.toastMsg('Conversa com Ana aceita.');
+      },
+      declineRequest: () => this.ask({ title:'Recusar solicitação?', body:'A solicitação de Ana sai da sua lista. Ela pode enviar outra depois.', confirm:'Recusar', danger:true, action: () => this.updCircle(cid, c => ({ ...c, request:false })) }),
+      wipeCircle: () => this.ask({ title:'Apagar dados de '+C.name+'?', body:'Remove deste aparelho as conversas desse círculo. Não apaga cópias nos aparelhos de outras pessoas.', confirm:'Apagar', danger:true, action: () => this.removeCircle(cid, 'Dados de '+C.name+' apagados deste aparelho.') }),
+      toLista: () => this.go('lista'), toAjustes: () => this.go('ajustes'), toGestao: () => this.go('gestao'), toChat: () => this.go('chat'), toInfo: () => this.go('info'),
+      chat: { name:chat.name, initials:ini(chat.name), group:!!chat.group, person:!chat.group,
+        sub: typing ? 'Ana está escrevendo…' : chat.group ? (chat.members.length+(isHost ? 1 : 2))+' membros · toque para ver' : 'Conversa individual',
+        subColor: typing ? 'var(--accent)' : 'var(--text2)',
+        kindLabel: chat.group ? 'Grupo em '+C.name : 'Membro de '+C.name, hasDesc:!!chat.desc, desc:chat.desc || '', memberCount:infoMembers.length },
+      msgs, typing,
+      draftValue: s.drafts[tk(chat.id)] || '', hasDraft: !!(s.drafts[tk(chat.id)] || '').trim(), noDraft: !(s.drafts[tk(chat.id)] || '').trim(),
+      onDraft: e => { const v = e.target.value, k = tk(chat.id); this.setState(st => ({ drafts:{ ...st.drafts, [k]:v } })); },
+      onDraftKey: e => { if (e.key === 'Enter') this.send(); }, send: () => this.send(),
+      recording:s.recording, notRecording:!s.recording, recLabel:'0:'+String(s.recSec).padStart(2,'0'),
+      startRec: () => this.startRec(), cancelRec: () => this.stopRec(), sendRec: () => this.sendRec(),
+      infoMembers, ownerGroup: isHost && chat.group, guestGroup: !isHost && chat.group,
+      leaveGroup: () => this.ask({ title:'Sair de “'+chat.name+'”?', body:'Você deixa de receber mensagens deste grupo. As mensagens já recebidas continuam neste aparelho.', confirm:'Sair do grupo', danger:true, action: () => { this.updCircle(cid, c => ({ ...c, chats:c.chats.filter(x => x.id !== chat.id) })); this.go('lista'); this.toastMsg('Você saiu de “'+chat.name+'”.'); } }),
+      leaveCircle: () => this.ask({ title:'Sair do círculo '+C.name+'?', body:'Você deixa de enviar e receber mensagens neste círculo. As mensagens já recebidas continuam neste aparelho até você apagá-las.', confirm:'Sair do círculo', danger:true, action: () => this.removeCircle(cid, 'Você saiu de '+C.name+'.') }),
+      themeSeg: [['sistema','Sistema'],['claro','Claro'],['escuro','Escuro']].map(([k, label]) => ({ label, on: pref === k ? 'true' : 'false', bg: pref === k ? segOn : segOff, w: pref === k ? 600 : 400, pick: () => this.setState({ themeOverride:k }) })),
+      coverOn: s.cover ? 'true' : 'false', toggleCover: () => this.setState({ cover:!s.cover }),
+      sw: { bg: s.cover ? 'var(--success)' : 'var(--border)', left: s.cover ? '22px' : '2px' },
+      gestaoSummary: activeMembers+' de '+limit+' membros · '+pendingInv+(pendingInv === 1 ? ' convite pendente' : ' convites pendentes'),
+      mgmtSeg: [['convites','Convites'],['membros','Membros'],['grupos','Grupos']].map(([k, label]) => ({ label, bg: s.manageTab === k ? segOn : segOff, w: s.manageTab === k ? 600 : 400, pick: () => this.setState({ manageTab:k }) })),
+      mt: { convites:s.manageTab === 'convites', membros:s.manageTab === 'membros', grupos:s.manageTab === 'grupos' },
+      inviteBtn: full ? { bg:'var(--surfaceMuted)', fg:'var(--disabledText)' } : { bg:'var(--primary)', fg:'var(--onPrimary)' },
+      inviteHelp: full ? 'O círculo está completo. Aumente o limite em Membros ou retire o acesso de alguém para convidar outra pessoa.' : 'Cada convite vale para uma entrada. Se for repassado, quem usar primeiro entra.',
+      createInvite: () => { if (full) return; this.updCircle(cid, c => ({ ...c, invites:[{ label:'Novo convite', meta:'Criado agora · expira em 7 dias', state:'Novo' }, ...c.invites] })); this.toastMsg('Convite criado. Envie o link para uma pessoa.'); },
+      inviteRows: invites.map(i => ({ ...i, color: i.state === 'Pendente' || i.state === 'Novo' ? 'var(--accent)' : 'var(--text2)' })),
+      limit, limitDownColor: limit > used ? 'var(--primary)' : 'var(--disabledText)',
+      limitHelp: limit > used ? 'Inclui você e convites pendentes' : 'Há '+used+' lugares em uso. Para reduzir, retire acessos antes.',
+      limitDown: () => limit > used && this.updCircle(cid, c => ({ ...c, limit:c.limit-1 })),
+      limitUp: () => limit < 50 && this.updCircle(cid, c => ({ ...c, limit:c.limit+1 })),
+      countLabel: activeMembers+' de '+limit+' membros'+(pendingInv ? ' · '+pendingInv+(pendingInv === 1 ? ' convite pendente' : ' convites pendentes') : ''),
+      memberRows: [{ name:C.myName+' (você)', initials:ini(C.myName), meta:'Anfitriã', canRevoke:false, revoked:false, revoke:null }, ...members.map((m, idx) => ({
+        name:m.name, initials:ini(m.name), meta:m.meta, canRevoke:!m.revoked, revoked:m.revoked,
+        revoke: () => this.ask({ title:'Retirar acesso de '+m.name.split(' ')[0]+'?', body:m.name.split(' ')[0]+' deixa de enviar e receber mensagens no círculo. Mensagens já recebidas continuam nos aparelhos.', confirm:'Retirar acesso', danger:true,
+          action: () => this.updCircle(cid, c => ({ ...c, members:c.members.map((x, j) => j === idx ? { ...x, revoked:true, meta:'Retirado hoje' } : x) })) })
+      }))],
+      groupRows: [...C.chats.filter(c => c.group).map(c => ({ name:c.name, initials:ini(c.name), meta:(c.members.length+1)+' membros' })), ...s.groupsExtra.filter(g => g.cid === cid)],
+      createGroup: () => { this.setState(st => ({ groupsExtra:[...st.groupsExtra, { cid, name:'Novo grupo', initials:'NG', meta:'Escolha os membros deste grupo.' }] })); },
+      hasToast:!!s.toast, toast:s.toast || '',
+      hasAlert:!!s.alert, alert: s.alert ? { ...s.alert, color: s.alert.danger ? 'var(--danger)' : 'var(--primary)' } : { title:'', body:'', confirm:'', color:'' },
+      alertConfirm: () => { const a = s.alert; this.setState({ alert:null }); a && a.action && a.action(); },
+      alertCancel: () => this.setState({ alert:null })
+    };
+  }
+}
+</script>
+</body>
+</html>

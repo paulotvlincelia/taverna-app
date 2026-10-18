@@ -6,9 +6,11 @@ As decisões canônicas ficam em [docs/taverna/decisions](../docs/taverna/decisi
 
 ## Handoff
 
-- Feature: invitation-only, BRAND-01, proposta documental de identidade solicitada pelo proprietário. TLC Spec Driven preserva contrato e critérios aprovados; skill design auxilia o briefing, anti-ai-slop auxilia a escrita.
-- Branch: codex/identity-design-draft; base c25dc4eb0. Codex autor/harness/integrador. Worktree exclusivo identity-design-draft; responsabilidade: DESIGN.md, docs/taverna/design, README, checker/fixture Foundation necessários à nova raiz documental e este handoff.
-- Scope: Draft 0.1.0, proposta de marca/cores/tipos/componentes/estados e três telas em claro/escuro. Referências originais documentais; nenhum asset de distribuição aprovado. Não altera interface, assinatura, protocolos ou operação.
-- Checks: executar os 78 testes Foundation, checker, compileall, contraste e whitespace; revisão independente documental antes de publicar. Os dois testes novos verificam links e material privado no DESIGN.md; as 76 asserções/suítes anteriores permanecem.
-- Next: submeter a direção/símbolo/navegação ao proprietário. BRAND-02/03 e demais requisitos continuam Pending até suas provas. Nenhuma aprovação artística foi inferida do pedido de preparar o documento.
-- Native transport: continua no worktree próprio; esta branch não altera ou integra o transporte. Publicação exige pacote classificado/digest exato e integração exige CI e Verifier.
+- Feature: invitation-only, BRAND-01, registro documental InnerMesh 0.5.2. TLC Spec Driven; pedido e seção inicial do HANDOFF delimitam a entrega. Nenhuma UI implementada.
+- Branch: codex/identity-design-draft, início ec4f2c1545b88bd675368f40a95374550ed35079. Codex autor/harness/integrador, worktree exclusivo identity-design-draft.
+- Scope: DESIGN.md substituído, GOVERNANCE.md novo (ausente antes), 49 referências em docs/innermesh/design, registro e relatório desta subentrega. docs/taverna, código, identificadores, catálogos e CI não mudam. Exceção autorizada: dois destinos novos na cópia da fixture Foundation, sem mudar asserts.
+- Capacity: proprietário confirmou 20 convidados além dele, 21 pessoas. Ajuste autorizado somente em DESIGN.md/HANDOFF.md; spec intacta.
+- Checks: contraste 17 pares/34 medições PASS, bytes do JSON idênticos ao pacote. Links de fase 6 esperados: docs/innermesh/assets.md e docs/innermesh/asset-policy.json. Demais links devem resolver. Regressões Foundation e Verifier exigidos antes de publicar.
+- Next: revisão independente do registro; resolver bloqueio do publicador para 25 PNGs antes de publicar o pacote completo no PR para stable. Não contornar guard, implementar UI ou inferir aprovação de navegação/telas.
+- Native transport: permanece pausado e fora desta branch. NSE efetiva continua pré-requisito antes de UI. Plano de remediação externo citado no pacote não localizado nos documentos locais; numeração preservada sem inventar estado.
+- Ownership: somente documentação e handoff; Verifier escreve seu relatório. Estado/evidências locais em .build. Registro detalhado em .specs/features/invitation-only/innermesh-handoff.md.
