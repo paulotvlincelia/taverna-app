@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<script src="innermesh-symbol.js"></script>
+<style>body{margin:0;background:#E9E6DF;font-family:-apple-system,system-ui,sans-serif;color:#14181F}a{color:#1B2638}a:hover{color:#111A28}.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 8px}.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#14181F;color:#fff;border-radius:4px;text-decoration:none}.dv-tname{font:600 13px/1.2 system-ui,sans-serif;color:#14181F}.dv-opts{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#14181F;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 system-ui,sans-serif;color:rgba(0,0,0,.55)}.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}.dv-opt:target .dv-oid{background:#1B2638;color:#fff}.dv-next{margin:22px 0 0;font:12px/1.5 system-ui,sans-serif;color:rgba(0,0,0,.5)}.dv-intro{margin:0 0 22px;max-width:760px;font:400 13px/1.5 system-ui;color:rgba(0,0,0,.6)}</style>
+</helmet>
+
+<section class="dv-turn" id="t2">
+  <div class="dv-thd"><a class="dv-tid" href="#t2">2</a><span class="dv-tname">Paleta: champanhe × bordô</span></div>
+  <p class="dv-intro">Mesmas telas, mesmo tinta e marfim; só o acento e o fundo da porta mudam. Repare em duas coisas: no escuro, se o acento se separa do marfim de ação; no claro, se o bordô se confunde com vermelho de erro. As telas usam o símbolo <a class="dv-oid" href="#1a">1a</a>.</p>
+  <div class="dv-opts">
+    <div class="dv-opt" id="2a">
+      <div class="dv-olabel"><a class="dv-oid" href="#2a">2a</a>Champanhe · DESIGN 0.5</div>
+      <div class="dv-card" style="padding:24px;background:#D9D5CC;display:grid;grid-template-columns:repeat(2,390px);gap:20px">
+        <dc-import name="InnerMeshTela" tema="escuro" acento="champanhe" tela="convite" hint-size="390px,844px"></dc-import>
+        <dc-import name="InnerMeshTela" tema="escuro" acento="champanhe" tela="conversa" hint-size="390px,844px"></dc-import>
+        <dc-import name="InnerMeshTela" tema="claro" acento="champanhe" tela="convite" hint-size="390px,844px"></dc-import>
+        <dc-import name="InnerMeshTela" tema="claro" acento="champanhe" tela="conversa" hint-size="390px,844px"></dc-import>
+      </div>
+      <p style="margin:4px 0 0;max-width:820px;font:400 13px/1.5 system-ui;color:rgba(0,0,0,.65)">Mais quente e mais “clube”. No escuro, champanhe e marfim ficam a 1,66:1: a validade e o botão disputam a mesma família de cor.</p>
+    </div>
+    <div class="dv-opt" id="2b">
+      <div class="dv-olabel"><a class="dv-oid" href="#2b">2b</a>Bordô · alternativa 5.1.2</div>
+      <div class="dv-card" style="padding:24px;background:#D9D5CC;display:grid;grid-template-columns:repeat(2,390px);gap:20px">
+        <dc-import name="InnerMeshTela" tema="escuro" acento="bordo" tela="convite" hint-size="390px,844px"></dc-import>
+        <dc-import name="InnerMeshTela" tema="escuro" acento="bordo" tela="conversa" hint-size="390px,844px"></dc-import>
+        <dc-import name="InnerMeshTela" tema="claro" acento="bordo" tela="convite" hint-size="390px,844px"></dc-import>
+        <dc-import name="InnerMeshTela" tema="claro" acento="bordo" tela="conversa" hint-size="390px,844px"></dc-import>
+      </div>
+      <p style="margin:4px 0 0;max-width:820px;font:400 13px/1.5 system-ui;color:rgba(0,0,0,.65)">Mais sério, menos luxo. Separa-se bem do marfim no escuro. No claro fica perto do <code>danger</code> (#A3262A); se escolhido, o vermelho de erro precisa ficar mais alaranjado.</p>
+    </div>
+  </div>
+  <p class="dv-next">Próximos: “fico com <a class="dv-oid" href="#2a">2a</a>” · “<a class="dv-oid" href="#2b">2b</a>, mas só no escuro” · “testa um terceiro acento”</p>
+</section>
+
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Símbolo: três construções dentro das regras do DESIGN 1.1</span></div>
+  <p class="dv-intro">Cada opção mostra ícone (mestre 1024, exibido a 200), os três tamanhos ópticos (64 · 24 · 20 pt, com menos linhas nos menores), os estados do momento de marca e os testes de rotação e cor única. Nenhuma corda passa pelo centro; o ponto central não toca nenhuma linha.</p>
+  <div class="dv-opts">
+
+    <div class="dv-opt" id="1a">
+      <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Malha · 6 nós, anel + 2 cordas</div>
+      <div class="dv-card" style="width:600px">
+        <div style="background:#0D1015;color:#F1EDE4;padding:28px;display:flex;flex-direction:column;gap:26px">
+          <div style="display:flex;gap:28px;align-items:center">
+            <div style="width:200px;height:200px;border-radius:45px;background:#0D1015;box-shadow:inset 0 0 0 1px #252B35;display:flex;align-items:center;justify-content:center;flex:none">{{ a.iconD }}</div>
+            <div style="display:flex;flex-direction:column;gap:18px">
+              <div style="display:flex;align-items:flex-end;gap:22px">{{ a.d64 }}{{ a.d24 }}{{ a.d20 }}</div>
+              <span style="font:400 12px/1 system-ui;color:#A7AEB9">64 · 24 · 20 pt</span>
+              <div style="display:flex;align-items:center;gap:10px">{{ a.lockD }}<span style="font:600 28px/1 ui-serif,'New York',Georgia,serif;color:#E6DCC6">InnerMesh</span></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">{{ a.sConvite }}<span style="font:400 12px/1 system-ui;color:#A7AEB9">Convite</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">{{ a.sCompleto }}<span style="font:400 12px/1 system-ui;color:#A7AEB9">No círculo</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">{{ a.sFora }}<span style="font:400 12px/1 system-ui;color:#A7AEB9">Fora do círculo</span></div>
+          </div>
+        </div>
+        <div style="background:#F5F3EE;padding:24px 28px;display:flex;gap:26px;align-items:center;flex-wrap:wrap">
+          <div style="width:120px;height:120px;border-radius:27px;background:#F5F3EE;box-shadow:inset 0 0 0 1px #DFDBD3;display:flex;align-items:center;justify-content:center;flex:none">{{ a.iconL }}</div>
+          <div style="display:flex;align-items:flex-end;gap:18px">{{ a.l64 }}{{ a.l24 }}{{ a.l20 }}</div>
+          <div style="display:flex;gap:16px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">{{ a.r180 }}<span style="font:400 11px/1 system-ui;color:#565D68">180°</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">{{ a.r90 }}<span style="font:400 11px/1 system-ui;color:#565D68">90°</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">{{ a.mono }}<span style="font:400 11px/1 system-ui;color:#565D68">Uma cor</span></div>
+          </div>
+        </div>
+        <div style="padding:16px 28px 20px;display:flex;flex-direction:column;gap:6px;font:400 13px/1.5 system-ui;color:#3A404A">
+          <span><b>A favor:</b> o mais literal ao nome. A malha aparece de fato, e o convite tira um nó com as suas ligações.</span>
+          <span><b>Risco:</b> em 20 pt vira um hexágono, forma comum em ícones de tecnologia e blockchain.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="1b">
+      <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Anel aberto · 7 nós, uma passagem</div>
+      <div class="dv-card" style="width:600px">
+        <div style="background:#0D1015;color:#F1EDE4;padding:28px;display:flex;flex-direction:column;gap:26px">
+          <div style="display:flex;gap:28px;align-items:center">
+            <div style="width:200px;height:200px;border-radius:45px;background:#0D1015;box-shadow:inset 0 0 0 1px #252B35;display:flex;align-items:center;justify-content:center;flex:none">{{ b.iconD }}</div>
+            <div style="display:flex;flex-direction:column;gap:18px">
+              <div style="display:flex;align-items:flex-end;gap:22px">{{ b.d64 }}{{ b.d24 }}{{ b.d20 }}</div>
+              <span style="font:400 12px/1 system-ui;color:#A7AEB9">64 · 24 · 20 pt</span>
+              <div style="display:flex;align-items:center;gap:10px">{{ b.lockD }}<span style="font:600 28px/1 ui-serif,'New York',Georgia,serif;color:#E6DCC6">InnerMesh</span></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">{{ b.sConvite }}<span style="font:400 12px/1 system-ui;color:#A7AEB9">Convite</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">{{ b.sCompleto }}<span style="font:400 12px/1 system-ui;color:#A7AEB9">No círculo</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">{{ b.sFora }}<span style="font:400 12px/1 system-ui;color:#A7AEB9">Fora do círculo</span></div>
+          </div>
+        </div>
+        <div style="background:#F5F3EE;padding:24px 28px;display:flex;gap:26px;align-items:center;flex-wrap:wrap">
+          <div style="width:120px;height:120px;border-radius:27px;background:#F5F3EE;box-shadow:inset 0 0 0 1px #DFDBD3;display:flex;align-items:center;justify-content:center;flex:none">{{ b.iconL }}</div>
+          <div style="display:flex;align-items:flex-end;gap:18px">{{ b.l64 }}{{ b.l24 }}{{ b.l20 }}</div>
+          <div style="display:flex;gap:16px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">{{ b.r180 }}<span style="font:400 11px/1 system-ui;color:#565D68">180°</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">{{ b.r90 }}<span style="font:400 11px/1 system-ui;color:#565D68">90°</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">{{ b.mono }}<span style="font:400 11px/1 system-ui;color:#565D68">Uma cor</span></div>
+          </div>
+        </div>
+        <div style="padding:16px 28px 20px;display:flex;flex-direction:column;gap:6px;font:400 13px/1.5 system-ui;color:#3A404A">
+          <span><b>A favor:</b> a abertura no anel é o lugar por onde se entra. O símbolo conta a história do convite mesmo parado, e a animação só fecha o que já estava sugerido.</span>
+          <span><b>Risco:</b> a passagem pode ler como “incompleto” ou “carregando”. Sete nós pesam em 20 pt.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="1c">
+      <div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Órbita · 5 nós irregulares, circunferência contínua</div>
+      <div class="dv-card" style="width:600px">
+        <div style="background:#0D1015;color:#F1EDE4;padding:28px;display:flex;flex-direction:column;gap:26px">
+          <div style="display:flex;gap:28px;align-items:center">
+            <div style="width:200px;height:200px;border-radius:45px;background:#0D1015;box-shadow:inset 0 0 0 1px #252B35;display:flex;align-items:center;justify-content:center;flex:none">{{ c.iconD }}</div>
+            <div style="display:flex;flex-direction:column;gap:18px">
+              <div style="display:flex;align-items:flex-end;gap:22px">{{ c.d64 }}{{ c.d24 }}{{ c.d20 }}</div>
+              <span style="font:400 12px/1 system-ui;color:#A7AEB9">64 · 24 · 20 pt</span>
+              <div style="display:flex;align-items:center;gap:10px">{{ c.lockD }}<span style="font:600 28px/1 ui-serif,'New York',Georgia,serif;color:#E6DCC6">InnerMesh</span></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">{{ c.sConvite }}<span style="font:400 12px/1 system-ui;color:#A7AEB9">Convite</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">{{ c.sCompleto }}<span style="font:400 12px/1 system-ui;color:#A7AEB9">No círculo</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">{{ c.sFora }}<span style="font:400 12px/1 system-ui;color:#A7AEB9">Fora do círculo</span></div>
+          </div>
+        </div>
+        <div style="background:#F5F3EE;padding:24px 28px;display:flex;gap:26px;align-items:center;flex-wrap:wrap">
+          <div style="width:120px;height:120px;border-radius:27px;background:#F5F3EE;box-shadow:inset 0 0 0 1px #DFDBD3;display:flex;align-items:center;justify-content:center;flex:none">{{ c.iconL }}</div>
+          <div style="display:flex;align-items:flex-end;gap:18px">{{ c.l64 }}{{ c.l24 }}{{ c.l20 }}</div>
+          <div style="display:flex;gap:16px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">{{ c.r180 }}<span style="font:400 11px/1 system-ui;color:#565D68">180°</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">{{ c.r90 }}<span style="font:400 11px/1 system-ui;color:#565D68">90°</span></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">{{ c.mono }}<span style="font:400 11px/1 system-ui;color:#565D68">Uma cor</span></div>
+          </div>
+        </div>
+        <div style="padding:16px 28px 20px;display:flex;flex-direction:column;gap:6px;font:400 13px/1.5 system-ui;color:#3A404A">
+          <span><b>A favor:</b> o mais legível em 20 pt e o mais calmo. O espaçamento irregular parece pessoas reais, não uma grade.</span>
+          <span><b>Risco:</b> menos “malha”. Pode lembrar órbita, átomo ou um ícone de sincronização.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <p class="dv-next">Próximos: “<a class="dv-oid" href="#1b">1b</a> com 6 nós” · “a passagem de <a class="dv-oid" href="#1b">1b</a> na órbita de <a class="dv-oid" href="#1c">1c</a>” · “<a class="dv-oid" href="#1a">1a</a> com cordas mais finas”</p>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount(){ if (!window.IMSymbol) this.t = setInterval(() => { if (window.IMSymbol) { clearInterval(this.t); this.forceUpdate(); } }, 50); }
+  componentWillUnmount(){ clearInterval(this.t); }
+  renderVals(){
+    const S = window.IMSymbol;
+    const D = { ink:'#E6DCC6', accent:'#C9A86A', muted:'#A7AEB9' }, L = { ink:'#1B2638', accent:'#7E6128', muted:'#565D68' };
+    const mk = opt => !S ? {} : {
+      iconD:S({ opt, size:128, ...D }), d64:S({ opt, size:64, ...D }), d24:S({ opt, size:24, ...D }), d20:S({ opt, size:20, ...D }), lockD:S({ opt, size:30, ...D }),
+      sConvite:S({ opt, size:104, state:'convite', ...D }), sCompleto:S({ opt, size:84, ...D }), sFora:S({ opt, size:104, state:'fora', ...D }),
+      iconL:S({ opt, size:77, ...L }), l64:S({ opt, size:64, ...L }), l24:S({ opt, size:24, ...L }), l20:S({ opt, size:20, ...L }),
+      r180:S({ opt, size:56, rotate:180, ...L }), r90:S({ opt, size:56, rotate:90, ...L }), mono:S({ opt, size:56, mono:true, ...L })
+    };
+    return { a:mk('a'), b:mk('b'), c:mk('c') };
+  }
+}
+</script>
+</body>
+</html>
