@@ -242,3 +242,23 @@ No build share-boundary-dev-c, framework e NSE mantêm hashes idênticos aos da 
 
 
 A seleção na folha More foi corrigida a partir da hierarquia real: suas células não têm label, e o nome da atividade está no StaticText activityTitleLabel. A rodada de desenvolvimento run-share-f4c0f198 passou os 22 checkpoints e um XCTest sem falhas/skips usando essa seleção visível. A tentativa limpa anterior run-share-7880bbbd falhou na seleção e não recebeu PASS. O novo commit exige rodada limpa e revisão independente antes de publicar.
+
+
+## Retomada autorizada e qualificação NSE em 2026-10-18
+
+O proprietário aprovou a direção visual InnerMesh do PR #20 e autorizou retomar a prova NSE, mantendo os gates e sem merge. Método preservado: TLC Spec Driven; seis tarefas existentes, execução pelo autor e Verifier independente. Worktree e branch exclusivos permanecem os mesmos. A aprovação visual não libera assets de distribuição nem implementação antecipada de telas/renomeação.
+
+O checkout foi encontrado limpo em `4e0051008da46e3fdf9a1c3d3918f554d41e832f`. O build clean `share-final-clean` e os hashes dos quatro produtos foram conferidos antes das regressões. Não houve novo build do autor nesta retomada. A primeira tentativa de payload recusou corretamente o manifesto default antigo do guard, por hash de fonte divergente; cinco erros de preparação, sem PASS de produto. A tentativa foi preservada. O comando corrigido usa explicitamente o guard atual, sem editar fontes ou asserções:
+
+```sh
+TAVERNA_NATIVE_GUARD=.build/attempts/guard-share-b/guard-manifest.json TAVERNA_NATIVE_BUILD=.build/attempts/share-final-clean/receipt.json python3.12 tools/taverna/native_access_tests/test_payload.py
+TAVERNA_NATIVE_GUARD=.build/attempts/guard-share-b/guard-manifest.json TAVERNA_NATIVE_BUILD=.build/attempts/share-final-clean/receipt.json python3.12 tools/taverna/native_access_tests/test_startup.py
+```
+
+Payload Full passou cinco casos juntos em 162,838 s, sem falhas/skips. Novos receipts em `.build/access-qualification/run-payload-95dd633e`, `run-payload-e54bffd1`, `run-payload-f1e71612`, `run-payload-bb078401` e `run-payload-5fe364b7`, sob `ios/payload-receipt.json`, registram commit, fonte limpa, produtos, processo e fixture próprios. Mensagens e arquivos foram comparados nos dois sentidos; cada arquivo tem 2.097.289 bytes. Revogação e autorização ausente fecharam fluxos em 0,1551 s e 0,1495 s, respectivamente, após progresso estritamente parcial. Novas conexões SMP/XFTP foram negadas; sentinela manteve somente a conexão de controle. Logs em `.build/resume-20261018-payload-qualified.log`; a tentativa recusada permanece em `.build/resume-20261018-payload.log`.
+
+Startup passou quinze checkpoints em 24,332 s, sem falhas/skips, com receipt novo `.build/access-qualification/run-startup-b3bfc74f/ios/startup-result.json`. As 76 verificações Foundation, checker, compileall e whitespace passaram. Nenhuma fonte, asserção, target ou configuração foi alterada. Esses resultados pertencem a `4e0051008`; este registro documental não alega novo build para o commit que o incorpora.
+
+A [qualificação do ambiente NSE](nse-environment.md) mantém o gate em **BLOCKED_ENVIRONMENT**. A Apple documenta execução por push remoto APNs Sandbox no simulador compatível; `simctl push` não comprova a extensão. O artefato preservado usa assinatura ad hoc e bundle herdado; não há identidade APNs própria qualificada nesta rodada. A preparação de APNs Sandbox e do provisionamento permanece fora deste recorte; sua qualificação tem gate separado e não antecipa a renomeação do produto.
+
+A revisão independente do recorte Share está em andamento no scratch próprio, com build/guard novos; nenhuma execução interrompida anterior recebe PASS. T4 inteira, T6, os oito NP e os 34 requisitos do produto permanecem pendentes. Esta rodada não qualifica APNs, NSE efetiva ou operação; nenhum merge foi executado.
