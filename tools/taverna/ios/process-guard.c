@@ -58,17 +58,29 @@ done:
     return ok;
 }
 
+#ifndef TAVERNA_GUARD_EXECUTABLE
+#define TAVERNA_GUARD_EXECUTABLE "SimpleX"
+#endif
+#ifndef TAVERNA_GUARD_PREPARE
+#define TAVERNA_GUARD_PREPARE() 1
+#endif
+#ifndef TAVERNA_GUARD_APPLIED
+#define TAVERNA_GUARD_APPLIED() getenv("TAVERNA_SANDBOX_APPLIED")
+#endif
+#ifndef TAVERNA_GUARD_MECHANISM
+#define TAVERNA_GUARD_MECHANISM "kernel_sandbox"
+#endif
 __attribute__((constructor)) static void taverna_guard(void) {
-    if (strcmp(getprogname(), "SimpleX") != 0) return;
+    if (strcmp(getprogname(), TAVERNA_GUARD_EXECUTABLE) != 0 || !TAVERNA_GUARD_PREPARE()) return;
     const char *logpath = getenv("TAVERNA_GUARD_LOG");
     int fd = logpath ? open(logpath, O_WRONLY | O_CREAT | O_APPEND, 0600) : -1;
     if (fd < 0) _exit(78);
-    if (getenv("TAVERNA_SANDBOX_APPLIED")) {
+    if (TAVERNA_GUARD_APPLIED()) {
         int ipv4 = external_errno(AF_INET), ipv6 = external_errno(AF_INET6);
         int local = local_connection();
-        dprintf(fd, "{\"pid\":%d,\"executable\":\"SimpleX\",\"phase\":\"before_main\","
-            "\"ipv4_errno\":%d,\"ipv6_errno\":%d,\"loopback\":%s}\n",
-            getpid(), ipv4, ipv6, local ? "true" : "false");
+        dprintf(fd, "{\"pid\":%d,\"executable\":\"" TAVERNA_GUARD_EXECUTABLE "\",\"phase\":\"before_main\","
+            "\"ipv4_errno\":%d,\"ipv6_errno\":%d,\"loopback\":%s,\"mechanism\":\"%s\"}\n",
+            getpid(), ipv4, ipv6, local ? "true" : "false", TAVERNA_GUARD_MECHANISM);
         close(fd);
         if ((ipv4 != EPERM && ipv4 != EACCES) ||
             (ipv6 != EPERM && ipv6 != EACCES) || !local) _exit(78);

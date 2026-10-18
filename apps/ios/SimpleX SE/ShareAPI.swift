@@ -22,6 +22,7 @@ func apiGetActiveUser() throws -> User? {
 }
 
 func apiStartChat() throws -> Bool {
+    try apiSetNetworkConfig(getNetCfg())
     let r: APIResult<SEChatResponse> = sendSimpleXCmd(SEChatCommand.startChat(mainApp: false, enableSndFiles: true))
     switch r {
     case .result(.chatStarted): return true
@@ -31,7 +32,7 @@ func apiStartChat() throws -> Bool {
 }
 
 func apiSetNetworkConfig(_ cfg: NetCfg) throws {
-    let r: APIResult<SEChatResponse> = sendSimpleXCmd(SEChatCommand.apiSetNetworkConfig(networkConfig: cfg))
+    let r: APIResult<SEChatResponse> = sendSimpleXCmd(SEChatCommand.apiSetNetworkConfig(networkConfig: try TavernaCoreTransport.networkConfig(cfg)))
     if case .result(.cmdOk) = r { return }
     throw r.unexpected
 }
@@ -85,7 +86,9 @@ func apiSendMessages(
 }
 
 func apiActivateChat() throws {
+    let managed = try TavernaCoreTransport.networkConfig(getNetCfg())
     chatReopenStore()
+    try apiSetNetworkConfig(managed)
     let r: APIResult<SEChatResponse> = sendSimpleXCmd(SEChatCommand.apiActivateChat(restoreChat: false))
     if case .result(.cmdOk) = r { return }
     throw r.unexpected
@@ -115,6 +118,14 @@ func apiSuspendChat(expired: Bool) {
     SEChatState.shared.set(.inactive)
 }
 
+#if DEBUG && targetEnvironment(simulator)
+// Reads real core state as the generic dispatcher serializes a Share command.
+// Never changes the command or supplies an API response.
+enum TavernaShareCommandProbe {
+    static var beforeSend: ((SEChatCommand) -> Void)?
+}
+#endif
+
 enum SEChatCommand: ChatCmdProtocol {
     case showActiveUser
     case startChat(mainApp: Bool, enableSndFiles: Bool)
@@ -128,6 +139,9 @@ enum SEChatCommand: ChatCmdProtocol {
     case apiSendMessages(type: ChatType, id: Int64, scope: GroupChatScope?, sendAsGroup: Bool, live: Bool, ttl: Int?, composedMessages: [ComposedMessage])
     
     var cmdString: String {
+        #if DEBUG && targetEnvironment(simulator)
+        TavernaShareCommandProbe.beforeSend?(self)
+        #endif
         switch self {
         case .showActiveUser: return "/u"
         case let .startChat(mainApp, enableSndFiles): return "/_start main=\(onOff(mainApp)) snd_files=\(onOff(enableSndFiles))"

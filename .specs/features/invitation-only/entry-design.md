@@ -1,6 +1,6 @@
 # Convite e entrada: desenho mínimo da integração
 
-**Data:** 2026-10-16. **Status:** proposta para revisão do proprietário; não implementada.
+**Data:** 2026-10-16. **Status:** desenho técnico A1 aprovado em 2026-10-16; implementação ainda requer os gates abaixo.
 **Spec canônica:** [spec.md](spec.md). **Contexto aprovado:** [context.md](context.md).
 **Base:** PR #14 integrado em `da9136c541dd4ca06da0269dfd12355a360e0d3b`.
 **Método:** TLC Spec Driven, porque a entrega conecta autorização durável, transporte nativo e três processos iOS. Este desenho continua a feature existente e preserva seus 34 critérios.
@@ -66,7 +66,7 @@ Estes contratos são propostos para a implementação; nenhum endpoint está dis
 | `GET /v1/members` | Proprietário autenticado | IDs opacos, estado e data da alteração; sem mensagens ou identidade civil obrigatória |
 | `POST /v1/members/{id}/revoke` | Proprietário autenticado | Revogação durável; sessões da ponte fecham em até 60 segundos; repetição não reativa membro |
 
-Proposta inicial de ferramenta do proprietário: CLI administrativa usando credencial individual própria e esses endpoints. A custódia/bootstrap ocorre fora do app público; convidados nunca podem receber papel de proprietário pelo resgate. A interface administrativa no app fica para entrega posterior, sem adicionar um painel web agora. Essa escolha de interação precisa ser confirmada com o desenho.
+Ferramentas de gestão usam os endpoints autenticados. A custódia e o bootstrap são definidos no repositório privado; o resgate de um convite nunca concede papel de proprietário.
 
 Identidade administrativa exige mTLS validado no terminador TLS do próprio serviço e papel consultado no estado autoritativo. Não aceitar certificado, papel ou cabeçalho de identidade enviado pelo corpo HTTP; não confiar em headers injetáveis por um proxy. Qualificar a passagem segura da identidade TLS para o runtime HTTP antes de adotar um framework. A associação referencia o certificado emitido, além da chave pública, para que outro certificado da mesma CA não herde permissão.
 

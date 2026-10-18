@@ -33,13 +33,22 @@ struct SimpleXApp: App {
         setDbContainer()
         BGManager.shared.register()
         NtfManager.shared.registerCategories()
+        TavernaNativeProbe.startIfRequested()
     }
 
     var body: some Scene {
         WindowGroup {
             // contentAccessAuthenticationExtended has to be passed to ContentView on view initialization,
             // so that it's computed by the time view renders, and not on event after rendering
-            ContentView(contentAccessAuthenticationExtended: !authenticationExpired())
+            Group {
+                #if DEBUG && targetEnvironment(simulator)
+                if TavernaShareHost.active { TavernaShareHostView() } else {
+                    ContentView(contentAccessAuthenticationExtended: !authenticationExpired())
+                }
+                #else
+                ContentView(contentAccessAuthenticationExtended: !authenticationExpired())
+                #endif
+            }
                 .environmentObject(chatModel)
                 .environmentObject(AppTheme.shared)
                 .onOpenURL { url in
@@ -51,6 +60,7 @@ struct SimpleXApp: App {
                     }
                 }
                 .onAppear() {
+                    guard !TavernaNativeProbe.active else { return }
                     // Present screen for continue migration if it wasn't finished yet
                     if chatModel.migrationState != nil {
                         // It's important, otherwise, user may be locked in undefined state
@@ -64,6 +74,7 @@ struct SimpleXApp: App {
                 }
 // Spec: spec/architecture.md#scenePhaseHandling
                 .onChange(of: scenePhase) { phase in
+                    guard !TavernaNativeProbe.active else { return }
                     logger.debug("scenePhase was \(String(describing: scenePhase)), now \(String(describing: phase))")
                     AppSheetState.shared.scenePhaseActive = phase == .active
                     switch (phase) {
