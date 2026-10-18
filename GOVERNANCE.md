@@ -26,6 +26,8 @@ O [gate de assets](docs/innermesh/asset-policy.json) continua **BLOCKED**, com a
 - Fotos e avatares de participantes: dados locais, nunca fixtures nem assets da marca. Exemplos usam só iniciais fictícias.
 - Sem downloads automáticos de imagens, analytics, fontes ou CDN. Referências visuais são locais.
 
+**Exceção documental aprovada pelo proprietário em 2026-10-18:** o protótipo recebido em `docs/innermesh/design/prototype/` é preservado como referência, sem execução nesta entrega. Seu `support.js` carrega React, ReactDOM e Babel de `unpkg.com`; portanto, ele não é autocontido nem tem operação offline comprovada. Esta exceção permite somente registrar os arquivos recebidos e não autoriza executar o protótipo, baixar dependências ou usar CDN no app. A regra acima permanece válida para a implementação.
+
 **Pacote final do símbolo:** SVG mestre com caminhos, PDF vetorial para os catálogos, PNGs de referência, exportação para o Xcode/Icon Composer adotado. Registrar autor, licença, versão e SHA-256 por arquivo no inventário.
 
 | Superfície herdada | Ação |

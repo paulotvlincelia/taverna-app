@@ -1,6 +1,6 @@
 # Registro documental InnerMesh 0.5.2
 
-Status: registro local preparado; revisão independente e publicação pendentes. Data: 2026-10-18.
+Status: registro local verificado; exceção documental de CDN autorizada; publicação pendente. Data: 2026-10-18.
 
 ## Escopo e método
 
@@ -12,7 +12,7 @@ Responsável, harness e integrador: Codex. Branch exclusiva codex/identity-desig
 
 ## Critérios desta entrega
 
-1. WHEN o pacote for registrado THEN os 51 arquivos SHALL ocupar os destinos do mapa, sem alterações além da correção de capacidade autorizada.
+1. WHEN o pacote for registrado THEN os 51 arquivos SHALL ocupar os destinos do mapa, sem alterações além da correção de capacidade e da exceção documental de CDN autorizadas pelo proprietário.
 2. WHEN a primeira versão indicar capacidade THEN a documentação SHALL preservar 20 convidados ativos além do anfitrião, 21 pessoas no total, exibindo “N de 21 membros”.
 3. WHEN measure_contrast.py for executado THEN o JSON gerado SHALL ser idêntico ao do pacote e todos os 17 pares nos dois temas SHALL passar os limiares declarados.
 4. WHEN os links dos três documentos forem conferidos THEN somente os dois destinos de assets previstos para a fase 6 SHALL permanecer pendentes; qualquer outro caminho ou âncora inválido SHALL falhar a verificação.
@@ -30,13 +30,15 @@ A suíte Foundation teve 77/78 PASS antes da adequação: a fixture não copiava
 
 ## Ajustes e pendências
 
-A única alteração ao conteúdo recebido está em DESIGN.md e HANDOFF.md: capacidade de 20 convidados mais anfitrião, 21 no total. A spec aprovada permanece intacta. A proposta multicículos e limite configurável segue como referência futura, sem implementação. Protótipos e capturas foram preservados byte a byte; exemplos de limites configuráveis neles não alteram a primeira versão.
+Os ajustes autorizados ao conteúdo recebido são: capacidade de 20 convidados mais anfitrião, 21 no total, em DESIGN.md e HANDOFF.md; exceção documental de CDN em GOVERNANCE.md. A spec aprovada permanece intacta. A proposta multicículos e limite configurável segue como referência futura, sem implementação. Protótipos e capturas foram preservados byte a byte; exemplos de limites configuráveis neles não alteram a primeira versão.
 
 O pacote informa que a captura escura de Gestão → Membros foi retirada por ser duplicada. Sua reexportação segue pendente; a captura clara existe. A contagem de membros no cartão de convite continua decisão pendente. A seção “Arquivos” do HANDOFF cita DESIGN 0.5.1, embora os documentos entregues sejam 0.5.2; texto preservado por não afetar esta entrega.
 
 O plano de remediação citado no pacote não foi localizado nos documentos locais consultados. Sua numeração não foi reconstruída nem alterada; o pré-requisito de prova efetiva da NSE antes de UI foi preservado, coerente com o gate técnico ainda aberto.
 
 O publicador atual recusa binários sem adaptador de inspeção, incluindo as 25 capturas PNG recebidas. Esta entrega não modifica o publicador e não autoriza contornar esse controle. O bloqueio deve ser resolvido antes de qualquer publicação deste pacote completo.
+
+O Verifier independente examinou o commit 21b58fecf88ac7e53edbc3dddf1e7790799208cb: critérios locais 1–5 PASS, 78/78 testes, três mutantes detectados; publicação NOT READY. O conflito de CDN recebeu decisão explícita do proprietário em 2026-10-18: preservar o protótipo byte a byte e registrar a exceção, sem executá-lo. GOVERNANCE.md agora explicita as três dependências externas e não afirma que o protótipo funciona offline. Esta correção documental exige nova revisão no commit que a contém. A autorização para suporte restrito a PNG no publicador ainda está pendente; nenhum push ou CI novo foi executado.
 
 ## Comandos
 
