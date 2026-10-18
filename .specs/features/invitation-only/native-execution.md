@@ -262,3 +262,23 @@ Startup passou quinze checkpoints em 24,332 s, sem falhas/skips, com receipt nov
 A [qualificação do ambiente NSE](nse-environment.md) mantém o gate em **BLOCKED_ENVIRONMENT**. A Apple documenta execução por push remoto APNs Sandbox no simulador compatível; `simctl push` não comprova a extensão. O artefato preservado usa assinatura ad hoc e bundle herdado; não há identidade APNs própria qualificada nesta rodada. A preparação de APNs Sandbox e do provisionamento permanece fora deste recorte; sua qualificação tem gate separado e não antecipa a renomeação do produto.
 
 A revisão independente do recorte Share está em andamento no scratch próprio, com build/guard novos; nenhuma execução interrompida anterior recebe PASS. T4 inteira, T6, os oito NP e os 34 requisitos do produto permanecem pendentes. Esta rodada não qualifica APNs, NSE efetiva ou operação; nenhum merge foi executado.
+
+
+### T4: invocação pela lista e ícone observado
+
+A reprodução independente em `4e0051008` encontrou instabilidade do toque na célula direta: `run-share-5389a72a` falhou antes de a extensão executar, e `run-share-8d74e366` passou os 22 checkpoints no mesmo build. A primeira falha não foi tratada como mutante morto. More estava visível na hierarquia preservada. A tentativa de desenvolvimento `run-share-27e1ecec`, selecionando More pela célula inteira, também falhou antes da tabela; fontes e logs foram preservados. O teste terminou com falha; somente seu coletor auxiliar diagnose foi encerrado após o resultado completo, sem alterar o resultado.
+
+A correção mantém a seleção do sistema: abre sempre More/Mais e toca o centro relativo da imagem `activityImageView` observada, depois a linha `activityTitleLabel` SimpleX. Não usa coordenadas fixas de tela. As oito expressões XCTAssert continuam idênticas e na mesma ordem; o único método, driver e 22 checkpoints permanecem intactos. As sessões de UI foram serializadas no experimento. A causa das falhas anteriores não foi demonstrada isoladamente; esta rodada qualifica o fluxo corrigido, sem atribuir causalidade à concorrência ou ao hitpoint.
+
+**Desenvolvimento PASS**, ainda sem reivindicar novo commit limpo: `share-image-center-dev-20261018`, rodada `run-share-23a6ebb1`, um XCTest sem filtros, zero falhas/skips, 41,111 s. Processo efetivo SimpleX SE, PID 20307, contenção anterior ao main `test_socket_interposition`, SMP/XFTP reais e sentinela com uma conexão positiva e zero não autorizadas. Receipt em `.build/access-qualification/run-share-23a6ebb1/ios/share-driver-receipt.json`. Os quatro produtos do build de base são byte a byte idênticos aos do build clean `share-final-clean` em `4e0051008`; o binário de qualificação UI mudou, como esperado.
+
+| Critério do recorte | Asserção/observação | Resultado delimitado |
+| --- | --- | --- |
+| Invocação real, NP-07/08 | `TavernaShareTests.swift:38`, existência de share-result; `test_share.py:148`, processo SimpleX SE; `test_share.py:151`, PID e before_main | Desenvolvimento PASS no processo da extensão; nenhum substituto dentro do app |
+| Ordem start/resume, NP-07 | `test_share.py:144`, checks iguais à lista CHECKS, incluindo cold_network_before_start/resume_network_before_activate | 22 checkpoints exatos; driver e asserções preservados |
+| Política e fallback, NP-04/07 | `test_share.py:146`, sentinel.count == 1; `test_share.py:159`, protocolos autorizados == smp/xftp | Protocolos reais e sentinela positiva/negativa; sem ampliar contenção para kernel |
+| Integridade das regressões | Oito expressões XCTAssert idênticas em TavernaShareTests e mesmo teste; quatro produtos idênticos; suíte first-build separada | Nenhuma redução de teste/assertion; payload/startup do autor em 4e permanecem com sua proveniência |
+
+Mapeamento inverso: asserções de existência/visibilidade de botão, More e linha sustentam a invocação do sistema (NP-07/08); recibo/status/processo e os asserts do driver sustentam os resultados efetivos NP-04/07/08. Não foram adicionados testes para comportamento externo ao recorte. O sensor e a repetição limpa no commit da correção continuam pendentes; T4 não foi marcada concluída.
+
+O Verifier repetiu a suíte first-build sem filtros em destino próprio novo no HEAD `4e0051008`: quatro métodos, zero falhas/skips, 91,662 s. Build clean e prova anterior ao main preservados em `verifier-resume-20261018-first-build-b`; o coletor auxiliar diagnose foi encerrado somente após os quatro métodos concluírem. Esse resultado não substitui a revisão final do fix Share. A terceira revisão foi solicitada com build clean, prova serializada e sensor; se persistir falha, o recorte será escalado sem integração. NSE continua BLOCKED_ENVIRONMENT.
