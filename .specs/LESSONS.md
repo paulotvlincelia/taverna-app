@@ -32,6 +32,12 @@ Seen once or not yet corroborated. Tracked, not trusted.
 - evidence: .specs/features/invitation-only/native-startup-review.md:M6 (apps/ios/SimpleXChat/Taverna)
 - last seen: 2026-10-17T00:26:03Z
 
+### L-004 - Resolve system share-sheet actions from observed descendant accessibility elements, then prove repeated invocation before using them as a transport gate
+- signal: `gate_fail` · recurrence: 1 feature(s) · scope: `apps/ios/Tests iOS` · harmful: 0
+- features: invitation-only
+- evidence: .specs/features/invitation-only/share-resume-review.md#instabilidade-observada (apps/ios/Tests iOS)
+- last seen: 2026-10-18T23:35:28Z
+
 ## Quarantined (failed when applied - ignore)
 
 A confirmed lesson that recurred alongside failure. Kept for the maintainer to review.

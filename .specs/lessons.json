@@ -3,7 +3,7 @@
   "promote_threshold": 2,
   "window_days": 45,
   "quarantine_threshold": 2,
-  "next_id": 4,
+  "next_id": 5,
   "lessons": [
     {
       "id": "L-001",
@@ -58,6 +58,24 @@
       ],
       "created": "2026-10-17T00:26:03Z",
       "last_seen": "2026-10-17T00:26:03Z"
+    },
+    {
+      "id": "L-004",
+      "key": "gate_fail::resolve system share sheet actions from observed descendant accessibility elements then prove repeated invocation before using them as a transport gate",
+      "text": "Resolve system share-sheet actions from observed descendant accessibility elements, then prove repeated invocation before using them as a transport gate",
+      "signal": "gate_fail",
+      "scope": "apps/ios/Tests iOS",
+      "status": "candidate",
+      "features": [
+        "invitation-only"
+      ],
+      "recurrence": 1,
+      "harmful": 0,
+      "evidence": [
+        ".specs/features/invitation-only/share-resume-review.md#instabilidade-observada (apps/ios/Tests iOS)"
+      ],
+      "created": "2026-10-18T23:35:28Z",
+      "last_seen": "2026-10-18T23:35:28Z"
     }
   ]
 }

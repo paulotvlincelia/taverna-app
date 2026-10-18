@@ -1,6 +1,6 @@
 # Execução: transporte nativo
 
-Estado atual: T1–T3/T5 passaram no recorte anterior e permanecem registrados abaixo. Em 2026-10-17, o recorte Share de T4 passou em desenvolvimento; repetição limpa e revisão independente ainda precedem sua publicação. T4 inteira exige NSE efetiva, T6 depende dela, e os oito critérios agregados permanecem Pending. As tentativas abaixo são históricas, com os respectivos limites.
+Estado atual em 2026-10-18: T1–T3/T5 passaram nos seus recortes. A terceira revisão independente encerrou o recorte Share de T4 com FAIL por invocação instável e sensor incompleto. NSE permanece BLOCKED_ENVIRONMENT. T4/T6 e os oito critérios agregados continuam Pending. As tentativas abaixo são históricas, com os respectivos limites; o resultado final está em share-resume-review.md.
 
 ## T1: codec SOCKS
 
@@ -261,7 +261,7 @@ Startup passou quinze checkpoints em 24,332 s, sem falhas/skips, com receipt nov
 
 A [qualificação do ambiente NSE](nse-environment.md) mantém o gate em **BLOCKED_ENVIRONMENT**. A Apple documenta execução por push remoto APNs Sandbox no simulador compatível; `simctl push` não comprova a extensão. O artefato preservado usa assinatura ad hoc e bundle herdado; não há identidade APNs própria qualificada nesta rodada. A preparação de APNs Sandbox e do provisionamento permanece fora deste recorte; sua qualificação tem gate separado e não antecipa a renomeação do produto.
 
-A revisão independente do recorte Share está em andamento no scratch próprio, com build/guard novos; nenhuma execução interrompida anterior recebe PASS. T4 inteira, T6, os oito NP e os 34 requisitos do produto permanecem pendentes. Esta rodada não qualifica APNs, NSE efetiva ou operação; nenhum merge foi executado.
+A revisão independente do recorte Share, iniciada em scratch próprio com build/guard novos, foi encerrada com FAIL conforme a seção final e share-resume-review.md; nenhuma execução interrompida anterior recebe PASS. T4 inteira, T6, os oito NP e os 34 requisitos do produto permanecem pendentes. Esta rodada não qualifica APNs, NSE efetiva ou operação; nenhum merge foi executado.
 
 
 ### T4: invocação pela lista e ícone observado
@@ -282,3 +282,14 @@ A correção mantém a seleção do sistema: abre sempre More/Mais e toca o cent
 Mapeamento inverso: asserções de existência/visibilidade de botão, More e linha sustentam a invocação do sistema (NP-07/08); recibo/status/processo e os asserts do driver sustentam os resultados efetivos NP-04/07/08. Não foram adicionados testes para comportamento externo ao recorte. O sensor e a repetição limpa no commit da correção continuam pendentes; T4 não foi marcada concluída.
 
 O Verifier repetiu a suíte first-build sem filtros em destino próprio novo no HEAD `4e0051008`: quatro métodos, zero falhas/skips, 91,662 s. Build clean e prova anterior ao main preservados em `verifier-resume-20261018-first-build-b`; o coletor auxiliar diagnose foi encerrado somente após os quatro métodos concluírem. Esse resultado não substitui a revisão final do fix Share. A terceira revisão foi solicitada com build clean, prova serializada e sensor; se persistir falha, o recorte será escalado sem integração. NSE continua BLOCKED_ENVIRONMENT.
+
+
+### T4: terceira revisão encerrada com falha de invocação
+
+**FAIL no recorte Share; NSE permanece BLOCKED_ENVIRONMENT.** A revisão independente do código `7ae8e03027516a4e54ff1ba5f8e2237e04296c31` produziu um build limpo e uma execução positiva de 22 checkpoints. O sensor detectou uma falha comportamental real de início sem transporte. No cenário seguinte, a seleção de More falhou em `more.waitForExistence(timeout: 5)` antes de a extensão executar; não houve recibo do processo efetivo. Essa falha de invocação não conta como mutante detectado. Os demais cenários foram interrompidos e o sensor completo não está aprovado.
+
+A instabilidade persistiu na terceira revisão. O limite TLC interrompe novas correções automáticas: nenhuma quarta alteração funcional foi feita. As provas positivas e negativas anteriores continuam disponíveis, sem substituir este resultado. A [revisão independente](share-resume-review.md) discrimina comandos, recibos, asserções e limites.
+
+A reconciliação documental entre `7ae8e03027516a4e54ff1ba5f8e2237e04296c31` e `8e7eb8c63eca4937dda98f153794f85160a642ff` alterou somente STATE, este registro e nse-environment. As árvores de app e ferramentas são idênticas; os recibos mantêm o SHA original, sem alegar nova execução iOS no commit documental. As 76 verificações Foundation, checker, compileall, whitespace e validadores de spec/tasks passaram na base reconciliada; o aviso de T6 Tests:none é esperado para documentação.
+
+**Plano de correção proposto, ainda não executado:** a hierarquia da tentativa falha expõe o texto More/Mais no descendente `cellTitleLabel`, enquanto a consulta atual procura o label na célula. Corrigir essa consulta e conferir a seleção no compartilhamento do iOS, preservando todas as oito asserções e os 22 checkpoints; repetir prova limpa e sensor independente completo antes de aprovar o recorte. Não instanciar a extensão dentro do host como substituição. A qualificação remota da NSE segue seu gate separado em nse-environment.md. T4/T6, oito NP e 34 requisitos continuam pendentes; nenhum merge autorizado.
