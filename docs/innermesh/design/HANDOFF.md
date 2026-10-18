@@ -49,7 +49,6 @@ Vários círculos e limite configurável exigem uma spec nova antes de qualquer 
 
 **Pendências conhecidas do pacote:**
 
-- `screenshots/escuro/12-gestao-membros.png` foi removida: era cópia da tela de Convites. Reexportação pendente; usar a versão clara como referência.
 - O protótipo mostra o número de membros (“9 membros”) no cartão de convite. Isso não está especificado e revela o tamanho do círculo a quem ainda não entrou. Não implementar até decisão do anfitrião.
 
 ---
