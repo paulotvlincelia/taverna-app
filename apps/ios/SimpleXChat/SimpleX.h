@@ -18,6 +18,7 @@ typedef void* chat_ctrl;
 
 // the last parameter is used to return the pointer to chat controller
 extern char *chat_migrate_init_key(char *path, char *key, int keepKey, char *confirm, int backgroundMode, chat_ctrl *ctrl);
+extern char *chat_migrate_init_device_test(char *path, char *key, int keepKey, char *confirm, int backgroundMode, chat_ctrl *ctrl);
 extern char *chat_close_store(chat_ctrl ctl);
 extern char *chat_reopen_store(chat_ctrl ctl);
 extern char *chat_send_cmd_retry(chat_ctrl ctl, char *cmd, int retryNum);

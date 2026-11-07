@@ -1,11 +1,12 @@
 # Porte do ensaio SMP
 
-A branch começa em stable. O ensaio usa as três fontes Swift do listener, as extensões da fixture local e o inicializador dedicado do núcleo. A projeção de build inclui o listener no framework do host técnico. O fluxo comum mantém os targets e a inicialização existentes.
+O trabalho usa `tlc-spec-driven` porque a revisão cruza o núcleo iOS, o host Swift e a fixture de rede. A branch parte de `stable`. O projeto Xcode gerado para o ensaio inclui as três fontes Swift do listener e ativa `TAVERNA_DEVICE_TEST` no framework. O fluxo comum mantém os targets e a inicialização existentes.
 
-| Opção | Consequência |
-| --- | --- |
-| Publicar a branch de revisão local | Arrastaria histórico de entregas distintas e documentos operacionais. |
-| Reproduzir os commits de todos os laboratórios | Incluiria implementações e provas além do host técnico. |
-| Portar as dependências do host e o patch de inicialização | Permite revisar o comportamento e a origem dos artefatos na base atual. |
+O núcleo técnico confirma a rota única com um handshake SMP pelo SOCKS autenticado em loopback. O host só inicia o chat depois de verificar a configuração efetiva e a autorização da fixture. Os bancos e o item do Keychain do ensaio têm nomes próprios.
 
-O listener limita o destino ao relay fictício da fixture. A leitura técnica exige o handshake SMP com a identidade autorizada e o SOCKS autenticado em loopback. A prova exercita revogação, troca e histórico depois de reiniciar o núcleo. O recibo de build verifica a associação do pacote ao fonte. A execução usa dados fictícios e simulador isolado.
+## Provas locais
+
+- Rodar `python3.12 -m unittest discover -s tools/taverna/tests -v` e `python3.12 tools/taverna/check_foundation.py`.
+- Compilar o alvo Nix `aarch64-darwin-ios:lib:simplex-chat` e conferir a fonte imutável da derivação contra os arquivos do checkout. O ZIP gerado contém as cinco bibliotecas arm64. A prova registra os hashes dos arquivos originais e, para o simulador, a preservação dos objetos na conversão de plataforma.
+- Com um simulador arm64 do checkout, rodar `tools/taverna/native_access_tests/device_test_core.py` sobre as bibliotecas convertidas e `device_test_delivery.py` sobre a sonda compilada. As duas provas usam a fixture fictícia em loopback.
+- Rodar `tools/taverna/device_build.py --technical` com o ZIP imutável, a derivação, o mapa de hashes da fonte e das bibliotecas, os pacotes Swift fixados e os insumos privados de identidade. O recibo associa a projeção de fonte ao pacote sem assinatura.

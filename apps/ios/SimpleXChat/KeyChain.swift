@@ -21,6 +21,35 @@ public let kcAppPassword = KeyChainItem(forKey: APP_PASSWORD_ITEM)
 
 public let kcSelfDestructPassword = KeyChainItem(forKey: SELF_DESTRUCT_PASSWORD_ITEM)
 
+#if TAVERNA_DEVICE_TEST
+public enum DeviceTestDatabaseKey {
+    private static let account = "innermesh.deviceTest.v1.databasePassword"
+    private enum Failure: Error { case read, create }
+
+    public static func read() throws -> String? {
+        var query = baseItemQuery(forKey: account)
+        query[kSecMatchLimit] = kSecMatchLimitOne
+        query[kSecReturnData] = true as AnyObject
+        var result: CFTypeRef?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        if status == errSecItemNotFound { return nil }
+        guard status == errSecSuccess, let data = result as? Data,
+              let key = String(data: data, encoding: .utf8) else { throw Failure.read }
+        return key
+    }
+
+    public static func create() throws -> String {
+        let key = randomDatabasePassword()
+        guard !key.isEmpty else { throw Failure.create }
+        var query = baseItemQuery(forKey: account)
+        query[kSecAttrAccessible] = ACCESS_POLICY
+        query[kSecValueData] = Data(key.utf8) as AnyObject
+        guard SecItemAdd(query as CFDictionary, nil) == errSecSuccess else { throw Failure.create }
+        return key
+    }
+}
+#endif
+
 public struct KeyChainItem {
     var forKey: String
 

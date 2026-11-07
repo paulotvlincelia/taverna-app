@@ -52,12 +52,12 @@ O host técnico já comprovou a troca de textos pelo relay privado em um iPhone.
 
 | Requirement ID | Story | Phase | Status |
 | --- | --- | --- | --- |
-| PORT-01 | Revisar e reproduzir | Design | Pending |
+| PORT-01 | Revisar e reproduzir | Execute | Implemented |
 | PORT-02 | Revisar e reproduzir | Execute | Implemented |
 | PORT-03 | Revisar e reproduzir | Execute | Implemented |
 | PORT-04 | Revisar e reproduzir | Execute | Implemented |
-| PORT-05 | Revisar e reproduzir | Design | Pending |
-| PORT-06 | Revisar e reproduzir | Design | Pending |
+| PORT-05 | Revisar e reproduzir | Execute | Implemented |
+| PORT-06 | Revisar e reproduzir | Execute | Implemented |
 
 ## Success Criteria
 

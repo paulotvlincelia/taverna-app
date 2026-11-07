@@ -5,7 +5,7 @@
 Executar com `tlc-spec-driven` e verificar cada commit.
 
 **Design**: `.specs/features/device-test-stable-port/design.md`
-**Status**: In Progress
+**Status**: Implementation complete, independent verification pending
 
 ## Test Coverage Matrix
 
@@ -75,7 +75,7 @@ T1 → T2 → T3
 **Tools**: Swift e xcodebuild.
 **Done when**:
 
-- [ ] A suíte portátil preserva os 76 testes da base e o pacote técnico arm64 passa.
+- [x] A suíte portátil preserva os 76 testes da base e o pacote técnico arm64 passa.
 
 **Tests**: integration
 **Gate**: build
