@@ -5,7 +5,7 @@
 Executar com `tlc-spec-driven` e verificar cada commit.
 
 **Design**: `.specs/features/device-test-stable-port/design.md`
-**Status**: Implementation complete, independent verification pending
+**Status**: Complete
 
 ## Test Coverage Matrix
 
