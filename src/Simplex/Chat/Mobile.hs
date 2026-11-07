@@ -162,7 +162,10 @@ cChatMigrateInit fp key conf = cChatMigrateInitKey fp key 0 conf 0
 
 -- For postgres first param is schema prefix, second param is database connection string.
 cChatMigrateInitKey :: CString -> CString -> CInt -> CString -> CInt -> Ptr (StablePtr ChatController) -> IO CJSONString
-cChatMigrateInitKey fp key keepKey conf background ctrl = do
+cChatMigrateInitKey = cChatMigrateInitWith defaultMobileConfig
+
+cChatMigrateInitWith :: ChatConfig -> CString -> CString -> CInt -> CString -> CInt -> Ptr (StablePtr ChatController) -> IO CJSONString
+cChatMigrateInitWith cfg fp key keepKey conf background ctrl = do
   -- ensure we are set to UTF-8; iOS does not have locale, and will default to
   -- US-ASCII all the time.
   setLocaleEncoding utf8
@@ -172,7 +175,7 @@ cChatMigrateInitKey fp key keepKey conf background ctrl = do
   chatDbOpts <- mobileDbOpts fp key
   confirm <- peekCAString conf
   r <-
-    chatMigrateInitKey chatDbOpts (keepKey /= 0) confirm (background /= 0) >>= \case
+    chatMigrateInitWith cfg chatDbOpts (keepKey /= 0) confirm (background /= 0) >>= \case
       Right cc -> (newStablePtr cc >>= poke ctrl) $> DBMOk
       Left e -> pure e
   newCStringFromLazyBS $ J.encode r
@@ -305,7 +308,10 @@ chatMigrateInit dbFilePrefix dbKey confirm = do
 #endif
 
 chatMigrateInitKey :: ChatDbOpts -> Bool -> String -> Bool -> IO (Either DBMigrationResult ChatController)
-chatMigrateInitKey chatDbOpts keepKey confirm backgroundMode = runExceptT $ do
+chatMigrateInitKey = chatMigrateInitWith defaultMobileConfig
+
+chatMigrateInitWith :: ChatConfig -> ChatDbOpts -> Bool -> String -> Bool -> IO (Either DBMigrationResult ChatController)
+chatMigrateInitWith cfg chatDbOpts keepKey confirm backgroundMode = runExceptT $ do
   confirmMigrations <- liftEitherWith (const DBMInvalidConfirmation) $ strDecode $ B.pack confirm
   let migrationConfig = MigrationConfig confirmMigrations (Just "")
   chatStore <- migrate createChatStore (toDBOpts chatDbOpts chatSuffix keepKey chatDBFunctions) migrationConfig
@@ -315,7 +321,7 @@ chatMigrateInitKey chatDbOpts keepKey confirm backgroundMode = runExceptT $ do
     opts = mobileChatOpts $ removeDbKey chatDbOpts
     initialize st db = do
       user_ <- liftIO $ getActiveUser_ st
-      first DBMAgentError <$> newChatController db user_ defaultMobileConfig opts backgroundMode
+      first DBMAgentError <$> newChatController db user_ cfg opts backgroundMode
     migrate createStore dbOpts confirmMigrations =
       ExceptT $
         (first (DBMErrorMigration errDbStr) <$> createStore dbOpts confirmMigrations)

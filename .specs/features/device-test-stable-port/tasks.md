@@ -60,7 +60,7 @@ T1 → T2 → T3
 **Tools**: Nix, simctl e fixture de loopback.
 **Done when**:
 
-- [ ] A sonda do núcleo passa e os históricos dos dois processos preservam 20 itens depois de reabrir.
+- [x] A sonda do núcleo passa e os históricos dos dois processos preservam 20 itens depois de reabrir.
 
 **Tests**: integration
 **Gate**: full

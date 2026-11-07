@@ -121,6 +121,7 @@ defaultChatConfig =
       subscriptionEvents = False,
       hostEvents = False,
       testView = False,
+      deviceTestSMP = False,
       initialCleanupManagerDelay = 30 * 1000000, -- 30 seconds
       cleanupManagerInterval = 30 * 60, -- 30 minutes
       cleanupManagerStepDelay = 3 * 1000000, -- 3 seconds
