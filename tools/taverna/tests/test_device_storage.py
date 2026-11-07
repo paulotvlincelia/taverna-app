@@ -1,4 +1,7 @@
-"""Exercise the literal device-test storage policy with disposable files."""
+"""Exercise the device-test storage policy with disposable files.
+
+Discovery checks the storage flow. Direct execution also checks native backup metadata.
+"""
 import json
 from pathlib import Path
 import subprocess
@@ -13,6 +16,8 @@ import ios_session as session
 
 
 class DeviceStorage(unittest.TestCase):
+    backup_mode = "portable"
+
     @classmethod
     def setUpClass(cls):
         program = r'''
@@ -21,6 +26,7 @@ import Foundation
 enum Failure: Error { case read, insert, exclude }
 let manager = FileManager.default
 let base = URL(fileURLWithPath: CommandLine.arguments[1], isDirectory: true).resolvingSymlinksInPath()
+let nativeBackupExclusion = CommandLine.arguments[2] == "native"
 let key = Data(repeating: 42, count: 32).base64EncodedString()
 let chat = "_chat.db", agent = "_agent.db"
 let legacy = base.appendingPathComponent("restored")
@@ -62,13 +68,19 @@ func run(_ name: String, _ files: [String] = [], _ initialKey: String? = nil,
             excludeFromBackup: { url in
                 events.append("exclude")
                 if failure == .exclude { throw Failure.exclude }
-                try DeviceTestStorage.excludeFromBackup(url)
+                if nativeBackupExclusion {
+                    try DeviceTestStorage.excludeFromBackup(url)
+                }
+                excluded = url.path == folder.path
             })
         events.append("open")
         opens += 1
         sameKey = actualKey == key
         expectedPrefix = prefix.path == folder.appendingPathComponent("profile").path
-        excluded = try folder.resourceValues(forKeys: [.isExcludedFromBackupKey]).isExcludedFromBackup == true
+        if nativeBackupExclusion {
+            let persisted = try folder.resourceValues(forKeys: [.isExcludedFromBackupKey]).isExcludedFromBackup == true
+            excluded = excluded && persisted
+        }
         for suffix in [chat, agent] where !manager.fileExists(atPath: prefix.path + suffix) {
             try Data("fictitious new fixture db".utf8).write(to: URL(fileURLWithPath: prefix.path + suffix))
         }
@@ -109,7 +121,7 @@ print(String(decoding: try JSONSerialization.data(withJSONObject: output), as: U
             if build.returncode:
                 raise AssertionError(build.stderr)
             run = subprocess.run(
-                ['/usr/bin/sandbox-exec', '-p', '(version 1)(allow default)(deny network*)', str(base / 'probe'), tmp],
+                ['/usr/bin/sandbox-exec', '-p', '(version 1)(allow default)(deny network*)', str(base / 'probe'), tmp, cls.backup_mode],
                 env=env, capture_output=True, text=True, timeout=30)
             if run.returncode:
                 raise AssertionError(run.stderr)
@@ -172,3 +184,9 @@ print(String(decoding: try JSONSerialization.data(withJSONObject: output), as: U
                 self.assertTrue(self.rows[name]['excluded'])
         self.assertEqual(self.rows['backupError']['events'], ['exclude', 'blocked'])
         self.assertEqual(self.rows['backupError']['opens'], 0)
+
+
+if __name__ == '__main__':
+    # Direct execution exercises the real Foundation backup metadata adapter.
+    DeviceStorage.backup_mode = "native"
+    unittest.main()

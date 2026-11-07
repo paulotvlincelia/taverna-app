@@ -136,6 +136,7 @@ class IdentityTests(unittest.TestCase):
         harness = 'import Foundation\nimport Security\n' + constant + '\n' + function
         harness += '\nlet q = baseItemQuery(forKey: "fictitious-item")\n'
         harness += 'print(String(data: try! JSONSerialization.data(withJSONObject: q), encoding: .utf8)!)\n'
+        (ROOT / '.build').mkdir(exist_ok=True)
         with tempfile.TemporaryDirectory(dir=ROOT / '.build') as temp:
             folder = Path(temp)
             swift = folder / 'query.swift'
