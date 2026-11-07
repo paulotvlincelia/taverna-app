@@ -19,10 +19,10 @@ def context(directory):
     return ctx
 
 
-async def bridge(directory):
+async def bridge(directory, native=False):
     ctx = context(directory)
     servers = []
-    for local, target in ((15223, 15223), (18443, 15443)):
+    for local, target in (((5223, 15223), (8443, 15443)) if native else ((15223, 15223), (18443, 15443))):
         async def accept(reader, writer, target=target):
             remote = None
             tasks = []
@@ -122,11 +122,28 @@ async def api(port, command):
                 return
 
 
+
+async def session():
+    """One fixture peer socket; preserve asynchronous transfer events."""
+    import websockets
+    async with websockets.connect('ws://127.0.0.1:5225') as ws:
+        async def commands():
+            while line := await asyncio.to_thread(sys.stdin.readline):
+                await ws.send(line.strip())
+        async def responses():
+            async for value in ws:
+                print(value, flush=True)
+        tasks = [asyncio.create_task(commands()), asyncio.create_task(responses())]
+        await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
+        for task in tasks: task.cancel()
+        await asyncio.gather(*tasks, return_exceptions=True)
+
 if __name__ == '__main__':
     mode = sys.argv[1]
-    if mode == 'bridge': asyncio.run(bridge(Path('/client')))
+    if mode == 'bridge': asyncio.run(bridge(Path('/client'), '--native' in sys.argv))
     elif mode == 'probe': print(json.dumps(probe(Path('/client'), int(sys.argv[2]), '--no-cert' in sys.argv)))
     elif mode == 'hold': hold(Path('/client'), int(sys.argv[2]))
     elif mode == 'sentinel': sentinel(Path('/client'))
     elif mode == 'redirect': redirect(Path('/client'))
+    elif mode == 'session': asyncio.run(session())
     elif mode == 'api': asyncio.run(api(int(sys.argv[2]),sys.argv[3]))
