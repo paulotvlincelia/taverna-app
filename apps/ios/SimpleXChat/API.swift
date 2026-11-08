@@ -55,6 +55,17 @@ public func chatMigrateInit(_ useKey: String? = nil, confirmMigrations: Migratio
 }
 
 public func chatInitTemporaryDatabase(url: URL, key: String? = nil, confirmation: MigrationConfirmation = .error) -> (DBMigrationResult, chat_ctrl?) {
+    chatInitTemporaryDatabase(url: url, key: key, confirmation: confirmation, deviceTest: false)
+}
+
+#if TAVERNA_DEVICE_TEST
+public func chatInitDeviceTestDatabase(url: URL, key: String) -> (DBMigrationResult, chat_ctrl?) {
+    chatInitTemporaryDatabase(url: url, key: key, confirmation: .yesUp, deviceTest: true)
+}
+#endif
+
+private func chatInitTemporaryDatabase(url: URL, key: String?, confirmation: MigrationConfirmation,
+                                       deviceTest: Bool) -> (DBMigrationResult, chat_ctrl?) {
     let dbPath = url.path
     let dbKey = key ?? randomDatabasePassword()
     logger.debug("chatInitTemporaryDatabase path: \(dbPath)")
@@ -62,7 +73,12 @@ public func chatInitTemporaryDatabase(url: URL, key: String? = nil, confirmation
     var cPath = dbPath.cString(using: .utf8)!
     var cKey = dbKey.cString(using: .utf8)!
     var cConfirm = confirmation.rawValue.cString(using: .utf8)!
-    let cjson = chat_migrate_init_key(&cPath, &cKey, 1, &cConfirm, 0, &temporaryController)!
+    #if TAVERNA_DEVICE_TEST
+    let initialize = deviceTest ? chat_migrate_init_device_test : chat_migrate_init_key
+    #else
+    let initialize = chat_migrate_init_key
+    #endif
+    let cjson = initialize(&cPath, &cKey, 1, &cConfirm, 0, &temporaryController)!
     return (dbMigrationResult(dataFromCString(cjson)), temporaryController)
 }
 

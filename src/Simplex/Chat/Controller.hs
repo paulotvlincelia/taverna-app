@@ -90,7 +90,7 @@ import Simplex.Messaging.Crypto.Ratchet (PQEncryption)
 import Simplex.Messaging.Encoding.String
 import Simplex.Messaging.Notifications.Protocol (DeviceToken (..), NtfTknStatus)
 import Simplex.Messaging.Parsers (defaultJSON, dropPrefix, enumJSON, parseAll, parseString, sumTypeJSON)
-import Simplex.Messaging.Protocol (AProtoServerWithAuth, AProtocolType (..), MsgId, NMsgMeta (..), NtfServer, ProtocolType (..), QueueId, SMPMsgMeta (..), SMPServerWithAuth, SubscriptionMode (..), XFTPServer)
+import Simplex.Messaging.Protocol (AProtoServerWithAuth, AProtocolType (..), MsgId, NMsgMeta (..), NtfServer, ProtocolType (..), QueueId, SMPMsgMeta (..), SubscriptionMode (..), XFTPServer)
 import Simplex.Messaging.TMap (TMap)
 import Simplex.Messaging.Transport (TLS, TransportPeer (..), simplexMQVersion)
 import Simplex.Messaging.Transport.Client (SocksProxyWithAuth, TransportHost)
@@ -157,6 +157,7 @@ data ChatConfig = ChatConfig
     hostEvents :: Bool,
     logLevel :: ChatLogLevel,
     testView :: Bool,
+    deviceTestSMP :: Bool,
     initialCleanupManagerDelay :: Int64,
     cleanupManagerInterval :: NominalDiffTime,
     cleanupManagerStepDelay :: Int64,
@@ -481,6 +482,7 @@ data ChatCommand
   | GetChatTTL ChatName
   | APISetNetworkConfig NetworkConfig
   | APIGetNetworkConfig
+  | APIDeviceTestSMP UserId (Maybe SMPServerWithAuth)
   | SetNetworkConfig SimpleNetCfg
   | APISetNetworkInfo UserNetworkInfo
   | ReconnectAllServers
@@ -711,6 +713,7 @@ allowRemoteCommand = \case
 #endif
   APISetNetworkConfig _ -> False
   APIGetNetworkConfig -> False
+  APIDeviceTestSMP {} -> False
   SetLocalDeviceName _ -> False
   ListRemoteHosts -> False
   StartRemoteHost {} -> False
@@ -785,6 +788,7 @@ data ChatResponse
   | CRUsageConditions {usageConditions :: UsageConditions, conditionsText :: Text, acceptedConditions :: Maybe UsageConditions}
   | CRChatItemTTL {user :: User, chatItemTTL :: Maybe Int64}
   | CRNetworkConfig {networkConfig :: NetworkConfig}
+  | CRDeviceTestSMP {smpServers :: [SMPServerWithAuth]}
   | CRContactInfo {user :: User, contact :: Contact, connectionStats_ :: Maybe ConnectionStats, customUserProfile :: Maybe Profile}
   | CRGroupInfo {user :: User, groupInfo :: GroupInfo}
   | CRGroupMemberInfo {user :: User, groupInfo :: GroupInfo, member :: GroupMember, connectionStats_ :: Maybe ConnectionStats}

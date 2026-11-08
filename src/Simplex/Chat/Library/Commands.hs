@@ -55,6 +55,7 @@ import Data.Time.Clock (UTCTime, getCurrentTime, nominalDay)
 import Data.Type.Equality
 import qualified Data.UUID as UUID
 import qualified Data.UUID.V4 as V4
+import Network.Socket (SockAddr (SockAddrInet), tupleToHostAddress)
 import Simplex.Chat.Library.Subscriber
 import Simplex.Chat.Badges (BadgeCredential (..), LocalBadge (..), maxXFTPFileSize, mkBadgeStatus, verifyCredential)
 import Simplex.Chat.Names (SimplexDomainProof (..), SimplexDomainClaim (..), claimDomain, mkDomainClaim)
@@ -95,14 +96,16 @@ import qualified Simplex.Chat.Util as U
 import Simplex.Chat.Web (webPreviewWorker)
 import Simplex.FileTransfer.Description (FileDescriptionURI (..), maxFileSizeHard)
 import Simplex.Messaging.Agent
-import Simplex.Messaging.Agent.Env.SQLite (ServerCfg (..), ServerRoles (..), allRoles)
+import qualified Simplex.Messaging.Agent.Client as Agent
+import Simplex.Messaging.Agent.Env.SQLite (AgentConfig (smpCfg), ServerCfg (..), ServerRoles (..), UserServers (..), allRoles)
 import Simplex.Messaging.Agent.Protocol
 import Simplex.Messaging.Agent.Store.Entity
 import Simplex.Messaging.Agent.Store.Interface (execSQL)
 import Simplex.Messaging.Agent.Store.Shared (upMigration)
 import qualified Simplex.Messaging.Agent.Store.DB as DB
 import Simplex.Messaging.Agent.Store.Interface (getCurrentMigrations)
-import Simplex.Messaging.Client (NetworkConfig (..), NetworkRequestMode (..), NetworkTimeout (..), SMPWebPortServers (..), SocksMode (SMAlways), textToHostMode)
+import Simplex.Messaging.Client (NetworkConfig (..), NetworkRequestMode (..), NetworkTimeout (..), SMPProxyFallback (SPFProhibit), SMPProxyMode (SPMNever), SMPWebPortServers (..), SocksMode (SMAlways), textToHostMode)
+import qualified Simplex.Messaging.Client as Client
 import qualified Simplex.Messaging.Crypto as C
 import qualified Simplex.Messaging.Crypto.ShortLink as SL
 import Simplex.Messaging.Crypto.File (CryptoFile (..), CryptoFileArgs (..))
@@ -115,7 +118,7 @@ import Simplex.Messaging.Protocol (AProtoServerWithAuth (..), AProtocolType (..)
 import qualified Simplex.Messaging.Protocol as SMP
 import Simplex.Messaging.ServiceScheme (ServiceScheme (..))
 import qualified Simplex.Messaging.TMap as TM
-import Simplex.Messaging.Transport.Client (defaultSocksProxyWithAuth)
+import Simplex.Messaging.Transport.Client (SocksAuth (SocksAuthUsername), SocksProxy (SocksProxy), SocksProxyWithAuth (SocksProxyWithAuth), defaultSocksProxyWithAuth)
 import Simplex.Messaging.Util
 import Simplex.Messaging.Version
 import Simplex.RemoteControl.Invitation (RCInvitation (..), RCSignedInvitation (..))
@@ -242,17 +245,20 @@ startChatController mainApp enableSndFiles = do
           then Just <$> async (subscribeUsers False users)
           else pure Nothing
       atomically . writeTVar s $ Just (a1, a2)
+      testSMP <- asks (deviceTestSMP . config)
       if mainApp
         then do
-          startXFTP xftpStartWorkers
-          void $ forkIO $ startFilesToReceive users
+          unless testSMP $ do
+            startXFTP xftpStartWorkers
+            void $ forkIO $ startFilesToReceive users
           startDeliveryWorkers
-          startRelayRequestWorker_
+          unless testSMP startRelayRequestWorker_
           startCleanupManager
           void $ forkIO $ mapM_ startExpireCIs users
-          startRelayChecks users
-          startWebPreview users
-        else when enableSndFiles $ startXFTP xftpStartSndWorkers
+          unless testSMP $ do
+            startRelayChecks users
+            startWebPreview users
+        else when (enableSndFiles && not testSMP) $ startXFTP xftpStartSndWorkers
       pure a1
     startXFTP startWorkers = do
       tmp <- readTVarIO =<< asks tempDirectory
@@ -362,6 +368,51 @@ stopChatController ChatController {smpAgent, agentAsync = s, sndFiles, rcvFiles,
       fs <- readTVarIO files
       mapM_ hClose fs
       atomically $ writeTVar files M.empty
+
+requireDeviceTestUser :: User -> CM ()
+requireDeviceTestUser User {userId, profile = LocalProfile {displayName}, userChatRelay, clientService} = do
+  technical <- asks (deviceTestSMP . config)
+  unless (technical && displayName == "Device-D1" && not (isTrue userChatRelay || isTrue clientService)) $
+    throwCmdError "device test controller required"
+  users <- withFastStore' getUsers
+  unless (map (\User {userId = uid} -> uid) users == [userId]) $
+    throwCmdError "unexpected device test users"
+
+deviceTestServer :: SMP.ProtoServerWithAuth 'PSMP -> Bool
+deviceTestServer ProtoServerWithAuth {protoServer = SMP.ProtocolServer {SMP.host, SMP.port}, serverBasicAuth} =
+  host == ("relay.test" :| []) && port == "5223" && isNothing serverBasicAuth
+
+effectiveDeviceTestSMP :: User -> CM [SMP.ProtoServerWithAuth 'PSMP]
+effectiveDeviceTestSMP user = lift $ withAgent' $ \agent -> do
+  servers <- TM.lookupIO (aUserId user) (Agent.userServers @'PSMP agent)
+  pure $ case servers of
+    Just UserServers {storageSrvs = (_, server) :| [], proxySrvs = (_, proxy) :| [], nameSrvs = []}
+      | server == proxy && deviceTestServer server -> [server]
+    _ -> []
+
+deviceTestNetwork :: NetworkConfig -> Bool
+deviceTestNetwork NetworkConfig {socksProxy, socksMode, smpProxyMode, smpProxyFallback, smpWebPortServers} =
+  localCapability && socksMode == SMAlways && smpProxyMode == SPMNever
+    && smpProxyFallback == SPFProhibit && smpWebPortServers == SWPOff
+  where
+    localCapability = case socksProxy of
+      Just (SocksProxyWithAuth (SocksAuthUsername username password) (SocksProxy (SockAddrInet port host))) ->
+        host == tupleToHostAddress (127, 0, 0, 1) && port /= 0 && not (B.null username || B.null password)
+      _ -> False
+
+verifyDeviceTestHandshake :: NetworkRequestMode -> User -> ProtocolServer 'PSMP -> CM ()
+verifyDeviceTestHandshake nm user server = do
+  network <- lift getNetworkConfig
+  unless (deviceTestNetwork network) $ throwCmdError "device test SOCKS is not configured"
+  clientConfig <- asks $ smpCfg . agentConfig . config
+  let cfg = clientConfig {Client.networkConfig = network}
+  result <- lift $ withAgent' $ \agent -> do
+    ts <- getCurrentTime
+    Client.getProtocolClient (Agent.agentDRG agent) nm (aUserId user, server, Nothing) cfg [] Nothing ts (const $ pure ())
+      :: IO (Either Client.SMPClientError Client.SMPClient)
+  case result of
+    Left _ -> throwCmdError "device test SMP authorization failed"
+    Right client -> liftIO $ Client.closeProtocolClient client
 
 updateNetworkConfig :: NetworkConfig -> SimpleNetCfg -> NetworkConfig
 updateNetworkConfig cfg SimpleNetCfg {socksProxy, socksMode, hostMode, requiredHostMode, smpProxyMode_, smpProxyFallback_, smpWebPortServers, tcpTimeout_, logTLSErrors} =
@@ -548,10 +599,19 @@ processChatCommand cxt nm = \case
     checkDeleteChatUser user'
     withChatLock "deleteUser" $ deleteChatUser user' delSMPQueues
   DeleteUser uName delSMPQueues viewPwd_ -> withUserName uName $ \userId -> APIDeleteUser userId delSMPQueues viewPwd_
-  StartChat {mainApp, enableSndFiles} -> withUser' $ \_ ->
-    asks agentAsync >>= readTVarIO >>= \case
-      Just _ -> pure CRChatRunning
-      _ -> checkStoreNotChanged . lift $ startChatController mainApp enableSndFiles $> CRChatStarted
+  StartChat {mainApp, enableSndFiles} -> withUser' $ \user -> do
+    testSMP <- asks (deviceTestSMP . config)
+    let start = asks agentAsync >>= readTVarIO >>= \case
+          Just _ -> pure CRChatRunning
+          Nothing -> checkStoreNotChanged $ do
+            when testSMP $ do
+              requireDeviceTestUser user
+              servers <- effectiveDeviceTestSMP user
+              network <- lift getNetworkConfig
+              unless (mainApp && not enableSndFiles && length servers == 1 && deviceTestNetwork network) $
+                throwCmdError "device test SMP is not configured"
+            lift $ startChatController mainApp enableSndFiles $> CRChatStarted
+    if testSMP then withChatLock "deviceTestStart" start else start
   CheckChatRunning -> maybe CRChatStopped (const CRChatRunning) <$> chatReadVar agentAsync
   APIStopChat -> do
     ask >>= liftIO . stopChatController
@@ -564,7 +624,7 @@ processChatCommand cxt nm = \case
       users <- withFastStore' getUsers
       lift $ do
         void . forkIO $ subscribeUsers True users
-        void . forkIO $ startFilesToReceive users
+        unlessM (asks $ deviceTestSMP . config) $ void . forkIO $ startFilesToReceive users
         setAllExpireCIFlags True
     ok_
   APISuspendChat t -> do
@@ -1841,6 +1901,17 @@ processChatCommand cxt nm = \case
     pure $ CRChatItemTTL user (Just ttl)
   GetChatItemTTL -> withUser' $ \User {userId} -> do
     processChatCommand cxt nm $ APIGetChatItemTTL userId
+  APIDeviceTestSMP uid server_ -> withChatLock "deviceTestSMP" $ checkChatStopped $ withUser' $ \user@User {userId = activeId} -> do
+    requireDeviceTestUser user
+    unless (uid == activeId) $ throwChatError CEUserUnknown
+    forM_ server_ $ \server -> do
+      unless (deviceTestServer server) $ throwCmdError "invalid device test SMP route"
+      lift $ withAgent' $ \agent ->
+        setProtocolServers agent (aUserId user) (ServerCfg server Nothing True (ServerRoles True False False) :| [])
+    servers <- effectiveDeviceTestSMP user
+    when (isNothing server_) $ forM_ servers $ \ProtoServerWithAuth {protoServer} ->
+      verifyDeviceTestHandshake nm user protoServer
+    pure $ CRDeviceTestSMP servers
   APISetNetworkConfig cfg -> withUser' $ \_ -> withAgent (`setNetworkConfig` cfg) >> ok_
   APIGetNetworkConfig -> withUser' $ \_ ->
     CRNetworkConfig <$> lift getNetworkConfig
@@ -5546,6 +5617,7 @@ chatCommandP =
       "/ttl" $> GetChatItemTTL,
       "/ttl " *> (SetChatTTL <$> chatNameP <* A.space <*> (("default" $> Nothing) <|> (Just <$> ciTTL))),
       "/ttl " *> (GetChatTTL <$> chatNameP),
+      "/_device_test_smp " *> (APIDeviceTestSMP <$> A.decimal <*> optional (A.space *> strP)),
       "/_network info " *> (APISetNetworkInfo <$> jsonP),
       "/_network " *> (APISetNetworkConfig <$> jsonP),
       ("/network " <|> "/net ") *> (SetNetworkConfig <$> netCfgP),
