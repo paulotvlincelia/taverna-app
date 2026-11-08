@@ -43,6 +43,8 @@ def check(root: Path, release_assets: bool = False) -> list[str]:
                              or len(claude.read_text().splitlines()) > 6):
         errors.append("CLAUDE.md must redirect to AGENTS.md")
     docs = [root / n for n in ("README.md", "AGENTS.md", "CLAUDE.md", "CONTRIBUTING.md")]
+    if (root / "DESIGN.md").is_file():
+        docs.append(root / "DESIGN.md")
     for directory in ("docs/taverna", ".specs", ".agents/skills"):
         docs.extend((root / directory).rglob("*.md"))
     for path in docs:
